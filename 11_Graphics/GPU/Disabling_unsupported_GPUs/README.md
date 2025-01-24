@@ -30,7 +30,7 @@ The easiest way to disable an incompatible discrete GPU is via your config.plist
 
 ### Instructions
 
-- Add ***SSDT-PTSWAK***. See [**Comprehensive Sleep and Wake Patch**](https://github.com/5T33Z0/OC-Little-Translated/tree/main/04_Fixing_Sleep_and_Wake_Issues/PTSWAK_Sleep_and_Wake_Fix) for details
+- Add ***SSDT-PTSWAK***. See [**Comprehensive Sleep and Wake Patch**](/04_Fixing_Sleep_and_Wake_Issues/PTSWAK_Sleep_and_Wake_Fix) for details
 - Add eiher/or:
 	- ***SSDT-NDGP_OFF***
 		- In `DSDT`, find the name and path of `DGPU` and confirm the existence of the `_ON` and `_OFF` methods.

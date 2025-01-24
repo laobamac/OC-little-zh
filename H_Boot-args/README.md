@@ -53,7 +53,7 @@ Incomplete list of commonly used (and rather uncommon) boot-args and device prop
 **`dart=0`**|Disables VT-x/VT-d. Nowadays, `DisableIOMapper` Quirk is used instead.
 **`cpus=1`**|Limits the number of CPU cores to 1. Helpful in cases where macOS won't boot or install otherwise.
 **`npci=0x2000`**/ **`npci=0x3000`**|Disables PCI debugging related to kIOPCIConfiguratorPFM64. Alternatively, use `npci=0x3000` which also disables debugging of gIOPCITunnelledKey. Required when stuck at **`PCI Start Configuration`** as there are IRQ conflicts related to PCI Lanes. **Not needed if `Above4GDecoding` can be enabled in BIOS**
-**`-no_compat_check`**|Disables macOS compatibility checks. Allows booting macOS with unsupported SMBIOS/board-ids. **Downsides**:<ul><li>For installing macOS, you still need a supported SMBIOS temporarily</li><li>You can't install system updates if this boot-arg is active. This restriction can be lifted by adding `RestrictEvents.kext` and boot-arg `revpatch=sbvmm` but it [**requires macOS 11.3 or newer**](https://github.com/5T33Z0/OC-Little-Translated/tree/main/S_System_Updates)</li></ul>
+**`-no_compat_check`**|Disables macOS compatibility checks. Allows booting macOS with unsupported SMBIOS/board-ids. **Downsides**:<ul><li>For installing macOS, you still need a supported SMBIOS temporarily</li><li>You can't install system updates if this boot-arg is active. This restriction can be lifted by adding `RestrictEvents.kext` and boot-arg `revpatch=sbvmm` but it [**requires macOS 11.3 or newer**](/S_System_Updates)</li></ul>
 **`-liludbgall`** | For debugging Lilu kext and plugins (requires DEBUG build of Lilu and asociated plugins)
 
 > [!TIP]
@@ -294,7 +294,7 @@ boot-arg | Property | Description
 [**Source**](https://github.com/acidanthera/AppleALC/wiki/Installation-and-usage)
 
 ### BrcmPatchRAM
-BrcmPatchRAM kext is a macOS driver which applies PatchRAM updates for Broadcom RAMUSB based devices. It will apply the firmware update to your Broadcom Bluetooth device on every startup/wakeup. Since this kext includes different kexts which need to be [combined in different ways](https://github.com/5T33Z0/OC-Little-Translated/tree/main/10_Kexts_Loading_Sequence_Examples#example-7-broadcom-wifi-and-bluetooth) – depending on the hardware and macOS version used – please follow the instrunctions on the repo to configure it correctly.
+BrcmPatchRAM kext is a macOS driver which applies PatchRAM updates for Broadcom RAMUSB based devices. It will apply the firmware update to your Broadcom Bluetooth device on every startup/wakeup. Since this kext includes different kexts which need to be [combined in different ways](/10_Kexts_Loading_Sequence_Examples#example-7-broadcom-wifi-and-bluetooth) – depending on the hardware and macOS version used – please follow the instrunctions on the repo to configure it correctly.
 
 boot-arg | Description  
 ---------|------------
@@ -454,13 +454,13 @@ boot-arg | NVRAM Key| Description
 
 **NOTE**: NVRAM variables work the same way as the boot arguments, but have lower priority. They need to be added to the config under `NVRAM/Add/4D1FDA02-38C7-4A6A-9CC6-4BCCA8B30102`:
 
-![revpatchrevblock](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/dcfad4c5-f646-4463-b6dc-2248d23c49cf)
+![revpatchrevblock](https://github.com/laobamac/OC-little-zh/assets/76865553/dcfad4c5-f646-4463-b6dc-2248d23c49cf)
 
 [**Source**](https://github.com/acidanthera/RestrictEvents)
 
 ### RTCMemoryFixup
 Kext providing a way to emulate some offsets in your CMOS (RTC) memory. 
-More details about CMOS-related isses fan be found [here](https://github.com/5T33Z0/OC-Little-Translated/tree/main/06_CMOS-related_Fixes).
+More details about CMOS-related isses fan be found [here](/06_CMOS-related_Fixes).
 
 boot-arg | Description 
 :-------|------------

@@ -101,7 +101,7 @@ With this method, you don't need Whatevergreen and DRM works when using SMBIOS `
 With this method, you can inject all sorts of parameters into macOS to optimize the performance of your card such as: Power Limits, Clock Speeds, Fan Control and more without having to flash a modified vBIOS on your card. Combined with selecting specific AMD Framebuffers via the `@0,name` property, this is probably the best solution to optimize the performance of your AMD card under macOS.
 
 ### Creating PowerPlay Tables for AMD Polaris Cards (RX 500-series)
-&rarr; [**Follow this Guide**](https://github.com/5T33Z0/OC-Little-Translated/blob/main/11_Graphics/GPU/AMD_Radeon_Tweaks/Polaris_PowerPlay_Tables.md)
+&rarr; [**Follow this Guide**](/11_Graphics/GPU/AMD_Radeon_Tweaks/Polaris_PowerPlay_Tables.md)
 
 ### PowerPlay Table Generators for Radeon RX5700, Radeon VII and Vega 64
 
@@ -157,7 +157,7 @@ On page [35 and following](https://www.tonymacx86.com/threads/amd-radeon-perform
 
 I've added plists for both Clover and OpenCore to the "mattystonnie" folder. You can copy the included properties to the corresponding section of your config.plist. Ensure that the PCI paths and `AAPL,slot-name`[^1] match the ones used in your system and adjust them accordingly. Disable/delete the SSDTs and `DAGPM.kext` when using this method. 
 
-[^1]: Follow this [**guide**](https://github.com/5T33Z0/OC-Little-Translated/tree/main/11_Graphics/Metal_3#3-obtaining-aaplslot-name-for-igpu-and-gpu) to obtain the PCI path of a device and its `AAPL,slot-name` using Hackintool.
+[^1]: Follow this [**guide**](/11_Graphics/Metal_3#3-obtaining-aaplslot-name-for-igpu-and-gpu) to obtain the PCI path of a device and its `AAPL,slot-name` using Hackintool.
 
 ## Credits
 - Acidanthera for Lilu and WhateverGreen.kext

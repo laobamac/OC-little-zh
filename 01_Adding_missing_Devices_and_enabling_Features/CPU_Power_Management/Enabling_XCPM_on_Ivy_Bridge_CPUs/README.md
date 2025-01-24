@@ -37,8 +37,8 @@ This is exactly what this guide explains: re-enabling `XPCM` with a kernel patch
 - Mount the ESP
 - Open `config.plist`
 - Under `ACPI/Add`, disable `SSDT-PM.aml` (if present)
-- Under `ACPI/Delete`, enable rules "Drop CpuPm" and "Drop Cpu0Ist" (If missing, copy them over from [XCPM_IvyBridge.plist](https://github.com/5T33Z0/OC-Little-Translated/blob/main/01_Adding_missing_Devices_and_enabling_Features/CPU_Power_Management/Enabling_XCPM_on_Ivy_Bridge_CPUs/XCPM_IvyBridge.plist))
-- Under `Kernel/Patch`, enable "XCPM for Ivy Bridge" (copy it over from [XCPM_IvyBridge.plist](https://github.com/5T33Z0/OC-Little-Translated/blob/main/01_Adding_missing_Devices_and_enabling_Features/CPU_Power_Management/Enabling_XCPM_on_Ivy_Bridge_CPUs/XCPM_IvyBridge.plist))
+- Under `ACPI/Delete`, enable rules "Drop CpuPm" and "Drop Cpu0Ist" (If missing, copy them over from [XCPM_IvyBridge.plist](/01_Adding_missing_Devices_and_enabling_Features/CPU_Power_Management/Enabling_XCPM_on_Ivy_Bridge_CPUs/XCPM_IvyBridge.plist))
+- Under `Kernel/Patch`, enable "XCPM for Ivy Bridge" (copy it over from [XCPM_IvyBridge.plist](/01_Adding_missing_Devices_and_enabling_Features/CPU_Power_Management/Enabling_XCPM_on_Ivy_Bridge_CPUs/XCPM_IvyBridge.plist))
 - Optional: Adjust `MinKernel` to only enable XCPM for a specific version of macOS (for example Kernel 21.0.0 for Monterey and newer).
 - Under `Kernel/Quirks`, enable `AppleXcpmCfgLock` and `AppleXcpmExtraMsrs`
 - Save and reboot
@@ -81,7 +81,7 @@ Monitor the behavior of the CPU using [Intel Power Gadget](https://www.insanelym
 ## Big Sur and Monterey
 Since Big Sur and newer usually require a newer SMBIOS to boot, `ssdtPRGen` fails to generate `SSDT-XCPM` in this case, because it relies on Board-IDs containing data for Plugin-Type 0. As a workaround, you have 2 options:
 
-- **Option 1**: Add a Board-ID spoof utilizing Big Sur's virtualization capabilities to spoof a different board-id to macOS than the one which the hardware uses. This is made possible by [Booter and Kernel Patches](https://github.com/5T33Z0/OC-Little-Translated/tree/main/09_Board-ID_VMM-Spoof) from OpenCore Legacy Patcher. Add them to your config in order to install macOS 11.3 and newer on unsupported SMBIOSes and install System Updates as well (Recommended) **or**
+- **Option 1**: Add a Board-ID spoof utilizing Big Sur's virtualization capabilities to spoof a different board-id to macOS than the one which the hardware uses. This is made possible by [Booter and Kernel Patches](/09_Board-ID_VMM-Spoof) from OpenCore Legacy Patcher. Add them to your config in order to install macOS 11.3 and newer on unsupported SMBIOSes and install System Updates as well (Recommended) **or**
 - **Option 2**: Stay on an Ivy Bridge SMBIOS but add `-no_compat_check` boot-arg
 
 ### Pros and Cons
@@ -113,7 +113,7 @@ Advantages and disadvantages of using `MacBookPro10,1` (or equivalent iMac Board
 **CONS**:
 
 - You won't be able to install System Updates because you won't be notified about them. But there's a **Workaround**:
-	- Add the Booter Patches mentioned in the board-id VMM spoofing [guide](https://github.com/5T33Z0/OC-Little-Translated/tree/main/09_Board-ID_VMM-Spoof) to your config
+	- Add the Booter Patches mentioned in the board-id VMM spoofing [guide](/09_Board-ID_VMM-Spoof) to your config
 	- Add [**RestrictEvents.kext**](https://github.com/acidanthera/RestrictEvents) to `EFI/OC/Kexts` and config.plist
 	- Add boot-arg `revpatch=sbvmm`
 - Save your config and reboot.
@@ -137,7 +137,7 @@ In order to re-enable and use ACPI CPU Power Management on macOS Ventura, you ne
 
 - OpenCore 0.9.2 or newer so the `AppleCpuPmCfgLock` Quirk works again (it was skipped in previous versions, if Darwin Kernel 22 was running). Otherwise a BIOS where CFG Lock can be disabled is required.
 - [**OpenCore Patcher GUI App**](https://github.com/dortania/OpenCore-Legacy-Patcher/releases) to install Intel HD4000 iGPU drivers in macOS 12+.
-- [**Booter Patches**](https://github.com/5T33Z0/OC-Little-Translated/tree/main/09_Board-ID_VMM-Spoof) to skip Board-id checks to run macOS Ventura with an Ivy Bridge SMBIOS/board-id and install updates
+- [**Booter Patches**](/09_Board-ID_VMM-Spoof) to skip Board-id checks to run macOS Ventura with an Ivy Bridge SMBIOS/board-id and install updates
 - [**Kexts from OpenCore Legacy Patcher**](https://github.com/dortania/OpenCore-Legacy-Patcher/tree/main/payloads/Kexts/Misc):
 	- `AppleIntelCPUPowerManagement.kext` (set `MinKernel` to 22.0.0)
 	- `AppleIntelCPUPowerManagementClient.kext` (set `MinKernel` to 22.0.0)
@@ -163,14 +163,14 @@ The output should be `0`, indicating that the `X86PlatformPlugin` is not loaded 
 > [!NOTE]
 > 
 > Check the full [guide on upgrading Ivy Bridge systems to macOS Ventura
-](https://github.com/5T33Z0/OC-Little-Translated/blob/main/14_OCLP_Wintel/Ivy_Bridge-Ventura.md)
+](/14_OCLP_Wintel/Ivy_Bridge-Ventura.md)
 
 ### Option 2: Force-enabling XCPM (not recommended)
 
 You need the following files and settings in order to install and run macOS Ventura on Ivy Bridge without major issues:
 
 - [**OpenCore Patcher GUI App**](https://github.com/dortania/OpenCore-Legacy-Patcher/releases) to install Intel HD4000 iGPU drivers in macOS 12+.
-- [**Booter Patches**](https://github.com/5T33Z0/OC-Little-Translated/tree/main/09_Board-ID_VMM-Spoof) to skip Board-id checks to run macOS Ventura with an Ivy Bridge SMBIOS/board-id and install updates
+- [**Booter Patches**](/09_Board-ID_VMM-Spoof) to skip Board-id checks to run macOS Ventura with an Ivy Bridge SMBIOS/board-id and install updates
 - [**CryptexFixup.kext**](https://github.com/acidanthera/CryptexFixup) &rarr; required to be able to install macOS 13 at all
 - [**RestrictEvents.kext**](https://github.com/acidanthera/RestrictEvents) 
 - **Additional boot-args:**

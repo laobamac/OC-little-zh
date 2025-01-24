@@ -20,7 +20,7 @@ Additionally, it can modify the following ACPI table:
 
 Table <br>Signature  | Description
 :------------------: |---------
-[***DMAR***](https://github.com/5T33Z0/OC-Little-Translated/tree/main/00_ACPI/ACPI_Dropping_Tables#method-2-dropping-tables-based-on-table-signature) |  Removes Reserved Memory Regions from the `DMAR` table and creates a rule to drop and replace the original table.
+[***DMAR***](/00_ACPI/ACPI_Dropping_Tables#method-2-dropping-tables-based-on-table-signature) |  Removes Reserved Memory Regions from the `DMAR` table and creates a rule to drop and replace the original table.
 
 > [!TIP]
 >

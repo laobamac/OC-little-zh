@@ -36,7 +36,7 @@ So to prevent that the full installer is downloaded every time, you can do the f
 
 - Run the OpenCore Legacy Patcher
 - Click on "Post-Install Root Patch"
-- Next, select `Revert Root Patches`: <br> ![revert](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/e5f9c409-7aad-4511-b1bc-e20466908913)
+- Next, select `Revert Root Patches`: <br> ![revert](https://github.com/laobamac/OC-little-zh/assets/76865553/e5f9c409-7aad-4511-b1bc-e20466908913)
 - Once reverting the patches is done, reboot. All the patches will be gone but the Snapshot seal will be intact again:
 	```
 	+-> Volume disk1s6
@@ -57,12 +57,12 @@ So to prevent that the full installer is downloaded every time, you can do the f
 
 > [!WARNING]
 > 
-> - This workaround only works on systems with 4th Gen Intel and newer CPUs. On Ivy Bridge and older, the update fails during the preparation phase! (&rarr; [Screenshot](https://github.com/5T33Z0/OC-Little-Translated/blob/main/S_System_Updates/Pics/SysUpd_Fail.png))
+> - This workaround only works on systems with 4th Gen Intel and newer CPUs. On Ivy Bridge and older, the update fails during the preparation phase! (&rarr; [Screenshot](/S_System_Updates/Pics/SysUpd_Fail.png))
 > - This workaround cannot be utilized if your system requires post-install patches for *both* Wi-Fi and Ethernet, because then you cannot access the internet to download updates!
 
 ## Notes
 - Depending on the root patches your system need to be able to run macOS Ventura or newer, booting might only be possible in Safe Mode. To do so, hold <kbd>Shift</kbd> and press <kbd>Enter</kbd> in OpenCore's Boot Picker.
-- To fix issues with System Update Notifications not showing at all, check [this article](https://github.com/5T33Z0/OC-Little-Translated/tree/main/S_System_Updates)
+- To fix issues with System Update Notifications not showing at all, check [this article](/S_System_Updates)
 
 ## Credits
 Thanks to Cyberdevs from Insanelymac for his [explanations](https://www.insanelymac.com/forum/topic/356881-pre-release-macos-sonoma/page/61/#comment-2809998)

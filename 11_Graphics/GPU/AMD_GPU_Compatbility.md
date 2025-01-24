@@ -202,4 +202,4 @@ Vendor | Model​ | Metal​ | Sierra​ | High Sierra​ | Mojave​+
 **Source**: [**EliteMacX86**](https://elitemacx86.com/threads/amd-gpu-compatibility-list-for-macos.617/)
 
 # Notes and Credits
-- Some AMD Vega iGPUs can be enabled in macOS via a new kext called NootedRed ([more details](https://github.com/5T33Z0/OC-Little-Translated/tree/main/11_Graphics/iGPU/AMD))
+- Some AMD Vega iGPUs can be enabled in macOS via a new kext called NootedRed ([more details](/11_Graphics/iGPU/AMD))

@@ -19,7 +19,7 @@ Booting with this hack will take much longer (up to 2 minutes), only about 5 MB 
 	framebuffer-patch-enable | 01000000 |Data
 	
 	The entry should look like this:</br>
-![OC_fakeid](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/b9b77d6f-1caf-46d3-9616-0debc83f855d)
+![OC_fakeid](https://github.com/laobamac/OC-little-zh/assets/76865553/b9b77d6f-1caf-46d3-9616-0debc83f855d)
 
 #### Enabling fake Platform-ID in Clover
 - Open your config.plist in Clover Configurator
@@ -28,6 +28,6 @@ Booting with this hack will take much longer (up to 2 minutes), only about 5 MB 
 - In ig-platforrm-id, enter `0x12345678` (you can omit the `0x`)
 
 	This is how it should look in Clover Configurator:</br>
-![FakeID](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/6ee45bfd-7d20-4d09-a61e-8bc165eb0a93)
+![FakeID](https://github.com/laobamac/OC-little-zh/assets/76865553/6ee45bfd-7d20-4d09-a61e-8bc165eb0a93)
 
 **NOTE**: Make sure to delete/disable the fake Platform-ID once you have generated your Framebuffer patch!

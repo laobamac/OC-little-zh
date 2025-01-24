@@ -1,94 +1,97 @@
-# Installing macOS Ventura and newer on Haswell/Broadwell systems
+# 在Haswell/Broadwell系统上安装macOS Ventura及更高版本
 
-[![OpenCore Version](https://img.shields.io/badge/OpenCore_Version:-0.9.4+-success.svg)](https://github.com/acidanthera/OpenCorePkg) ![macOS](https://img.shields.io/badge/Supported_macOS:-≤15.3-white.svg)
+[![OpenCore版本](https://img.shields.io/badge/OpenCore版本：-0.9.4+-success.svg)](https://github.com/acidanthera/OpenCorePkg) ![macOS](https://img.shields.io/badge/支持的macOS:-≤15.3-white.svg)
 
 <details>
-<summary><b>TABLE of CONTENTS</b> (Click to reveal)</summary><br>
+<summary><b>目录</b> (点击展开)</summary><br>
 
-- [About](#about)
-	- [How Haswell/Broadwell systems are affected](#how-haswellbroadwell-systems-are-affected)
-	- [Disclaimer](#disclaimer)
-- [Precautions and Limitations](#precautions-and-limitations)
-	- [Update OpenCore and kexts](#update-opencore-and-kexts)
-- [Config Edits](#config-edits)
-- [Testing the changes](#testing-the-changes)
-	- [Adjusting the SMBIOS](#adjusting-the-smbios)
-		- [When Upgrading from macOS Big Sur 11.3+](#when-upgrading-from-macos-big-sur-113)
-		- [When Upgrading from macOS Catalina or older](#when-upgrading-from-macos-catalina-or-older)
-- [macOS installation](#macos-installation)
-	- [Getting macOS](#getting-macos)
-	- [Option 1: Upgrading from macOS 11.3 or newer](#option-1-upgrading-from-macos-113-or-newer)
-	- [Option 2: Upgrading from macOS Catalina or older](#option-2-upgrading-from-macos-catalina-or-older)
-- [Post-Install](#post-install)
-	- [Installing Intel Haswell/Broadwell Graphics Acceleration Patches](#installing-intel-haswellbroadwell-graphics-acceleration-patches)
-	- [Installing Drivers for other GPUs](#installing-drivers-for-other-gpus)
-	- [Revert SMBIOS (after upgrading from macOS Catalina or older only)](#revert-smbios-after-upgrading-from-macos-catalina-or-older-only)
-	- [Removing/Disabling boot-args](#removingdisabling-boot-args)
-	- [Verifying AMFI is enabled](#verifying-amfi-is-enabled)
-- [OCLP and System Updates](#oclp-and-system-updates)
-- [Notes](#notes)
-- [Further Resources](#further-resources)
-- [Credits](#credits)
+- [在Haswell/Broadwell系统上安装macOS Ventura及更高版本](#在haswellbroadwell系统上安装macos-ventura及更高版本)
+	- [关于](#关于)
+		- [Haswell/Broadwell系统的影响](#haswellbroadwell系统的影响)
+		- [免责声明](#免责声明)
+	- [注意事项和限制](#注意事项和限制)
+		- [更新OpenCore和kexts](#更新opencore和kexts)
+	- [Config Edits](#config-edits)
+	- [Testing the changes](#testing-the-changes)
+		- [Adjusting the SMBIOS](#adjusting-the-smbios)
+			- [When Upgrading from macOS Big Sur 11.3+](#when-upgrading-from-macos-big-sur-113)
+			- [When Upgrading from macOS Catalina or older](#when-upgrading-from-macos-catalina-or-older)
+	- [macOS installation](#macos-installation)
+		- [Getting macOS](#getting-macos)
+		- [Option 1: Upgrading from macOS 11.3 or newer](#option-1-upgrading-from-macos-113-or-newer)
+		- [Option 2: Upgrading from macOS Catalina or older](#option-2-upgrading-from-macos-catalina-or-older)
+	- [Post-Install](#post-install)
+		- [Installing Intel Haswell/Broadwell Graphics Acceleration Patches](#installing-intel-haswellbroadwell-graphics-acceleration-patches)
+		- [Installing Drivers for other GPUs](#installing-drivers-for-other-gpus)
+		- [Revert SMBIOS (after upgrading from macOS Catalina or older only)](#revert-smbios-after-upgrading-from-macos-catalina-or-older-only)
+		- [Removing/Disabling boot-args](#removingdisabling-boot-args)
+		- [Verifying AMFI is enabled](#verifying-amfi-is-enabled)
+	- [OCLP and System Updates](#oclp-and-system-updates)
+		- [Re-applying root patches after System Updates](#re-applying-root-patches-after-system-updates)
+		- [OCLP App Update Notifications](#oclp-app-update-notifications)
+	- [Notes](#notes)
+	- [Further Resources](#further-resources)
+	- [Credits](#credits)
 
 </details>
 
-## About
-Although installing and running macOS Ventura and newer on machines with Intel Haswell and Broadwell CPUs is possible with OpenCore and the OpenCore Legacy Patcher (OCLP), it’s not officially supported by Dortania – their support is limited to Apple Macs. Since no guide exists, I created this one in order to bridge the gap. I wrote it based on my experiences, analyzing the config and EFI folder and log after building OpenCore with OCLP for a Haswell system.
+## 关于
+虽然通过OpenCore和OpenCore Legacy Patcher（OCLP）在带有Intel Haswell和Broadwell CPU的机器上安装和运行macOS Ventura及更新版本是可能的，但这并没有得到Dortania的官方支持——他们的支持仅限于Apple的Mac。由于没有现成的指南，我创建了这个指南来弥补这一空白。我的经验是基于分析在Haswell系统上使用OCLP构建OpenCore后的配置、EFI文件夹和日志。
 
-| ⚠️ Important Status Updates |
+| ⚠️ 重要的状态更新 |
 |:----------------------------|
-| All good.
+| 一切正常。
 
-### How Haswell/Broadwell systems are affected
-In macOS Ventura, support for CPU families prior to Kaby Lake was dropped. For Haswell/Broadwell CPUs this mainly affects integrated Graphics and Metal support. So what we will do is prepare the config with the required patches, settings and kexts for installing and running macOS Ventura and then add iGPU/GPU drivers in Post-Install using OpenCore Legacy Patcher.
+### Haswell/Broadwell系统的影响
+在macOS Ventura中，Kaby Lake之前的CPU系列被弃用。对于Haswell/Broadwell CPU，这主要影响集成显卡和Metal支持。因此，我们将准备好配置，带有必要的补丁、设置和kext，以便安装和运行macOS Ventura，并在后期安装过程中使用OpenCore Legacy Patcher添加iGPU/GPU驱动程序。
 
-### Disclaimer
-This guide is intended to provide general information for adjusting your EFI and config.plist to install and run macOS Ventura and newer on unsupported Wintel systems. It is not a comprehensive configuration guide. Please refrain from using the "report issue" function to seek individualised assistance for fixing your config. Such issue reports will be closed immediately!
+### 免责声明
+本指南旨在提供调整EFI和config.plist的一般信息，以便在不受支持的Wintel系统上安装和运行macOS Ventura及更高版本。这不是一个全面的配置指南。请避免使用“报告问题”功能寻求个性化的帮助来修复你的配置。此类问题报告将立即关闭！
 
-## Precautions and Limitations
-This is what you need to know before attempting to install macOS Ventura on unsupported systems:
+## 注意事项和限制
+在尝试在不受支持的系统上安装macOS Ventura之前，你需要了解以下内容：
 
-- :warning: **Backup** your working EFI folder on a FAT32 formatted USB Flash Drive just in case something goes wrong because we have to modify the config and content of the EFI folder.
-- **iGPU/GPU**: Check if your iGPU/GPU is supported by OCLP. Although Drivers for Intel, NVIDIA and AMD cards can be added in Post-Install, the [list is limited](https://dortania.github.io/OpenCore-Legacy-Patcher/PATCHEXPLAIN.html#on-disk-patches) 
-- Check if any peripherals you are using are compatible with macOS 12+ (Printers, WiFi and BlueTooth come to mind).
-- **Networking**:
-	- For **Ethernet**, there are kexts for legacy LAN controllers [available here](https://github.com/dortania/OpenCore-Legacy-Patcher/tree/main/payloads/Kexts/Ethernet)
-	- **Wifi and Bluetooth**:
-		- For enabling Broadcom Wifi/BT Cards, you will need a different [set of kexts](https://github.com/5T33Z0/OC-Little-Translated/tree/main/10_Kexts_Loading_Sequence_Examples#example-7-broadcom-wifi-and-bluetooth) to load which need to be controlled via `MinKernel` and `MaxKernel` settings. On macOS 12.4 and newer, a new address check has been introduced in `bluetoothd`, which will trigger an error if two Bluetooth devices have the same address. This can be circumvented by adding boot-arg `-btlfxallowanyaddr` (provided by [BrcmPatchRAM](https://github.com/acidanthera/BrcmPatchRAM) kext).
-		- Same applies to [Intel WiFi/BT](https://github.com/5T33Z0/OC-Little-Translated/tree/main/10_Kexts_Loading_Sequence_Examples#example-8a-intel-wifi-airportitlwm-and-bluetooth-intelbluetoothfirmware) cards using [OpenIntelWirless](https://github.com/OpenIntelWireless) kexts
-		- [Enabling Wifi in macOS Sonoma](https://github.com/5T33Z0/OC-Little-Translated/blob/main/14_OCLP_Wintel/Enable_Features/WiFi_Sonoma.md) requires additional kext and also applying root patches in Post-Install!
-- **Security**: Modifying the system with OCLP Requires SIP, Apple Secure Boot and AMFI to be disabled so there are some compromises in terms of security.
-- **System Updates**: Incremental (or delta) updates won't be available after applying root patches with OCLP. Instead, the whole macOS Installer will be downloaded every time (approx. 15 GB for the latest OS), since root patching breaks the security seal of the volume! :bulb: In Haswell and newer, you can actually workaround this issue by reverting the root patches *prior* to checking for updates. Then, a regular incremental update will be installed which is much smaller. Afterwards you just have to re-apply the root patches again.
-- **Other**: Check the links below for in-depth documentation about components/features that have been removed from macOS 12 and newer and the impact this has on systems prior to Kaby Lake. But keep in mind that this was written for real Macs so certain issues don't apply to Wintel systems.
-	- [Status of OpenCore Legacy Patcher Support for macOS Sonoma](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/1076)
-	- [Status of OpenCore Legacy Patcher Support for macOS Ventura](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/998)
-	- [Legacy Metal Support and macOS Ventura/Sonoma](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/1008)
+- :warning: **备份**你的EFI文件夹到一个FAT32格式的USB闪存驱动器，以防万一出现问题，因为我们需要修改配置和EFI文件夹的内容。
+- **iGPU/GPU**：检查你的iGPU/GPU是否被OCLP支持。虽然可以在后期安装中为Intel、NVIDIA和AMD显卡添加驱动程序，但[支持的驱动程序列表是有限的](https://dortania.github.io/OpenCore-Legacy-Patcher/PATCHEXPLAIN.html#on-disk-patches)。
+- 检查你使用的外设是否与macOS 12+兼容（例如打印机、WiFi和蓝牙等）。
+- **网络**：
+	- 对于**以太网**，有[可用的kexts](https://github.com/dortania/OpenCore-Legacy-Patcher/tree/main/payloads/Kexts/Ethernet)。
+	- **WiFi和蓝牙**：
+		- 要启用Broadcom WiFi/BT卡，你将需要一个不同的[一组kexts](/10_Kexts_Loading_Sequence_Examples#example-7-broadcom-wifi-and-bluetooth)，这些kext需要通过`MinKernel`和`MaxKernel`设置来控制。在macOS 12.4及更高版本中，`bluetoothd`中引入了新的地址检查，如果两个蓝牙设备有相同的地址，会触发错误。可以通过添加启动参数`-btlfxallowanyaddr`（由[BrcmPatchRAM](https://github.com/acidanthera/BrcmPatchRAM) kext提供）来绕过此问题。
+		- 同样适用于[Intel WiFi/BT](/10_Kexts_Loading_Sequence_Examples#example-8a-intel-wifi-airportitlwm-and-bluetooth-intelbluetoothfirmware)卡，使用[OpenIntelWireless](https://github.com/OpenIntelWireless) kexts。
+		- [在macOS Sonoma中启用WiFi](/14_OCLP_Wintel/Enable_Features/WiFi_Sonoma.md)需要额外的kext，并且在后期安装时需要应用根补丁！
+- **安全性**：使用OCLP修改系统需要禁用SIP、Apple Secure Boot和AMFI，因此在安全性方面存在一些妥协。
+- **系统更新**：在应用根补丁后，增量（或增量）更新将不可用。每次都会下载整个macOS安装程序（大约15GB），因为根补丁破坏了卷的安全密封！:bulb: 在Haswell及更新版本的系统中，你实际上可以通过在检查更新之前还原根补丁来绕过此问题。然后，将安装常规的增量更新，这样会小得多。之后，你只需再次应用根补丁。
+- **其他**：查看下面的链接，了解有关macOS 12及更高版本中已移除的组件/功能的深入文档，以及这些变化对Kaby Lake之前的系统的影响。但请记住，这些文档是针对真实Mac编写的，因此某些问题对Wintel系统不适用。
+	- [OpenCore Legacy Patcher支持macOS Sonoma的状态](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/1076)
+	- [OpenCore Legacy Patcher支持macOS Ventura的状态](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/998)
+	- [Legacy Metal支持和macOS Ventura/Sonoma](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/1008)
 
-### Update OpenCore and kexts
-Update OpenCore and kexts to the latest version to maximize compatibility with macOS. To check which version of OpenCore you're currently using, run the following commands in Terminal:
+### 更新OpenCore和kexts
+更新OpenCore和kexts到最新版本，以最大限度地提高与macOS的兼容性。要检查当前使用的OpenCore版本，请在终端中运行以下命令：
 
 ```shell
 nvram 4D1FDA02-38C7-4A6A-9CC6-4BCCA8B30102:opencore-version
 ```
 
 ## Config Edits
-Listed below, you find the required modifications to prepare your `config.plist` and EFI folder for installing macOS Monterey or newer on Haswell/Broadwell systems. You can use this [.plist](https://github.com/5T33Z0/OC-Little-Translated/blob/main/14_OCLP_Wintel/plist/Haswell-Broadwell_OCLP_Wintel_Patches.plist) which contains all the necessary settings for cross-referencing.
+Listed below, you find the required modifications to prepare your `config.plist` and EFI folder for installing macOS Monterey or newer on Haswell/Broadwell systems. You can use this [.plist](/14_OCLP_Wintel/plist/Haswell-Broadwell_OCLP_Wintel_Patches.plist) which contains all the necessary settings for cross-referencing.
 
 :bulb: If your system (or components thereof) doesn't work afterwards, please refer to OCLP's [patch documentation](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/main/docs/PATCHEXPLAIN.md) and see if need additional settings or kexts.
 
 Config Section | Action | Description
 :-------------:| ------ | ------------
-**`Booter/Patch`**| **Add** and **enable** the following Booter patch from OCLP's config: <ul> <li> [**"Skip Board ID check"**](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/main/payloads/Config/config.plist#L220-L243) | <ul><li> Skips board-id check. <li> In combination with ResterictEvents kext, this allows: <ul> <li> Booting macOS with unsupported, native SMBIOS best suited for your CPU <li> Installing Sytsem Updates on unsupported systems </ul> <li> More [Details](https://github.com/5T33Z0/OC-Little-Translated/tree/main/09_Board-ID_VMM-Spoof#booter-patches)
+**`Booter/Patch`**| **Add** and **enable** the following Booter patch from OCLP's config: <ul> <li> [**"Skip Board ID check"**](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/main/payloads/Config/config.plist#L220-L243) | <ul><li> Skips board-id check. <li> In combination with ResterictEvents kext, this allows: <ul> <li> Booting macOS with unsupported, native SMBIOS best suited for your CPU <li> Installing Sytsem Updates on unsupported systems </ul> <li> More [Details](/09_Board-ID_VMM-Spoof#booter-patches)
 **`DeviceProperties/Add`**|**PciRoot(0x0)/Pci(0x2,0x0)** – Verify/adjust Framebuffer patch. <ul><li> **Desktop** (Haswell Headless) <ul><li> **AAPL,ig-platform-id**: 04001204 <li> **device-id**: 12040000 (Only reqd. for HD 4400)</ul></ul><ul><li> **Desktop** (Haswell Default) <ul><li> **AAPL,ig-platform-id**: 0300220D <li> **device-id**: 12040000 (Only reqd. for HD 4400) </ul></ul><ul><li> **Desktop** (Broadwell Default) <ul><li> **AAPL,ig-platform-id**: 07002216 <li> **device-id**: 12040000 (Only reqd. for HD 4400) </ul></ul><ul><li> **Laptop/NUC** (Haswell): &rarr; see [OpenCore Install Guide](https://dortania.github.io/OpenCore-Install-Guide/config-laptop.plist/haswell.html#add-2) </ul><ul><li> **Laptop/NUC** (Broadwell): &rarr; see [OpenCore Install Guide](https://dortania.github.io/OpenCore-Install-Guide/config-laptop.plist/broadwell.html#add-2) </ul>|**iGPU Support**: Intel HD 4200/4400/4600, HD 5000/5100/5200/5600 and Iris Pro 6200 <ul> <li> **Haswell Headless**: For systems with a Haswell CPU using an iMac SMBIOS, iGPU and a GPU which is used for graphics. <li> **Haswell/Broadwell Default**: Use this if you have a Desktop PC and the iGPU is used for driving a display. <li>**Laptop/NUC**: Depending on the iGPU used in your Lapto, Nuc or USDT a different combination of **AAPL,ig-platform-id** and **device-id** may be required. </ul> **Note**: Additional properties need to be added when using the iGPU for displaying graphics. Please refer to the OpenCore Install guide in this case. This section is only here to ensure that you are using the correct `AAPL,ig-platform-id`!
-**`Kernel/Add`** and <br>**`EFI/OC/Kexts`** |**Add the following Kexts**:<ul><li>[**AutoPkgInstaller**](https://github.com/dortania/OpenCore-Legacy-Patcher/tree/main/payloads/Kexts/Acidanthera)<li>[**AMFIPass**](https://github.com/dortania/OpenCore-Legacy-Patcher/tree/main/payloads/Kexts/Acidanthera) (`MinKernel`: `21.0.0`)<li> [**RestrictEvents**](https://github.com/acidanthera/RestrictEvents) (`MinKernel`: `20.4.0`) <li> [**FeatureUnlock**](https://github.com/acidanthera/FeatureUnlock) (optional) </ul> **WiFi** (optional) <ul><li>[**IOSkywalk.kext**](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/e21efa975c0cf228cb36e81a974bc6b4c27c7807/payloads/Kexts/Wifi/IOSkywalkFamily-v1.0.0.zip) (`MinKernel`: `23.0.0`) <li>[**IO80211FamilyLegacy.kext**](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/e21efa975c0cf228cb36e81a974bc6b4c27c7807/payloads/Kexts/Wifi/IO80211FamilyLegacy-v1.0.0.zip) (contains `AirPortBrcmNIC.kext`, ensure this is injected as well) (`MinKernel`: `23.0.0`) </ul> **Disable the following Kexts** (if present): <ul><li> **CPUFriend** <li> **CPUFriendDataProvider** </ul> | <ul><li>**AutoPkgInstaller**: For applying root-patches during macOS istallation automatically. Requires preparation of the installer ([**Details**](https://github.com/5T33Z0/OC-Little-Translated/blob/main/14_OCLP_Wintel/Guides/Auto-Patching.md))<li> **AMFIPass**: Beta kext from OCLP 0.6.7. Allows booting macOS 12+ without disabling AMFI.  <li> **RestrictEvents**: Forces VMM SB model, allowing OTA updates on systems with disabled SIP. Requires additional NVRAM parameters. <li> **FeatureUnlock**: Unlocks additional features in macOS that are only avaiable for certain Mac models/SMBIOSes. <li> **CPUFriend**: When changing the SMBIOS, it's recommeneded to generate a new CPUFriendDataProvider.kext! <li> **WiFi Kexts**: For macOS Sonoma. Re-Enable modern WiFi: BCM94350, BCM94360, BCM43602, BCM94331 and BCM943224. Legacy WiFi: Atheros chipsets, Broadcom BCM94322, BCM94328.
-**`Kernel/Block`**| Block `com.apple.iokit.IOSkywalkFamily`: <br> ![](https://user-images.githubusercontent.com/76865553/256150446-54079541-ee2e-4848-bb80-9ba062363210.png)| Blocks macOS'es IOSkywalk kext, so the injected one will be used instead. Only required for "Modern" Wifi Cards (&rarr; [Wifi Patching Guide](https://github.com/5T33Z0/OC-Little-Translated/blob/main/14_OCLP_Wintel/Enable_Features/WiFi_Sonoma.md)). 
+**`Kernel/Add`** and <br>**`EFI/OC/Kexts`** |**Add the following Kexts**:<ul><li>[**AutoPkgInstaller**](https://github.com/dortania/OpenCore-Legacy-Patcher/tree/main/payloads/Kexts/Acidanthera)<li>[**AMFIPass**](https://github.com/dortania/OpenCore-Legacy-Patcher/tree/main/payloads/Kexts/Acidanthera) (`MinKernel`: `21.0.0`)<li> [**RestrictEvents**](https://github.com/acidanthera/RestrictEvents) (`MinKernel`: `20.4.0`) <li> [**FeatureUnlock**](https://github.com/acidanthera/FeatureUnlock) (optional) </ul> **WiFi** (optional) <ul><li>[**IOSkywalk.kext**](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/e21efa975c0cf228cb36e81a974bc6b4c27c7807/payloads/Kexts/Wifi/IOSkywalkFamily-v1.0.0.zip) (`MinKernel`: `23.0.0`) <li>[**IO80211FamilyLegacy.kext**](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/e21efa975c0cf228cb36e81a974bc6b4c27c7807/payloads/Kexts/Wifi/IO80211FamilyLegacy-v1.0.0.zip) (contains `AirPortBrcmNIC.kext`, ensure this is injected as well) (`MinKernel`: `23.0.0`) </ul> **Disable the following Kexts** (if present): <ul><li> **CPUFriend** <li> **CPUFriendDataProvider** </ul> | <ul><li>**AutoPkgInstaller**: For applying root-patches during macOS istallation automatically. Requires preparation of the installer ([**Details**](/14_OCLP_Wintel/Guides/Auto-Patching.md))<li> **AMFIPass**: Beta kext from OCLP 0.6.7. Allows booting macOS 12+ without disabling AMFI.  <li> **RestrictEvents**: Forces VMM SB model, allowing OTA updates on systems with disabled SIP. Requires additional NVRAM parameters. <li> **FeatureUnlock**: Unlocks additional features in macOS that are only avaiable for certain Mac models/SMBIOSes. <li> **CPUFriend**: When changing the SMBIOS, it's recommeneded to generate a new CPUFriendDataProvider.kext! <li> **WiFi Kexts**: For macOS Sonoma. Re-Enable modern WiFi: BCM94350, BCM94360, BCM43602, BCM94331 and BCM943224. Legacy WiFi: Atheros chipsets, Broadcom BCM94322, BCM94328.
+**`Kernel/Block`**| Block `com.apple.iokit.IOSkywalkFamily`: <br> ![](https://user-images.githubusercontent.com/76865553/256150446-54079541-ee2e-4848-bb80-9ba062363210.png)| Blocks macOS'es IOSkywalk kext, so the injected one will be used instead. Only required for "Modern" Wifi Cards (&rarr; [Wifi Patching Guide](/14_OCLP_Wintel/Enable_Features/WiFi_Sonoma.md)). 
 **`Kernel/Emulate`** <br>(HEDT only!)| **Haswell E**: <ul> <li> **Cpuid1Data**: C3060300 00000000 00000000 00000000 <li> **Cpuid1Mask**: FFFFFFFF 00000000 00000000 00000000 </ul> **Broadwell E**: <ul> <li> **Cpuid1Data**: D4060300 00000000 00000000 00000000 <li> **Cpuid1Mask**: FFFFFFFF 00000000 00000000 00000000 | :warning: Only required for High End Desktop Workstations using Haswell E or Broadwell E CPUs! DON'T add to Desktop, Laptop or NUC configs!
 **`Kernel/Patch`** | Add and enable the following Kernel Patches from [**OCLP**](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/main/payloads/Config/config.plist) (apply `MinKernel` and `MaxKernel` settings as well): <ul> <li> **Force FileVault on Broken Seal** (optional) <li> **"Disable Library Validation Enforcement"**<li>**"Disable _csr_check() in _vnode_check_signature"** <li> **Fix PCI bus enumeration (Ventura)** <li> **Fix PCI bus enumeration (Sonoma)** </ul> **NOTE**: VMM board-id kernel patches are no longer required since `RestrictEvents` kext can enable the VMM board-id via `sbvmm` NVRAM entry!| <ul> <li> **Force FileVault on Broken Seal** is only required when using FileVault <li> **"Disable _csr_check() in _vnode_check_signature"** is not required on my Laptop, but on some Desktops it's needed. Try for yourself. <li> **Fix PCI bus enumeration**: enable if internal PCIe devices are showing up as express cards in the menu bar: ![Screenshot](https://github.com/user-attachments/assets/d362d81c-01f7-491e-98c9-cd9372f30eb1) 
 **`Misc/Security`**| <ul> <li>**SecureBootModel**: `Disabled` <li> **Vault**: `Optional`| Required when patching in graphics drivers for AMD and NVIDIA GPUs. Intel HD graphics might work with SecureBootModel set to `Default`. Try for yourself.
 **`NVRAM/Add/...-4BCCA8B30102`** | **Add the following Keys**: <ul> <li> **Key**: `OCLP-Settings`<br>**Type**: String <br> **Value**: `-allow_amfi`<li> **Key**: `revblock` <br> **Type:** String <br> **Value**: `media`<li> **Key**: `revpatch` <br> **Type:** String <br> **Value**: `sbvmm,asset`| **Explanaitons**: <ul> <li> Settings for OCLP and RestrictEvents. <li> `revblock`: `media` &rarr; Blocks mediaanalysisd on Ventura+ (for Metal 1 GPUs) which helps with graphical issues <li>`revpatch`: `sbvmm,asset` &rarr; Enables OTA updates and content caching (Check RestrictEvents documentation for details)|
 **`NVRAM/Delete/...-4BCCA8B30102`** (Array) | **Add the following Strings**: <ul> <li> `OCLP-Settings` <li> `revblock` <li> `revpatch` |Deletes NVRAM for these parameters before writing them. Otherwise you would need to perform an NVRAM reset every time you change any of them in the corresponding `Add` section.  
-**`NVRAM/Add/...-FE41995C9F82`** | **Change** **`csr-active-config`** to: <ul><li>**`03080000`** <li> When using an NVIDIA GPU, set it to: **`030A0000`** </ul>**Add the following**`boot-args`: <ul><li> **`amfi_get_out_of_my_way=0x1`** or **`amfi=0x80`** (same) <li> **`ipc_control_port_options=0`** <li> **`-disable_sidecar_mac`** (optinal) </ul>**Optional boot-args for GPUs** (Select based on GPU Vendor): <ul><li> **`-radvesa`** <li> **`nv_disable=1`** <li> **`ngfxcompat=1`**<li>**`ngfxgl=1`**<li> **`nvda_drv_vrl=1`** <li> **`agdpmod=vit9696`** | <ul> <li>**`amfi=0x80`**: Disables Apple Mobile File Integrity validation. Required for applying Root Patches with OCLP ~~and booting macOS 12+~~. :bulb: No longer needed for booting thanks to AMFIPass.kext – only for installing Root Patches with OCLP. Disabling AMFI causes issues with [3rd party apps' access to Mics and Cameras](https://github.com/5T33Z0/OC-Little-Translated/blob/main/13_Peripherals/Fixing_Webcams.md).<li> **`ipc_control_port_options=0`**: Required for Intel HD Graphics. Fixes issues with Firefox and electron-based apps like Discord. <li> **`-disable_sidecar_mac`**: For FeatureUnlock &rarr; Disables Sidecar/AirPlay/Universal Control patches. Since the features that can be enabled depend on the chosen SMBIOS refer to the [documentation](https://github.com/acidanthera/FeatureUnlock) <li> **`-radvesa`** (AMD only): Disables hardware acceleration and puts the card in VESA mode. Only required if your screen turns off after installing macOS 12+. Once you've installed the GPU drivers with OCLP, **disable it** so graphics acceleration works! <li> **`nv_disable=1`** (NVIDIA only): Disables hardware acceleration and puts the card in VESA mode. Only required if your screen turns off after installing macOS Ventura. Kepler Cards switch into VESA mode automatically without it. Once you've installed the GPU drivers with OCLP, **disable it** so graphics acceleration works! <li>**`ngfxcompat=1`** (NVIDIA only): Ignores compatibility check in `NVDAStartupWeb`. Not required for Kepler GPUs <li>**`ngfxgl=1`** (NVIDIA only): Disables Metal Spport so OpenGL is used for rendering instead. Not required for Kepler GPUs. <li> **`nvda_drv_vrl=1`** (NVIDIA only): Enables Web Drivers. Not required for Kepler GPUs. <li> **`agdpmod=vit9696`** &rarr; Disables board-id check. Useful if screen turns black after booting macOS which can happen after installing NVIDIA Webdrivers. <li> **`-wegnoigpu`** &rarr; Optional. Disables the iGPU in macOS. **ONLY** required when using an AMD GPU and an SMBIOS for a CPU without on-board graphics (i.e. `iMacPro1,1` or `MacPro7,1`) to let the GPU handle background rendering and other tasks. Requires Polaris or Vega cards to work properly (Navi is not supported by OCLP). Combine with `unfairgva=x` bitmask (x= 1 to 7) to [address DRM issues](https://github.com/5T33Z0/OC-Little-Translated/tree/main/H_Boot-args#unfairgva-overrides)
-**`UEFI/Drivers`** and <br> **`EFI/OC/Drivers`**| <ul><li> Add `ResetNvramEntry.efi` to `EFI/OC/Drivers` <li> And to your config:<br> ![resetnvram](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/8d955605-fb27-401f-abdd-2c616b233418) | Adds a boot menu entry to perform an NVRAM reset but without resetting the order of the boot drives. Requires a BIOS with UEFI support.
+**`NVRAM/Add/...-FE41995C9F82`** | **Change** **`csr-active-config`** to: <ul><li>**`03080000`** <li> When using an NVIDIA GPU, set it to: **`030A0000`** </ul>**Add the following**`boot-args`: <ul><li> **`amfi_get_out_of_my_way=0x1`** or **`amfi=0x80`** (same) <li> **`ipc_control_port_options=0`** <li> **`-disable_sidecar_mac`** (optinal) </ul>**Optional boot-args for GPUs** (Select based on GPU Vendor): <ul><li> **`-radvesa`** <li> **`nv_disable=1`** <li> **`ngfxcompat=1`**<li>**`ngfxgl=1`**<li> **`nvda_drv_vrl=1`** <li> **`agdpmod=vit9696`** | <ul> <li>**`amfi=0x80`**: Disables Apple Mobile File Integrity validation. Required for applying Root Patches with OCLP ~~and booting macOS 12+~~. :bulb: No longer needed for booting thanks to AMFIPass.kext – only for installing Root Patches with OCLP. Disabling AMFI causes issues with [3rd party apps' access to Mics and Cameras](/13_Peripherals/Fixing_Webcams.md).<li> **`ipc_control_port_options=0`**: Required for Intel HD Graphics. Fixes issues with Firefox and electron-based apps like Discord. <li> **`-disable_sidecar_mac`**: For FeatureUnlock &rarr; Disables Sidecar/AirPlay/Universal Control patches. Since the features that can be enabled depend on the chosen SMBIOS refer to the [documentation](https://github.com/acidanthera/FeatureUnlock) <li> **`-radvesa`** (AMD only): Disables hardware acceleration and puts the card in VESA mode. Only required if your screen turns off after installing macOS 12+. Once you've installed the GPU drivers with OCLP, **disable it** so graphics acceleration works! <li> **`nv_disable=1`** (NVIDIA only): Disables hardware acceleration and puts the card in VESA mode. Only required if your screen turns off after installing macOS Ventura. Kepler Cards switch into VESA mode automatically without it. Once you've installed the GPU drivers with OCLP, **disable it** so graphics acceleration works! <li>**`ngfxcompat=1`** (NVIDIA only): Ignores compatibility check in `NVDAStartupWeb`. Not required for Kepler GPUs <li>**`ngfxgl=1`** (NVIDIA only): Disables Metal Spport so OpenGL is used for rendering instead. Not required for Kepler GPUs. <li> **`nvda_drv_vrl=1`** (NVIDIA only): Enables Web Drivers. Not required for Kepler GPUs. <li> **`agdpmod=vit9696`** &rarr; Disables board-id check. Useful if screen turns black after booting macOS which can happen after installing NVIDIA Webdrivers. <li> **`-wegnoigpu`** &rarr; Optional. Disables the iGPU in macOS. **ONLY** required when using an AMD GPU and an SMBIOS for a CPU without on-board graphics (i.e. `iMacPro1,1` or `MacPro7,1`) to let the GPU handle background rendering and other tasks. Requires Polaris or Vega cards to work properly (Navi is not supported by OCLP). Combine with `unfairgva=x` bitmask (x= 1 to 7) to [address DRM issues](/H_Boot-args#unfairgva-overrides)
+**`UEFI/Drivers`** and <br> **`EFI/OC/Drivers`**| <ul><li> Add `ResetNvramEntry.efi` to `EFI/OC/Drivers` <li> And to your config:<br> ![resetnvram](https://github.com/laobamac/OC-little-zh/assets/76865553/8d955605-fb27-401f-abdd-2c616b233418) | Adds a boot menu entry to perform an NVRAM reset but without resetting the order of the boot drives. Requires a BIOS with UEFI support.
 
 > [!CAUTION]
 > 
@@ -212,7 +215,7 @@ Once you reach the set-up assistant (where you select your language, time zone, 
 To bring them back, do the following:
 
 - Run the OpenCore Patcher App
-- In the OpenCore Legacy Patcher menu, select "Post Install Root Patch":</br>![Post_Root_Patches](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/15fe5dc1-793c-465c-9252-1ee6e503c680)
+- In the OpenCore Legacy Patcher menu, select "Post Install Root Patch":</br>![Post_Root_Patches](https://github.com/laobamac/OC-little-zh/assets/76865553/15fe5dc1-793c-465c-9252-1ee6e503c680)
 - Follow the instructions of the Patcher App (I don't have a Haswell or Broadwell system, so I can't capture screenshots. I also couldn't find any online.)
 
 ### Installing Drivers for other GPUs
@@ -266,15 +269,15 @@ You just click on "Okay" and the drivers will be re-installed. After the obligat
 
 OCLP can also inform you about availabled updates of the Patcher app itself. But this requires adding the key `OCLP-Version`to the `NVRAM/Add` section of your config.plist:
 
-![OCLPver01](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/4a7b0fc8-2ab5-4d2c-9ab2-ea62ca7614ff)
+![OCLPver01](https://github.com/laobamac/OC-little-zh/assets/76865553/4a7b0fc8-2ab5-4d2c-9ab2-ea62ca7614ff)
 
 This ke is optional for Hackintosh users, since the OCLP app also informs you about updates once you run it. If you choose to add it to your config, you also have to add a reset key to the corresponding `NVRAM/Delete` section, so that new values can be applied:
 
-![OCLPver03](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/2ca84e3b-fb66-4d96-8fe8-d8ee94fde0a5)
+![OCLPver03](https://github.com/laobamac/OC-little-zh/assets/76865553/2ca84e3b-fb66-4d96-8fe8-d8ee94fde0a5)
 
 After that, you will be notified whenever an update for the OpenCore Patcher is available:
 
-![OCLPver02](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/dc61fb53-2a72-4523-81fe-a0df3596bc73)
+![OCLPver02](https://github.com/laobamac/OC-little-zh/assets/76865553/dc61fb53-2a72-4523-81fe-a0df3596bc73)
 
 Note that this Pop-up refers to "OpenCore" and not the Patcher because OCLP was designed with real Macs and Mac users in mind. For "regular" Mac users, using OCLP is most likely the only way they update OpenCore, config and kexts. So after downloading the latest OCLP update, they, just rebuild the EFI, mount the ESP, replaces the EFI/OC folder, apply reoo patches, reboot and that's it. 
 
@@ -282,10 +285,10 @@ But as Hackintosh users, we only care about the App updates to apply new, update
 
 > [!TIP]
 > 
-> If your system won't boot after patching it with OpenCore Legacy Patcher, you have several options to [revert root patches](https://github.com/5T33Z0/OC-Little-Translated/blob/main/14_OCLP_Wintel/Guides/Reverting_Root_Patches.md).
+> If your system won't boot after patching it with OpenCore Legacy Patcher, you have several options to [revert root patches](/14_OCLP_Wintel/Guides/Reverting_Root_Patches.md).
 
 ## Notes
-- Applying Root Patches to the system partition breaks its security seal. This affects System Updates: every time a System Update is available, the FULL Installer (about 12 GB) will be downloaded. But there is a [**workaround to reduce the size of OTA Updates**](https://github.com/5T33Z0/OC-Little-Translated/blob/main/S_System_Updates/OTA_Updates.md).
+- Applying Root Patches to the system partition breaks its security seal. This affects System Updates: every time a System Update is available, the FULL Installer (about 12 GB) will be downloaded. But there is a [**workaround to reduce the size of OTA Updates**](/S_System_Updates/OTA_Updates.md).
 - After each System Update, the iGPU/GPU drivers have to be re-installed. OCLP will take care of this. Just make sure to re-enable the appropriate boot-args to put AMD/NVIDIA GPUs in VESA mode prior to updating/upgrading macOS.
 
 ## Further Resources

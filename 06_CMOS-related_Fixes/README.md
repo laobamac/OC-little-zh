@@ -1,11 +1,13 @@
-# CMOS-related Fixes
-**CMOS** (complementary metal-oxide-semiconductor) memory holds important data such as date, time, hardware configuration information, auxiliary setup information, boot settings, hibernation information, etc. 
+# CMOS相关问题修复
+**CMOS**内存保存重要数据，如日期、时间、硬件配置信息、辅助设置信息、启动设置、休眠信息等。
 
-On a real Mac, non-volatile RAM (NVRAM) is used for this instead. Just like CMOS, NVRAM is also powered by a small battery, which allows it to retain its data when the system power is off.
+人话就是：主板上存储BIOS类数据的，你拔电池作用就是清CMOS
 
-When running macOS on Wintel systems, it can sometimes trigger a CMOS-reset on some BIOSes/Firmwares when shutting down or restarting the system.
+在实际 Mac 上，非易失性 RAM (NVRAM) 用于此目的。就像 CMOS 一样，NVRAM 也由小电池供电，这使得它可以在系统电源关闭时保留数据。
 
-You can use one of the following fixes to resolve the issue:
+在 Wintel 系统上运行 macOS 时，有时会在关闭或重新启动系统时触发某些 BIOS/固件上的 CMOS 重置。
 
-- [**CMOS Reset Fix**](/06_CMOS-related_Fixes/CMOS_Reset_Fix/README.md) – For fixing CMOS resets triggered by macOS after shutting down or rebooting.
-- [**Emulating CMOS Memory**](/06_CMOS-related_Fixes/Emulating_CMOS/README.md) – For fixing conflicts between `AppleRTC` and the BIOS/UEFI Firmware. Can be helpful when trying to fix hibernation.
+您可以使用以下修复程序之一来解决此问题：
+
+- [**CMOS 重置修复**](/06_CMOS-related_Fixes/CMOS_Reset_Fix/README.md) – 用于修复 macOS 在关机或重启后触发的 CMOS 重置。
+- [**模拟 CMOS 内存**](/06_CMOS-related_Fixes/Emulating_CMOS/README.md) – 用于修复“AppleRTC”与 BIOS/UEFI 固件之间的冲突。在尝试修复休眠时可能会有所帮助。

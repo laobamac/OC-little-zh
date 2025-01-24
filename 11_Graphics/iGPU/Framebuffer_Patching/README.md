@@ -47,7 +47,7 @@ Your Laptop boots into macOS and the internal screen works, but:
 2. the handshake between the system and both displays takes a long time and both screens turn off and on several times during the handshake until a stable connection is established.
 
 > [!NOTE]
-> If you don't get a picture at all you could try a [fake ig-platform-id](https://github.com/5T33Z0/OC-Little-Translated/blob/main/11_Graphics/iGPU/Framebuffer_Patching/Fake_IG-Platform-ID.md) to force the system into [VESA mode](https://wiki.osdev.org/VESA_Video_Modes). For desktop systems, try CaseyJ's [General Framebuffer Patching guide](https://www.tonymacx86.com/threads/guide-general-framebuffer-patching-guide-hdmi-black-screen-problem.269149/) instead.
+> If you don't get a picture at all you could try a [fake ig-platform-id](/11_Graphics/iGPU/Framebuffer_Patching/Fake_IG-Platform-ID.md) to force the system into [VESA mode](https://wiki.osdev.org/VESA_Video_Modes). For desktop systems, try CaseyJ's [General Framebuffer Patching guide](https://www.tonymacx86.com/threads/guide-general-framebuffer-patching-guide-hdmi-black-screen-problem.269149/) instead.
 
 ### Possible causes
 - Using an incorrect or sub-optimal `AAPL,ig-platform-id` for your iGPU
@@ -115,7 +115,7 @@ No | Yes (Index?)| [Adjust flags](#if-case-3-occurs) for the connector detected 
 
 If the display is detected in Hackintool's "Patch" section, either **Index 1** or **Index 2** should turn red: 
 
-![display-red](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/f671908c-ae2f-4241-a782-f35ccaa6c918)
+![display-red](https://github.com/laobamac/OC-little-zh/assets/76865553/f671908c-ae2f-4241-a782-f35ccaa6c918)
 
 If the display is detected and turns on:
 
@@ -137,14 +137,14 @@ Take note of your test results. Depending on the results you might be able to sk
 
 3. Take note of the the CPU family it belongs to (for example "Whisky Lake") 
 
-4. Identify the iGPU model of the CPU. If the actual model of the iGPU is not specified (i.e. if it says "Intel® UHD Graphics for xth Generation Intel® Processors"), use sites like netbookcheck.net or check in Windows Device Manager to find the exact model. In my case, it's an Intel UHD Graphics 620: <br> ![devmanigp](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/1844b3a0-01fa-4655-9cf8-ab771388512f)
+4. Identify the iGPU model of the CPU. If the actual model of the iGPU is not specified (i.e. if it says "Intel® UHD Graphics for xth Generation Intel® Processors"), use sites like netbookcheck.net or check in Windows Device Manager to find the exact model. In my case, it's an Intel UHD Graphics 620: <br> ![devmanigp](https://github.com/laobamac/OC-little-zh/assets/76865553/1844b3a0-01fa-4655-9cf8-ab771388512f)
 
 4. Next, verify that you are using the recommended `AAPL,ig-platform-id` for your CPU and iGPU:
-	- Find the recommended framebuffer for your mobile CPU family [in this list](https://github.com/5T33Z0/OC-Little-Translated/blob/main/11_Graphics/iGPU/iGPU_DeviceProperties.md#framebuffers-laptopnuc) (based on data from the OpenCore Install Guide)
+	- Find the recommended framebuffer for your mobile CPU family [in this list](/11_Graphics/iGPU/iGPU_DeviceProperties.md#framebuffers-laptopnuc) (based on data from the OpenCore Install Guide)
 	- Check if your iGPU requires a device-id to spoof a different iGPU model!
 	- Compare the data with the `DeviceProperties` used in your config.plist
 
-5. Make sure to cross-reference the default/recommended framebuffer for your iGPU against the ones listed in the [Intel HD Graphics FAQs](https://github.com/acidanthera/WhateverGreen/blob/master/Manual/FAQ.IntelHD.en.md#intel-hd-graphics-faqs). But keep in mind that the Intel HD FAQs uses [Big Endian instead of Little Endian](https://github.com/5T33Z0/OC-Little-Translated/blob/main/11_Graphics/iGPU/Framebuffer_Patching/Big-Endian_Little-Endian.md) which is required for the `config.plist`.
+5. Make sure to cross-reference the default/recommended framebuffer for your iGPU against the ones listed in the [Intel HD Graphics FAQs](https://github.com/acidanthera/WhateverGreen/blob/master/Manual/FAQ.IntelHD.en.md#intel-hd-graphics-faqs). But keep in mind that the Intel HD FAQs uses [Big Endian instead of Little Endian](/11_Graphics/iGPU/Framebuffer_Patching/Big-Endian_Little-Endian.md) which is required for the `config.plist`.
 
 6. If necessary, adjust the framebuffer patch (mainly `AAPL,ig-platform-id`) in the config.plist stored on your USB flash drive according to the data you gathered in steps 4 or 5. If you are already using the correct/recommended `AAPL,ig-platform-id`, then you can skip to the next chapter "Adding Connectors".
 
@@ -165,11 +165,11 @@ Let's have a look inside Hackintool's "Connectors" tab to understand the paramet
 
 |Parameter|Description|
 |:-------:|-----------|
-**Index**| An **Index** represents a *physical* graphics output on your Laptop. In macOS, up to 3 software connectors can be assigned (`con0` to `con2`) to 3 connectors (Indexes `1` to `3`). Index `-1` has no physical connector:</br>![Connectors](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/38ab2a7f-c342-4f1a-81a0-72decf1d0b4d) </br>Framebuffers which only contain `-1` Indexes (often referred to as "headless" or "empty") are used in setups where a discrete GPU is used for displaying graphics while the iGPU performs computational tasks only, e.g. Platform-ID `0x9BC80003`:</br>![headless](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/00b0b232-0de7-4a1b-a01f-8c6fabb90753)|
+**Index**| An **Index** represents a *physical* graphics output on your Laptop. In macOS, up to 3 software connectors can be assigned (`con0` to `con2`) to 3 connectors (Indexes `1` to `3`). Index `-1` has no physical connector:</br>![Connectors](https://github.com/laobamac/OC-little-zh/assets/76865553/38ab2a7f-c342-4f1a-81a0-72decf1d0b4d) </br>Framebuffers which only contain `-1` Indexes (often referred to as "headless" or "empty") are used in setups where a discrete GPU is used for displaying graphics while the iGPU performs computational tasks only, e.g. Platform-ID `0x9BC80003`:</br>![headless](https://github.com/laobamac/OC-little-zh/assets/76865553/00b0b232-0de7-4a1b-a01f-8c6fabb90753)|
 |**BusID**| ![](/Users/stunner/Desktop/BUSIDs.png) </br> The **Bus ID** is used to select the busses or pathways available for connecting displays. Every connector (`con`) must be assigned a *unique* `BusID` through which the signal travels from the iGPU to the physical port(s). Unique means each Bus ID can only be assigned to one connector at a time! And: only certain combinations of BusIDs and connector Types are allowed: <ul> <li> For **DisplayPort**: `0x02`, `0x04`, `0x05` or `0x06`<li>For **HDMI**: `0x01`, `0x02`, `0x04`, `0x06` (availabilty may vary) <li> For **DVI**: same as HDMI <li> For **VGA**: N/A|
 **Pipe**| Responsible for taking the graphics data from the iGPU and converting it into a format that can be displayed on a monitor or screen. It performs tasks such as scaling, color correction, and synchronization to ensure that the visual output appears correctly on the connected display. This is fixed for each framebuffer
 |**Type**| Type of the *physical* connector (DP, HDMI, DVi, LVDS, etc). Each connector type has a specific value associated with it: <ul><li> **DP**: `00040000` <li> **HDMI**: `00080000` <li> **DVI**: `00800000`
-|**Flags**| A bitmask representing connector "Flags" for the selected connector. The recommended value for connect value for any connection is `C7030000`:</br>![Flags](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/94aa0944-a3dc-4fb8-b68e-ba4c502c7bac) <br> For a complete list of framebuffer and connector flags, [click here](https://github.com/5T33Z0/OC-Little-Translated/blob/main/11_Graphics/iGPU/Framebuffer_Patching/Framebuffer_Connector_Flags.md)
+|**Flags**| A bitmask representing connector "Flags" for the selected connector. The recommended value for connect value for any connection is `C7030000`:</br>![Flags](https://github.com/laobamac/OC-little-zh/assets/76865553/94aa0944-a3dc-4fb8-b68e-ba4c502c7bac) <br> For a complete list of framebuffer and connector flags, [click here](/11_Graphics/iGPU/Framebuffer_Patching/Framebuffer_Connector_Flags.md)
 
 ### Understanding the `framebuffer-conX-alldata` property
 
@@ -259,7 +259,7 @@ Mobile: 1, PipeCount: 3, PortCount: 3, FBMemoryCount: 3
 
 The picture below lists the same data for the 3 connectors this framebuffer provides but with some additional color coding:
 
-![FBADATA02](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/91a78db5-ec2a-4a1f-8eba-df6720787ed3)
+![FBADATA02](https://github.com/laobamac/OC-little-zh/assets/76865553/91a78db5-ec2a-4a1f-8eba-df6720787ed3)
 
 <details>
 <summary><strong>More Examples</strong> (click to reveal)</summary>
@@ -311,11 +311,11 @@ Let's have a look inside Hackintool's "Connectors" tab to get to know the parame
 
 |Parameter|Description|
 |:-------:|-----------|
-**Index**| An **Index** represents a *physical* graphics output on your Laptop. In macOS, up to 3 software connectors can be assigned (`con0` to `con2`) to 3 connectors (Indexes `1` to `3`). Index `-1` has no physical connector:</br>![Connectors](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/38ab2a7f-c342-4f1a-81a0-72decf1d0b4d) </br>Framebuffers which only contain `-1` Indexes (often referred to as "headless" or "empty") are used in setups where a discrete GPU is used for displaying graphics while the iGPU performs computational tasks only, such as Platform-ID `0x9BC80003`:</br>![headless](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/00b0b232-0de7-4a1b-a01f-8c6fabb90753)|
+**Index**| An **Index** represents a *physical* graphics output on your Laptop. In macOS, up to 3 software connectors can be assigned (`con0` to `con2`) to 3 connectors (Indexes `1` to `3`). Index `-1` has no physical connector:</br>![Connectors](https://github.com/laobamac/OC-little-zh/assets/76865553/38ab2a7f-c342-4f1a-81a0-72decf1d0b4d) </br>Framebuffers which only contain `-1` Indexes (often referred to as "headless" or "empty") are used in setups where a discrete GPU is used for displaying graphics while the iGPU performs computational tasks only, such as Platform-ID `0x9BC80003`:</br>![headless](https://github.com/laobamac/OC-little-zh/assets/76865553/00b0b232-0de7-4a1b-a01f-8c6fabb90753)|
 |**BusID**| ![](/Users/stunner/Desktop/BUSIDs.png) </br> The **Bus ID** is used to select the busses or pathways available for connecting displays. Every connector (`con`) must be assigned a *unique* `BusID` through which the signal travels from the iGPU to the physical port(s). Unique means each Bus ID can only be assigned to one connector at a time! And: only certain combinations of BusIDs and connector Types are allowed: <ul> <li> For **DisplayPort**: `0x02`, `0x04`, `0x05` or `0x06`<li>For **HDMI**: `0x01`, `0x02`, `0x04`, `0x06` (availability may vary) <li> For **DVI**: same as HDMI <li> For **VGA**: N/A|
 **Pipe**| Responsible for taking the graphics data from the iGPU and converting it into a format that can be displayed on a monitor or screen. It performs tasks such as scaling, color correction, and synchronization to ensure that the visual output appears correctly on the connected display. This is fixed for each framebuffer
 |**Type**| Type of the *physical* connector (DP, HDMI, DVi, LVDS, etc). Each connector type has a specific value associated with it: <ul><li> **DP**: `00040000` <li> **HDMI**: `00080000` <li> **DVI**: `0080000`
-|**Flags**| A bitmask representing connector "Flags" for the selected connector. The recommended value for connect value for any connection is `C7030000`:</br>![Flags](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/94aa0944-a3dc-4fb8-b68e-ba4c502c7bac) <br> For a complete list of framebuffer and connector flags, [click here](https://github.com/5T33Z0/OC-Little-Translated/blob/main/11_Graphics/iGPU/Framebuffer_Patching/Framebuffer_Connector_Flags.md)
+|**Flags**| A bitmask representing connector "Flags" for the selected connector. The recommended value for connect value for any connection is `C7030000`:</br>![Flags](https://github.com/laobamac/OC-little-zh/assets/76865553/94aa0944-a3dc-4fb8-b68e-ba4c502c7bac) <br> For a complete list of framebuffer and connector flags, [click here](/11_Graphics/iGPU/Framebuffer_Patching/Framebuffer_Connector_Flags.md)
 
 #### Translating the data into `DeviceProperties`
 
@@ -393,7 +393,7 @@ Key                              | Type | Value     | Notes
 
 **This is how the DeviceProperties for your iGPU should look like now**:
 
-![cfg-step1](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/760bd4d0-e2de-493b-8fb0-aee52caf15c0)
+![cfg-step1](https://github.com/laobamac/OC-little-zh/assets/76865553/760bd4d0-e2de-493b-8fb0-aee52caf15c0)
 </details>
 <details>
 <summary><strong>Semi-automated method using Hackintool</strong> (click to reveal)</summary>
@@ -402,15 +402,15 @@ Key                              | Type | Value     | Notes
 
 #### Generating a framebuffer patch with Hackintool
 1. Run Hackintool
-2. In the menu bar, choose the "Framebuffer" type. Select either **≤ macOS 10.13** (High Sierra and older) or **≥ macOS 10.14** (Mojave and newer, default): </br> ![Menubar](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/3e425067-557c-4418-88d1-02c5f64c9aea)
+2. In the menu bar, choose the "Framebuffer" type. Select either **≤ macOS 10.13** (High Sierra and older) or **≥ macOS 10.14** (Mojave and newer, default): </br> ![Menubar](https://github.com/laobamac/OC-little-zh/assets/76865553/3e425067-557c-4418-88d1-02c5f64c9aea)
 3. Next, click on "Patch".
 4. Then click on "Connectors"
 5. From the "Intel Generation" dropdown menu, select the CPU family your CPU belongs to. Since my Whiskey Lake CPU is 8th Gen and since 8th and 9th gen Intel CPUs belong to the Coffee Lake family, I select Coffee Lake)
-6. Next, specify the "Platform ID" to use. For this example, I am using the recommended framebuffer by Dortania, `0x9B3E0000`:</br>![start01](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/67f8c8a5-6474-4168-9fe7-7ae942743a8f)
-7. The list below the "Connectors" tab shows the default configuration of the selected Framebuffer:<br>![start02](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/912181f0-5b68-4228-bfec-adf89cd0ea41)
+6. Next, specify the "Platform ID" to use. For this example, I am using the recommended framebuffer by Dortania, `0x9B3E0000`:</br>![start01](https://github.com/laobamac/OC-little-zh/assets/76865553/67f8c8a5-6474-4168-9fe7-7ae942743a8f)
+7. The list below the "Connectors" tab shows the default configuration of the selected Framebuffer:<br>![start02](https://github.com/laobamac/OC-little-zh/assets/76865553/912181f0-5b68-4228-bfec-adf89cd0ea41)
 8. Leave `Index 0` (= internal display) and `Index 1` untouched!
-9. If you are using HDMI to HDMI or HDMI to DVI, change the "Type" for `Index 1` and `Index 2` to  HDMI: <br>![cons01](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/8df0d0a8-67da-43ba-8048-fb496cb1fa48)
-10. Next, we modify the connector "Flags" for `Index 1` and `Index 2`:<br>![cons02](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/238faa4b-ac61-4a1c-bbbb-b5dde21d3400)
+9. If you are using HDMI to HDMI or HDMI to DVI, change the "Type" for `Index 1` and `Index 2` to  HDMI: <br>![cons01](https://github.com/laobamac/OC-little-zh/assets/76865553/8df0d0a8-67da-43ba-8048-fb496cb1fa48)
+10. Next, we modify the connector "Flags" for `Index 1` and `Index 2`:<br>![cons02](https://github.com/laobamac/OC-little-zh/assets/76865553/238faa4b-ac61-4a1c-bbbb-b5dde21d3400)
 11. We want the sum to be `0x000003C7`, which consists of the following flags:
 	- `CNAlterAppertureRequirements`
 	- `CNUnknownFlag_2`
@@ -419,20 +419,20 @@ Key                              | Type | Value     | Notes
 	- `CNUnknownFlag_80`
 	- `CNUnknownFlag_100`
 12. Next, click on "Patch".
-13. In the "General" section, enable the following settings:<br>![patch01](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/b58b1b6c-15d5-4cb6-8e75-81947c052100)
-14. Next, click the "Advanced" tab, select the following settings (and read the notes):<br>![patch02](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/cc34a3b1-25bc-4201-a2d7-660abea2aca0)
-15. Next, click on "LSPCON" and read the text that appears when hovering over the "Enable Driver" box. If you have verified that your iGPU supports HDMI 2.0 and is routed via the iGPU you can enable the driver and select the "Preferred Mode". If uncertain, just leave it on "Auto Detect": <br>![patch03](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/f337105e-b1de-48f7-b87a-73b5b3540a52)
-16. Now, click on "Generate Patch" located at the bottom of the window. The empty black area will be filled with the raw text for a .plist containing the `DeviceProperties` for your iGPU: <br>![generate01](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/c8011839-6c8b-4dfe-9216-efe91655252d)
+13. In the "General" section, enable the following settings:<br>![patch01](https://github.com/laobamac/OC-little-zh/assets/76865553/b58b1b6c-15d5-4cb6-8e75-81947c052100)
+14. Next, click the "Advanced" tab, select the following settings (and read the notes):<br>![patch02](https://github.com/laobamac/OC-little-zh/assets/76865553/cc34a3b1-25bc-4201-a2d7-660abea2aca0)
+15. Next, click on "LSPCON" and read the text that appears when hovering over the "Enable Driver" box. If you have verified that your iGPU supports HDMI 2.0 and is routed via the iGPU you can enable the driver and select the "Preferred Mode". If uncertain, just leave it on "Auto Detect": <br>![patch03](https://github.com/laobamac/OC-little-zh/assets/76865553/f337105e-b1de-48f7-b87a-73b5b3540a52)
+16. Now, click on "Generate Patch" located at the bottom of the window. The empty black area will be filled with the raw text for a .plist containing the `DeviceProperties` for your iGPU: <br>![generate01](https://github.com/laobamac/OC-little-zh/assets/76865553/c8011839-6c8b-4dfe-9216-efe91655252d)
 17. Click in the text area. Press CMD+A to select the text, press CMD+C to copy it to the clipboard
 18. Run ProperTree
-19. Press CMD+V and you should have something like this: <br> ![result01](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/077a94e9-330c-459d-a7dc-5231de7af0b0)
+19. Press CMD+V and you should have something like this: <br> ![result01](https://github.com/laobamac/OC-little-zh/assets/76865553/077a94e9-330c-459d-a7dc-5231de7af0b0)
 20. Now, you could add the dictionary `PciRoot(0x0)/Pci(0x2,0x0)` to your config.plist as is, but there are some entries in there that we don't need, so do the following:
 	- Delete all **`framebuffer-con0-`** properties since they are the default settings for the internal screen
 	- Delete all entries for **`framebuffer-con3-`** since this is for the dummy connector which is not used anyway.
 	- Change the value for `model` by entering the name of your actual iGPU, like `Intel UHD Graphics 620` in my case.
 	- Disable/delete `framebuffer-stolenmem` if you want to use 2048 MB of VRAM which is handled by `framebuffer-unifiedmem`. `stolenmen` and `unifiedmem` should not be used at the same time.
 	- Add additional properties required for your iGPU (check Whatevergreen repo for details). In my case I need a backlight registers fix for Kaby Lake and newer which is property `enable-backlight-registers-fix` or `enable-backlight-registers-alternative-fix` (macOS 13.4+)
-21. After editing, the framebuffer patch might look like this:<br>![result02](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/b87abad1-3cb2-4db8-917a-60717b7007fa)
+21. After editing, the framebuffer patch might look like this:<br>![result02](https://github.com/laobamac/OC-little-zh/assets/76865553/b87abad1-3cb2-4db8-917a-60717b7007fa)
 22. Now copy the dictionary `PciRoot(0x0)/Pci(0x2,0x0)` to the clipboard, open your config.plist on your USB flash drive and replace the existing entry under `DeviceProperties/Add`
 
 #### Optional Properties:

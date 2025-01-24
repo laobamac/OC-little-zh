@@ -47,7 +47,7 @@ This method uses tools to create a codeless kext containing an info.plist with t
 
 > [!CAUTION]
 >
-> If your desktop mainboard has an LED-controller for driving RGB fans mapped via USB, you should disable these ports in macOS. There have been reports that these ports can cause shutdown/reboot issues under macOS, especially on ASRock boards ([A520m](https://github.com/5T33Z0/OC-Little-Translated/issues/121) and [B550M](https://www.reddit.com/r/hackintosh/comments/1flewc3/reboot_and_shutdown_problem_on_asrock_boards_with/) chipsets).
+> If your desktop mainboard has an LED-controller for driving RGB fans mapped via USB, you should disable these ports in macOS. There have been reports that these ports can cause shutdown/reboot issues under macOS, especially on ASRock boards ([A520m](https://github.com/laobamac/OC-little-zh/issues/121) and [B550M](https://www.reddit.com/r/hackintosh/comments/1flewc3/reboot_and_shutdown_problem_on_asrock_boards_with/) chipsets).
 
 ### Option 1: Mapping USB ports in Microsoft Windows (recommended)
 
@@ -70,7 +70,7 @@ Since the `XhciPortLimit` quirk has been fixed since OC 0.9.3, it can be used ag
 #### Using USBMap (recommended)
 The following method is applicable when using [**USBMap**](https://github.com/corpnewt/USBMap).
 
-- [**Update OpenCore**](https://github.com/5T33Z0/OC-Little-Translated/tree/main/D_Updating_OpenCore) to the latest version (0.9.3 or newer is mandatory!)
+- [**Update OpenCore**](/D_Updating_OpenCore) to the latest version (0.9.3 or newer is mandatory!)
 - Enable Kernel Quirk `XchiPortLimit`
 - Save your config and reboot
 - Follow the [**instructions**](https://github.com/corpnewt/USBMap#general-mapping-process) to map your USB ports and generate a `USBPort.kext`
@@ -82,7 +82,7 @@ The following method is applicable when using [**USBMap**](https://github.com/co
 #### Using Hackintool (outdated, inconvenient but prevalent)
 This method is applicable when using [**Hackintool**](https://github.com/benbaker76/Hackintool). Although wide-spread, using Hackintool for mapping USB ports is a bit antiquated, requires a kot more prepworkd and is unreliable in terms of detecting *internal* USB ports. You also need 2 different kinds of USB flash drives for mapping ports: a USB 2 and a USB 3 stick!
 
-- [**Update OpenCore**](https://github.com/5T33Z0/OC-Little-Translated/tree/main/D_Updating_OpenCore) to the latest version (0.9.3 or newer is mandatory!)
+- [**Update OpenCore**](/D_Updating_OpenCore) to the latest version (0.9.3 or newer is mandatory!)
 - Mount your EFI
 - Add Daliansky's variant of [**USBInjectAll.kext**](https://github.com/daliansky/OS-X-USB-Inject-All/releases) to `EFI/OC/Kexts` and your `config.plist` since it also supports the latest chipsets
 - [**Prepare your system**](https://dortania.github.io/OpenCore-Post-Install/usb/system-preparation.html) for mapping by renaming USB controllers.
@@ -106,12 +106,12 @@ This method is applicable when using [**Hackintool**](https://github.com/benbake
 > 
 > If you decide to change the SMBIOS later, you have to adjust the `model` property inside the kext's `info.plist` – otherwise the mapping won't be applied!
 > 
-> **Example**:<br> ![USBremap](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/4386daf7-fc63-480d-8922-9632425c3c57)
+> **Example**:<br> ![USBremap](https://github.com/laobamac/OC-little-zh/assets/76865553/4386daf7-fc63-480d-8922-9632425c3c57)
 
 ## Method 2: Mapping USB Ports via ACPI
 Declaring USB ports is via ACPI is the "gold standard" since this method is OS-agnostic (unlike USBPort kexts, which by default only work for the SMBIOS they were defined for). It's aimed at advanced users only who are experienced in working with ACPI tables already. 
 
-You can follow [**this guide**](https://github.com/5T33Z0/OC-Little-Translated/tree/main/03_USB_Fixes/ACPI_Mapping_USB_Ports) to map your USB Ports via ACPI.
+You can follow [**this guide**](/03_USB_Fixes/ACPI_Mapping_USB_Ports) to map your USB Ports via ACPI.
 
 ## Additional Resources
 - [**USBInjectAll.kext**](https://github.com/daliansky/OS-X-USB-Inject-All/releases) by daliansky. Updated version with IOKit Personalities for the latest SMBIOSes and USB Controllers, including 400 to 700-series mainboards. Its `info.plist` contains about 9.300 lines of code while the original by Rehabman is from 2018 and "only" contains about 6.800!

@@ -14,11 +14,11 @@
 - [Credits and Resources](#credits-and-resources)
 
 ## Description
-Keyboard keys can be re-mapped for triggering different keys than the ones that are actually pressed. Function keys like `F2` can be re-mapped to triggering `F10`, for example. But beware that *only* keys that can capture **PS2 Scan Code** under macOS can be re-mapped! An in-depth example from a Lenovo ThinkPad utilizing this technique and [ACPI Debugging](https://github.com/5T33Z0/OC-Little-Translated/tree/main/00_ACPI/ACPI_Debugging) can be found [here](https://github.com/5T33Z0/OC-Little-Translated/blob/main/05_Laptop-specific_Patches/Fixing_Keyboard_Mappings_and_Brightness_Keys/Customizing_ThinkPad_Keyboard_Shortcuts.md).
+Keyboard keys can be re-mapped for triggering different keys than the ones that are actually pressed. Function keys like `F2` can be re-mapped to triggering `F10`, for example. But beware that *only* keys that can capture **PS2 Scan Code** under macOS can be re-mapped! An in-depth example from a Lenovo ThinkPad utilizing this technique and [ACPI Debugging](/00_ACPI/ACPI_Debugging) can be found [here](/05_Laptop-specific_Patches/Fixing_Keyboard_Mappings_and_Brightness_Keys/Customizing_ThinkPad_Keyboard_Shortcuts.md).
 
 > [!CAUTION]
 > 
-> Logging Keyboard Scan Codes does no longer work on macOS Big Sur and newer. There have been reports [here](https://github.com/acidanthera/bugtracker/issues/872), [here](https://github.com/daliansky/OC-little/issues/46) and [here](https://github.com/5T33Z0/OC-Little-Translated/issues/92#issuecomment-1848874053). <br> **Solution**: use macOS 10.15 or older for mapping keyboard shortcuts.
+> Logging Keyboard Scan Codes does no longer work on macOS Big Sur and newer. There have been reports [here](https://github.com/acidanthera/bugtracker/issues/872), [here](https://github.com/daliansky/OC-little/issues/46) and [here](https://github.com/laobamac/OC-little-zh/issues/92#issuecomment-1848874053). <br> **Solution**: use macOS 10.15 or older for mapping keyboard shortcuts.
 
 ### Update [September 30, 2020]:
 
@@ -32,7 +32,7 @@ If the **BrightnessKeys** kext does not work initially, please refer to the "[sp
   
 >[!NOTE]
 >
-> Some ASUS and Dell Laptops require `SSDT-OCWork-xxx` to enable `Notify (GFX0, 0x86)` and `Notify (GFX0,0x87)`, so that the Brightness shorcut keys work. Please refer to the [ASUS Machine Special Patch](https://github.com/5T33Z0/OC-Little-Translated/tree/main/05_Laptop-specific_Patches/Brand-specific_Patches/ASUS_Special_Patch) and [Dell Machine Special Patch](https://github.com/5T33Z0/OC-Little-Translated/blob/main/05_Laptop-specific_Patches/Brand-specific_Patches/Dell_Special_Patch) for instructions.
+> Some ASUS and Dell Laptops require `SSDT-OCWork-xxx` to enable `Notify (GFX0, 0x86)` and `Notify (GFX0,0x87)`, so that the Brightness shorcut keys work. Please refer to the [ASUS Machine Special Patch](/05_Laptop-specific_Patches/Brand-specific_Patches/ASUS_Special_Patch) and [Dell Machine Special Patch](/05_Laptop-specific_Patches/Brand-specific_Patches/Dell_Special_Patch) for instructions.
 
 ## Requirements and Preparations
 
@@ -43,7 +43,7 @@ If the **BrightnessKeys** kext does not work initially, please refer to the "[sp
 
 > [!CAUTION]
 >
-> If the keys you want to map are not routed via the PS/2 Controller but via the EC instead, you cannot use this method. In this case, try ACPI Debugging instead (&rarr; [**Example**](https://github.com/5T33Z0/OC-Little-Translated/blob/main/05_Laptop-specific_Patches/Fixing_Keyboard_Mappings_and_Brightness_Keys/Customizing_ThinkPad_Keyboard_Shortcuts.md): In-depth guide for Mapping `Fn` Shortcut Keys on Lenovo ThinkPads)
+> If the keys you want to map are not routed via the PS/2 Controller but via the EC instead, you cannot use this method. In this case, try ACPI Debugging instead (&rarr; [**Example**](/05_Laptop-specific_Patches/Fixing_Keyboard_Mappings_and_Brightness_Keys/Customizing_ThinkPad_Keyboard_Shortcuts.md): In-depth guide for Mapping `Fn` Shortcut Keys on Lenovo ThinkPads)
 
 ### About PS/2 and ABD Scan Codes
 

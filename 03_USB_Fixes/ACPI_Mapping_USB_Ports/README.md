@@ -83,7 +83,7 @@ In order to declare USB ports via ACPI, 2 conditions of the ACPI tables in your 
 - [**maciASL**](https://github.com/acidanthera/MaciASL) or [**XIASL**](https://github.com/ic005k/Xiasl/releases) (cross-platform) for editing `.dsl`/`.aml` files.
 - [**IOResgistryExplorer**](https://github.com/utopia-team/IORegistryExplorer/releases) for gathering infos about I/O on macOS. Used for probing USB Ports.
 - [**OpenCore Auxiliary Tools**](https://github.com/ic005k/QtOpenCoreConfig) or a Plist Editor for editing the `config.plist`.
-- [**Example Files**](https://github.com/5T33Z0/OC-Little-Translated/tree/main/03_USB_Fixes/ACPI_Mapping_USB_Ports/Example_Files) (for following along)
+- [**Example Files**](/03_USB_Fixes/ACPI_Mapping_USB_Ports/Example_Files) (for following along)
 - FAT32 formatted USB 3.x flash drive for dumping ACPI tables and probing `SS` ports.
 - Additional USB 2.0 flash drive (optional, for probing `HS` ports).
 - Your mainboard manual with a schematic of the physical locations of the USB headers and ports.

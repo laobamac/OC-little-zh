@@ -3,7 +3,7 @@ This section covers the current status of OpenCore Legacy Patcher development fo
 
 ## (Officially) Supported Mac Models
 
-![macos15_b](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/7e741e5b-64fc-4456-ac02-37b258d68216)
+![macos15_b](https://github.com/laobamac/OC-little-zh/assets/76865553/7e741e5b-64fc-4456-ac02-37b258d68216)
 
 ### Intel CPU requirements:
 

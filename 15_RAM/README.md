@@ -1,39 +1,40 @@
-# Fixing falsely reported RAM speed in macOS
+# 修复macOS中错误报告的RAM速度
 
-- [About](#about)
-- [Fix](#fix)
-- [Gathering RAM data](#gathering-ram-data)
-	- [Using Windows](#using-windows)
-	- [Using Linux (recommended)](#using-linux-recommended)
-- [Add the memory data to your config.plist](#add-the-memory-data-to-your-configplist)
-- [Verify](#verify)
-- [Further Resources](#further-resources)
+- [修复macOS中错误报告的RAM速度](#修复macos中错误报告的ram速度)
+	- [关于](#关于)
+	- [修复方法](#修复方法)
+	- [收集RAM数据](#收集ram数据)
+		- [使用Windows](#使用windows)
+		- [使用Linux（推荐）](#使用linux推荐)
+	- [将内存数据添加到config.plist](#将内存数据添加到configplist)
+	- [验证](#验证)
+	- [进一步资源](#进一步资源)
 
 ---
 
-## About
-I recently acquired a Lenovo T490 Laptop. While checking the installed RAM, I noticed in System Profiler that the reported RAM speed was 2400 MHz:
+## 关于
+我最近购买了一台联想T490笔记本。检查安装的RAM时，我注意到在系统信息中报告的RAM速度为2400 MHz：
 
 ![2400](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/e068bb0e-d9e7-4e0f-a591-50a6ba992ac4)
 
-But in Windows it was reported correctly, running @2666 MHz:
+但在Windows中，它正确地显示为2666 MHz：
 
 ![MemSpeed](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/41e21b50-d19c-4ac8-9c2e-5fbd615cfe01)
 
-Since in Wintel systems RAM speed is are handle by the BIOS/UEFI Firmware, I assume there's a memory speed reporting issue in macOS.
+由于在Wintel系统中，RAM速度由BIOS/UEFI固件处理，我推测macOS中存在内存速度报告问题。
 
-## Fix
-In order to fix the falsely reported memory speed in macOS, you *can* do the following. I say *can* because this fix is purely cosmetic:
+## 修复方法
+为了修复macOS中错误报告的内存速度，你*可以*做以下操作。我说*可以*是因为这个修复纯粹是外观上的修复：
 
-## Gathering RAM data
+## 收集RAM数据
 
-### Using Windows
-1. Run Windows, open a command prompt and enter:
+### 使用Windows
+1. 运行Windows，打开命令提示符并输入：
 	
 	```bash
 	wmic memorychip list full
 	```
-2. The output shoul look like this:
+2. 输出应如下所示：
 	```
 	BankLabel=BANK 0
 	Capacity=8589934592
@@ -93,22 +94,22 @@ In order to fix the falsely reported memory speed in macOS, you *can* do the fol
 	TypeDetail=128
 	Version=
 	```
-3. Save the data as a .txt file so you can access it later from within macOS
+3. 将数据保存为.txt文件，以便稍后在macOS中访问
 
-### Using Linux (recommended)
-Using Linux is recommended because the command used under Windows doesn't show the `AssetTag`. Listed below are the instructions to run a live version of Linux from a USB flash drive directly from an .iso, without needing to install Linux.
+### 使用Linux（推荐）
+推荐使用Linux，因为Windows下的命令没有显示`AssetTag`。以下是直接从USB闪存驱动器运行Linux live版的说明，无需安装Linux。
 
-1. Prepare a USB Flash Drive with [**Ventoy**](https://github.com/ventoy/Ventoy)
-2. Download an .iso of a Linux distribution of your choice (for example Ubuntu or Zorin, etc.)
-3. Copy the .iso to your Ventoy USB stick
-4. Reboot from USB flash drive
-5. In the Ventoy menu, select your Linux distro and click on "Normal Boot"
-6. Select the "Try" option instead of the "Install" option 
-7. Once you've reached the Desktop, run Terminal and enter:
+1. 准备一个USB闪存驱动器，安装[**Ventoy**](https://github.com/ventoy/Ventoy)
+2. 下载一个你选择的Linux发行版的.iso文件（例如Ubuntu或Zorin等）
+3. 将.iso文件复制到Ventoy USB驱动器中
+4. 从USB闪存驱动器启动
+5. 在Ventoy菜单中，选择你的Linux发行版并点击“Normal Boot”
+6. 选择“Try”选项而不是“Install”选项
+7. 一旦进入桌面，打开终端并输入：
 	```bash
 	sudo dmidecode -t memory
 	```
-8. The output should look like this:
+8. 输出应如下所示：
 	```
 	dmidecode 3.2
 	Getting SMBIOS data from sysfs.
@@ -170,26 +171,26 @@ Using Linux is recommended because the command used under Windows doesn't show t
 		Minimum Voltage: Unknown
 		Maximum Voltage: Unknown
 	```
-9. Save the data as a .txt file on a USB flash drive so you can access it later from within macOS
+9. 将数据保存为.txt文件到USB闪存驱动器中，以便稍后在macOS中访问
 
-> [!NOTE]
->
-> It seems that macOS displays the "Configured Memory Speed" value instead of the "Speed" value. And since the Configured Memory Speed is 2400 MT/s in my case, that's the reason why the reported speed is lower in macOS than in Windows. But "Configured Memory Speed" actually refers to the *actual* speed the RAM is running at and not the maximum possible speed it is capable of. This can be changed in BIOS but Laptop BIOSes usually don't let you configure RAM speeds. Mhh…
+> [!注意]
+> 
+> 看起来macOS显示的是“Configured Memory Speed”值，而不是“Speed”值。由于我的“Configured Memory Speed”是2400 MT/s，这就是为什么在macOS中报告的速度低于Windows的原因。但“Configured Memory Speed”实际上指的是*实际*运行的内存速度，而不是它能达到的最大速度。这可以在BIOS中更改，但笔记本BIOS通常不允许你配置内存速度。唉…
 
-## Add the memory data to your config.plist 
-:warning: Read OpenCore's "Documentation.pdf", chapter 10.4: "Memory Properties" to get familiar with the available parameters *before entering any data into your config.plist!* Because some parameters use different values in OpenCore and have to be converted from hex to decimal.
+## 将内存数据添加到config.plist 
+:warning: 在将任何数据输入`config.plist`之前，先阅读OpenCore的“Documentation.pdf”第10.4章：“内存属性”，以熟悉可用的参数！因为某些参数在OpenCore中使用不同的值，必须将其从十六进制转换为十进制。
 
-1. Reboot into macOS
-2. Run OpenCore Auxiliary Tools, mount the EFI and open your `config.plist`
-3. Navigate to `PlatformInfo/Memory`
-4. Enable `CustomMemory` (disabling it ignores the whole `Memory` section)
-5. Enter the relevant data you gathered earlier and ensure it follows OpenCore's standards: ![CstmMem](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/b40dd4e2-aca6-454f-86bd-75ab8faf78c6)
-6. Save your config and reboot
+1. 重启进入macOS
+2. 运行OpenCore辅助工具，挂载EFI并打开`config.plist`
+3. 转到`PlatformInfo/Memory`
+4. 启用`CustomMemory`（禁用它将忽略整个`Memory`部分）
+5. 输入你之前收集的相关数据，并确保它符合OpenCore的标准： ![CstmMem](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/b40dd4e2-aca6-454f-86bd-75ab8faf78c6)
+6. 保存配置并重启
 
-## Verify
-- Run System Profiler
-- Check "Memory" Section. The correct memory speed should be reported now: <br>![2667](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/338f44f4-f7db-4bbf-91ca-53ec9afbf187)
-- Done
+## 验证
+- 运行系统信息
+- 检查“内存”部分。现在应该报告正确的内存速度： <br>![2667](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/338f44f4-f7db-4bbf-91ca-53ec9afbf187)
+- 完成
 
-## Further Resources
-- [New Memory Properties Section](https://www.insanelymac.com/forum/topic/345520-opencore-063-new-memory-properties-section/) by miliuco
+## 进一步资源
+- [内存属性部分](https://www.insanelymac.com/forum/topic/345520-opencore-063-new-memory-properties-section/) 来自miliuco

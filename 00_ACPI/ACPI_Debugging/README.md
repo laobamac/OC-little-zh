@@ -23,7 +23,7 @@ To enable ACPI Debugging, do the following:
 ## Example
 To observe `_PTS` and `_WAK` of `ACPI` receiving `Arg0` after the machine sleeps and wakes up.
 
-- ***SSDT-PTSWAK*** &rarr; This patch has built-in parameter passing variables `\_SB.PCI9.TPTS`, `\_SB.PCI9.TWAK`, which are convenient for other patches. See [**PTSWAK Sleep and WakeFix**](https://github.com/5T33Z0/OC-Little-Translated/tree/main/04_Fixing_Sleep_and_Wake_Issues/PTSWAK_Sleep_and_Wake_Fix).
+- ***SSDT-PTSWAK*** &rarr; This patch has built-in parameter passing variables `\_SB.PCI9.TPTS`, `\_SB.PCI9.TWAK`, which are convenient for other patches. See [**PTSWAK Sleep and WakeFix**](/04_Fixing_Sleep_and_Wake_Issues/PTSWAK_Sleep_and_Wake_Fix).
 - ***SSDT-BKeyQxx-Debug*** &rarr; Debug code is added within the patch to be able to execute debug code after key response. You can specify the brightness shortcut key, or other keys when you actually use it.
 - Complete the sleep and wake up process once
 - Open the Console and search for `ABCD-`

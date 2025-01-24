@@ -1,4 +1,4 @@
-[![macOS](https://img.shields.io/badge/Supported_macOS:-≤13.2-white.svg)](https://www.apple.com/macos/ventura/)
+[![macOS](https://img.shields.io/badge/支持的macOS:-≤13.2-white.svg)](https://www.apple.com/macos/ventura/)
 
 # Enabling Metal 3 Support and "GPU" Tab in Activity Monitor
 
@@ -44,7 +44,7 @@ Here's a screenshot from my system which uses an 10th Gen i9 CPU with a Intel UH
 - **GPU**: 
 	- `AAPL,slot-name` with correct location (internal@…)
 - **iGPU**:
-	- `AAPL,ig-platform-id` entry with correct [**empty Framebuffer**](https://github.com/5T33Z0/OC-Little-Translated/blob/main/11_Graphics/iGPU/iGPU_DeviceProperties.md#empty-framebuffers-for-desktop) for your CPU
+	- `AAPL,ig-platform-id` entry with correct [**empty Framebuffer**](/11_Graphics/iGPU/iGPU_DeviceProperties.md#empty-framebuffers-for-desktop) for your CPU
 	- `AAPL,slot-name` with correct location (built-in)
 	- Correct `device-id` for used CPU (optional)
 - **SMBIOS** that utilizes the iGPU (so no **iMacPro1,1** or **MacPro**)
@@ -54,8 +54,8 @@ Here's a screenshot from my system which uses an 10th Gen i9 CPU with a Intel UH
 ### Required Software and Resources
 - [**Hackintool**](https://github.com/headkaze/Hackintool) to obtain DeviceProperties, specifically `AAPL,slot-name`
 - [**ProperTree**](https://github.com/corpnewt/ProperTree) to copy keys from one .plist file to another
-- [**metalgpu**](https://github.com/5T33Z0/OC-Little-Translated/blob/main/11_Graphics/Metal_3/metalgpu.zip?raw=true) Script for checking Metal 3 support (iGPU/dGPU) in macOS Ventura
-- [**VDADecoderChecker**](https://github.com/5T33Z0/OC-Little-Translated/blob/main/11_Graphics/Metal_3/VDADecoderChecker.zip?raw=true) for checking if Hardware Acceleration is working
+- [**metalgpu**](/11_Graphics/Metal_3/metalgpu.zip?raw=true) Script for checking Metal 3 support (iGPU/dGPU) in macOS Ventura
+- [**VDADecoderChecker**](/11_Graphics/Metal_3/VDADecoderChecker.zip?raw=true) for checking if Hardware Acceleration is working
 - WhateverGreen's [**Intel HD Framebuffer Guide**](https://github.com/acidanthera/WhateverGreen/blob/master/Manual/FAQ.IntelHD.en.md) (optional)
 - [**Big/Little Endian Converter**](https://www.save-editor.com/tools/wse_hex.html#littleendian) (online)
 

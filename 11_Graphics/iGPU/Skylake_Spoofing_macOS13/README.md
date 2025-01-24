@@ -101,8 +101,8 @@ This way, you can leave your DeviceProperties as is for older versions of macOS 
 
 - Download [**`OSIEnhancer.kext`**](https://github.com/b00t0x/OSIEnhancer/releases)
 - Add it to `EFI/OC/Kexts` and your `config.plist` 
-- Download [**`SSDT-Darwin.aml`**](https://github.com/5T33Z0/OC-Little-Translated/blob/main/11_Graphics/iGPU/Skylake_Spoofing_macOS13/SSDT/SSDT-Darwin.aml)
-- Download [**`SSDT-GFX0.aml`**](https://github.com/5T33Z0/OC-Little-Translated/blob/main/11_Graphics/iGPU/Skylake_Spoofing_macOS13/SSDT/SSDT-GFX0.aml)
+- Download [**`SSDT-Darwin.aml`**](/11_Graphics/iGPU/Skylake_Spoofing_macOS13/SSDT/SSDT-Darwin.aml)
+- Download [**`SSDT-GFX0.aml`**](/11_Graphics/iGPU/Skylake_Spoofing_macOS13/SSDT/SSDT-GFX0.aml)
 - Add them to `EFI/OC/ACPI` and your `config.plist`
 - Change the SMBIOS to `iMac18,1`
 - Save your `config.plist` and rebbot into macOS 13 or newer. 
@@ -117,7 +117,7 @@ The SSDT should inject the required iGPU properties into macOS Ventura and newer
 
 Instead of spoofing a Kaby Lake Framebuffer, you could utilize OpenCore Legacy Patcher to re-install files to enable Skylake graphics in macOS Ventura and newer.
 
-Follow my [**Skylake configuration guide**](https://github.com/5T33Z0/OC-Little-Translated/blob/main/14_OCLP_Wintel/Guides/Skylake.md) to… 
+Follow my [**Skylake configuration guide**](/14_OCLP_Wintel/Guides/Skylake.md) to… 
 
 - Prepare your config and EFI to install and run macOS Ventura or newer
 - Apply Post-Install Root Patches with OpenCore Legacy Patcher. This will install the following files on the system volume:
@@ -149,7 +149,7 @@ Config Section | Setting | Description
 
 ## NOTES and CREDITS
 - Thanks to b00t0x for [**OSIEnhancer**](https://github.com/b00t0x/OSIEnhancer/releases) and SSDT Samples 
-- [**Board-id VMM spoof explained**](https://github.com/5T33Z0/OC-Little-Translated/tree/main/09_Board-ID_VMM-Spoof)
+- [**Board-id VMM spoof explained**](/09_Board-ID_VMM-Spoof)
 - When spoofing the iGPU in macOS Ventura, you might experience glitches and issues related to HEVC encoding/decoding.
 - The previously used `SKLAsKBLGraphicsInfo.kext` is no longer required
 - PMheart for the Patch 

@@ -1,46 +1,46 @@
-# Fixing Sleep and Wake issues
+# 修复睡眠和唤醒问题
 
-This section contains fixes for resolving common issues related to Sleep and Wake, occurring especially on but not limited to Laptops. The following areas are covered:
+本节包含了解决与睡眠和唤醒相关的常见问题的修复方法，特别是在笔记本电脑上，但不限于此。以下是涵盖的内容：
 
-## [`PTSWAKTTS`](/04_Fixing_Sleep_and_Wake_Issues/PTSWAK_Sleep_and_Wake_Fix/README.md): Comprehensive Sleep and Wake fix
+## [`PTSWAKTTS`](/04_Fixing_Sleep_and_Wake_Issues/PTSWAK_Sleep_and_Wake_Fix/README.md)：全面的睡眠和唤醒修复
 
-This SSDT is the center piece for fixing most sleep and wake issues and is used in conjunction with other patches in this section. It consists of binary renames and an ACPI Hotfix (SSDT).
+这个SSDT是修复大多数睡眠和唤醒问题的核心，通常与本节中的其他补丁一起使用。它由二进制重命名和ACPI热修复(SSDT)组成。
 
-### How the patch works
+### 补丁如何工作
 
-- The methods `_PTS` (Prepare To Sleep), `_Wak` (Wake) and `_TTS` (Transition to State) are renamed to something else via binary renames. 
-- ***SSDT-PTSWAKTTS*** re-defines the original methods and if any of them  are triggered (either automatically by the sleep timer, by pressing the sleep/power button or via the  Menu), it fetches these events and takes care of sleep/wake (in conjunction with additional SSDTs).
+- 方法`_PTS`(准备睡眠)，`_Wak`(唤醒)和`_TTS`(转换到状态)通过二进制重命名进行修改。
+- ***SSDT-PTSWAKTTS*** 重新定义了原始方法，如果这些方法中的任何一个被触发(无论是由睡眠计时器自动触发，按下睡眠/电源按钮，还是通过菜单)，它会捕获这些事件并处理睡眠/唤醒(与其他额外的SSDT一起使用)。
 
-> [!NOTE]
+> [!WARNING]
 > 
-> ***SSDT-PTSWAKTTS.aml*** has to be loaded prior to some of the other Hotpatches in this section. Details about each patch are provided in the `README` of the corresponding fix.
+> ***SSDT-PTSWAKTTS.aml*** 必须在本节的其他一些热修复之前加载。关于每个补丁的详细信息，请查看相应修复的 `README` 文件。
 
-## Fixing [`PNP0C0E Sleep`](/04_Fixing_Sleep_and_Wake_Issues/PNP0C0E_Sleep_Correction_Method/README.md)
+## 修复 [`PNP0C0E 睡眠问题`](/04_Fixing_Sleep_and_Wake_Issues/PNP0C0E_Sleep_Correction_Method/README.md)
 
-This patch is required if pressing the Power or Sleep button causes an instant reset or shutdown. In order for this to work, it must be used in conjunction with ***SSDT-PTSWAKTTS***.
+如果按下电源或睡眠按钮导致即时重启或关机，则需要此补丁。为了使其生效，必须与 ***SSDT-PTSWAKTTS*** 一起使用。
 
-## Fixing instant wake issues: [`0D/6D Patch`](/04_Fixing_Sleep_and_Wake_Issues/060D_Instant_Wake_Fix/README.md)
+## 修复即时唤醒问题：[`0D/6D 补丁`](/04_Fixing_Sleep_and_Wake_Issues/060D_Instant_Wake_Fix/README.md)
 
-This patch is for fixing instant wake issues, where the system instantly wakes up which after entering sleep. This is usually caused by components/devices prohibiting the system to enter sleep/hibernation state.
+这个补丁用于修复即时唤醒问题，即系统在进入睡眠状态后立刻被唤醒。通常是由于某些组件/设备阻止系统进入睡眠/休眠状态。
 
-## Fixing [`AOAC Sleep`](/04_Fixing_Sleep_and_Wake_Issues/Fixing_AOAC_Machines/README.md)
+## 修复 [`AOAC 睡眠问题`](/04_Fixing_Sleep_and_Wake_Issues/Fixing_AOAC_Machines/README.md)
 
-These patches are used for fixing sleep and standby issues on more recent Laptops utilizing **Always on always connected** (`AOAC`) technology.
+这些补丁用于修复最近使用**始终开启，始终连接**(`AOAC`)技术的笔记本电脑的睡眠和待机问题。
 
-## Configuring [`ASPM`](/04_Fixing_Sleep_and_Wake_Issues/Setting_ASPM_Operating_Mode/README.md)
+## 配置 [`ASPM`](/04_Fixing_Sleep_and_Wake_Issues/Setting_ASPM_Operating_Mode/README.md)
 
-**ASPM** (Active State Power Management), is a power link management scheme supported at system level. Under ASPM management, **PCI devices** attempt to enter power saving mode when they are idle. You can modify the Active Power State of peripherals like Bluetooth/WiFi or other devices if they interrupt sleep.
+**ASPM**(活动状态电源管理)是一种在系统级别支持的电源链接管理方案。在ASPM管理下，**PCI设备**尝试在空闲时进入省电模式。如果它们打断了睡眠，你可以修改蓝牙/WiFi或其他设备的活动电源状态。
 
-## Changing [Hibernation Modes](/04_Fixing_Sleep_and_Wake_Issues/Changing_Hibernation_Modes/README.md)
+## 更改 [休眠模式](/04_Fixing_Sleep_and_Wake_Issues/Changing_Hibernation_Modes/README.md)
 
-`pmset` commands for changing settings related to **system power management**, such as sleep/hibernation.
+用于更改与**系统电源管理**相关的设置的`pmset`命令，例如睡眠/休眠模式。
 
-## Notes and further Resources
-- Before applying any of these hotfixes, make sure that you are not using generic ACPI tables from Dortania or the OpenCore Package as provided, since they often contain additional devices, device names and paths to cover various scenarios at once (e.g. `SSDT-PLUG`). Instead, tailor them to your system's specific requirements or generate your own using [**SSDTTime**](https://github.com/corpnewt/SSDTTime). This alone can prevent sleep and wake issues.
-- Check Dortania's Post-Install guide for additional info about [**Fixing Sleep Issues**](https://github.com/dortania/OpenCore-Post-Install/blob/master/universal/sleep.md)
-- [**Fixing Power Management, Sleep and Hibernation**](https://github.com/zx0r/HackintoshBible/blob/main/PowerManagement/README.md) in macOS Sonoma and Sequoia (by zx0r).
-- In-depth look into [**Darkwake**](https://www.insanelymac.com/forum/topic/342002-darkwake-on-macos-catalina-boot-args-darkwake8-darkwake10-are-obsolete/), what it does (and what it doesn't do).
-- While researching how these fixes work, I found out that the SSDTs and binary renames used in this section are basically "reverse engineered" `DSDT` patches created by RehabMan included in maciASL's DSDT patching engine. They are also available on his "Laptop DSDT Patch" Repo:
-	- **Sleep and Wake** fixes: https://github.com/RehabMan/Laptop-DSDT-Patch/tree/master/system
-	- **0D/6D** fixes: https://github.com/RehabMan/Laptop-DSDT-Patch/tree/master/usb
-	- **Lid** fixes: https://github.com/RehabMan/Laptop-DSDT-Patch/tree/master/misc
+## 注意事项和其他资源
+- 在应用任何这些热修复之前，请确保你没有使用Dortania或OpenCore包中提供的通用ACPI表，因为它们通常包含额外的设备、设备名称和路径，以覆盖多种场景(例如`SSDT-PLUG`)。相反，应该根据你的系统的特定需求定制它们，或者使用[**SSDTTime**](https://github.com/corpnewt/SSDTTime)生成自己的表。仅此一项就可以防止睡眠和唤醒问题。
+- 查看Dortania的后安装指南，了解更多关于[**修复睡眠问题**](https://github.com/dortania/OpenCore-Post-Install/blob/master/universal/sleep.md)的信息。
+- [**修复电源管理、睡眠和休眠问题**](https://github.com/zx0r/HackintoshBible/blob/main/PowerManagement/README.md)(针对macOS Sonoma和Sequoia，由zx0r提供)。
+- 深入了解[**Darkwake**](https://www.insanelymac.com/forum/topic/342002-darkwake-on-macos-catalina-boot-args-darkwake8-darkwake10-are-obsolete/)，它的作用和误区。
+- 在研究这些修复如何工作时，我发现本节中使用的SSDT和二进制重命名基本上是“逆向工程”`DSDT`补丁，这些补丁由RehabMan在maciASL的DSDT修补引擎中创建。它们也可以在他的“笔记本电脑DSDT修补”库中找到：
+	- **睡眠和唤醒** 修复: https://github.com/RehabMan/Laptop-DSDT-Patch/tree/master/system
+	- **0D/6D** 修复: https://github.com/RehabMan/Laptop-DSDT-Patch/tree/master/usb
+	- **合盖** 修复: https://github.com/RehabMan/Laptop-DSDT-Patch/tree/master/misc

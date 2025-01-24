@@ -1,75 +1,75 @@
-# Fixing issues with peripherals
+# 修复外设问题
 
-- **Affected OS**: macOS with support for Apple Mobile File Integrity (Sierra and newer).
+- **受影响的操作系统**：支持Apple Mobile File Integrity的macOS(Sierra及更新版本)。
 
-## Affected Devices and Symptoms
-- **Webcams**:
-	- Webcam is supported by macOS and is working fine in Facetime and/or Photobooth but not in 3rd party apps
-	- No Audio: You can't get audio from the webcam Mic or Headset
-	- No Video: Webcam won't turn on in 3rd party conferencing apps like Zoom, Microsoft Teams, Skype, etc. 
-- **Wireless Mice**:
-	- Pairing Logitech Wireless Mice via Logitech Unifying Software might not be possible. If the mouse can also be paired via BT, then it's not an issue.
+## 受影响的设备和症状
+- **网络摄像头**：
+	- 网络摄像头在macOS中正常工作，可以在Facetime和/或Photobooth中使用，但在第三方应用程序中无法使用
+	- 没有音频：无法从摄像头麦克风或耳机获取音频
+	- 没有视频：在Zoom、Microsoft Teams、Skype等第三方视频会议应用中无法开启摄像头
+- **无线鼠标**：
+	- 通过Logitech Unifying Software配对Logitech无线鼠标时可能会遇到问题。如果鼠标也可以通过蓝牙配对，则没有问题。
 
-## Cause
-- Prompts for granting permissions to 3rd party apps don't pop-up if Apple Mobile File Integrity (AMFI) is disabled. 
+## 原因
+- 如果禁用了Apple Mobile File Integrity(AMFI)，则不会弹出授予第三方应用程序权限的提示。
 
-## Solutions
-Since disabling AMFI requires System Integrity Protection (SIP) to be disabled in the first place, re-enabling SIP can be a solution. Below you will find 4 different solutions for fixing this issue…
+## 解决方案
+由于禁用AMFI首先需要禁用系统完整性保护(SIP)，因此重新启用SIP可能是解决方案。以下是四种解决此问题的不同方法…
 
-### Solution 1: Add `AMFIPass.kext` (best)
-The beta version of OpenCore Legacy patcher 0.6.7 introduced a new Kext called `AMFIPass` which allows booting macOS with SIP disabled and AMFI fully enabled even if root patches have been applied – which would be impossible otherwise. This not only enhances security it also resolves the issue of not being able to grant 3rd party applications permissions to cameras and microphones.
+### 解决方案1：添加`AMFIPass.kext`(最佳方案)
+OpenCore Legacy Patcher 0.6.7的测试版引入了一个新的Kext，叫做`AMFIPass`，它允许在禁用SIP的情况下启动macOS并完全启用AMFI，即使已经应用了root补丁——否则这是不可能的。这样不仅增强了安全性，还解决了无法授予第三方应用程序摄像头和麦克风访问权限的问题。
 
-#### Add AMFIPass to your EFI and Config:
-- Download [**`AMFIPass.kext`**](https://github.com/dortania/OpenCore-Legacy-Patcher/tree/sonoma-development/payloads/Kexts/Acidanthera) from the OpenCore Legacy Patcher Repo and unzip it
-- Mount your EFI
-- Add the kext to `EFI/OC/Kexts` 
-- Open your config.plist
-- Add the kext to Kernel/Add manually or create a new OC Snapshot in ProperTree
-- **Optional**: Adjust `MinKernel` to the kernel version which would require AMFI to be disabled in order to boot. For example: `20.0.0` for Big Sur, `21.0.0` for Monterey, `22.0.0` for Ventura, etc.
-- Delete boot-arg `amfi_get_out_of_my_way=0x1` or `AMFI=0x80` (if present)
-- Save your config and reboot
+#### 将AMFIPass添加到你的EFI和Config中：
+- 从OpenCore Legacy Patcher仓库下载[**`AMFIPass.kext`**](https://github.com/dortania/OpenCore-Legacy-Patcher/tree/sonoma-development/payloads/Kexts/Acidanthera)并解压
+- 挂载你的EFI
+- 将kext添加到`EFI/OC/Kexts`
+- 打开你的`config.plist`
+- 将kext手动添加到Kernel/Add，或者在ProperTree中创建一个新的OC快照
+- **可选**：调整`MinKernel`为需要禁用AMFI才能启动的内核版本。例如：`20.0.0`对应Big Sur，`21.0.0`对应Monterey，`22.0.0`对应Ventura等。
+- 删除启动参数`amfi_get_out_of_my_way=0x1`或`AMFI=0x80`(如果存在)
+- 保存你的config并重启
 
-**Voilà**: Now, you can boot with AMFI enabled and grant 3rd party apps access to Mics and Cameras again!
+**结束**：现在，你可以启用AMFI并再次授予第三方应用程序访问麦克风和摄像头的权限！
 
-> [!NOTE]
->
-> You might still need `AMFI=0x80` before re-applying root patches after installing system updates
-
-### Solution 2: Re-enable SIP (not always possible)
-
-- Change `csr-active-config` to `00000000` to re-enable SIP
-- Save your config
-- Reboot
-
-Once SIP has been re-enabled, the prompts for granting access to the cam/mic will pop-up immediately once you launch the app requiring access to them. The apps will be listed in the Privacy Settings for Camera and Microphone afterwards.
-
-**Problem**: If you are using legacy hardware which requires booting with SIP and/or AMFI disabled you cannot use this method. So you either have to upgrade macOS from an existing previous install where you already granted these permissions so they are carried over to the new OS or use Method 3 instead.
-
-### Solution 3: Grant permissions in Safe Mode (if SIP is disabled)
-
-- Enable `PollAppleHotkeys` (under Misc/Boot)in your config.plist
-- Reboot into Safe Mode (in BootPicker, hold Shift and Press Enter)
-- Run the App that needs access to the mic/cam
-- The system will ask for permissions to access the mic/cam
-- Once you grant them, the apps will be listed in Privacy Settings for Camera/Microphone
-- Reboot normally
-- Webcam and Mic will work
-
-**Problems**: 
-
-- This works fine for Zoom but Microsoft Teams won't run in Safe Mode. There's no GUI so the prompts for granting the app access to the mic/cam are not triggered.
-- Only applicable if you can boot into Safe Mode with SIP disabled. If you did apply any Root Patches with OpenCore Legacy Patcher (like re-installing iGPU/GPU drivers), booting in Safe Mode will get stuck since the graphics drivers can't be loaded. In this case you have to resort to Option 3 as well.
-
-### Solution 4: Add permissions manually (requires command line skills)
-
-If you can't boot with SIP enabled, you must add permissions to the SQL3 database manually wit [tccplus](https://github.com/jslegendre/tccplus/releases), as explained here: [Unable to grant special permissions to apps](https://dortania.github.io/OpenCore-Legacy-Patcher/ACCEL.html#unable-to-grant-special-permissions-to-apps-ie-camera-access-to-zoom)
-
-> [!NOTE]
+> [!WARNING]
 > 
-> This guide is applicable to *any* 3rd party app which requires access to the microphone and/or camera – Digital Audio Workstations and Video Editing Software included!
+> 在安装系统更新后，你可能仍然需要在重新应用root补丁之前添加`AMFI=0x80`。
 
-## Furter Resources
+### 解决方案2：重新启用SIP(并非总是可行)
 
-- **More about TCC**: [What TCC does and doesn't](https://eclecticlight.co/2023/02/10/privacy-what-tcc-does-and-doesnt)
-- **More about AMFI**: [AMFI: checking file integrity on your Mac](https://eclecticlight.co/2018/12/29/amfi-checking-file-integrity-on-your-mac/)
-- **AMFI in macOS 13**: [How does Ventura check an app's security](https://eclecticlight.co/2023/03/09/how-does-ventura-check-an-apps-security/)
+- 将`csr-active-config`更改为`00000000`以重新启用SIP
+- 保存你的config
+- 重启
+
+一旦重新启用SIP，启动要求访问摄像头/麦克风的应用时，系统会立即弹出授权提示。之后，这些应用将出现在隐私设置中的摄像头和麦克风列表中。
+
+**问题**：如果你使用的是需要禁用SIP和/或AMFI才能启动的旧硬件，无法使用此方法。因此，你必须升级macOS，使用之前的安装版本，其中已经授予了这些权限，并将其携带到新系统中，或者使用方法3。
+
+### 解决方案3：在安全模式下授予权限(如果禁用了SIP)
+
+- 在`config.plist`中的Misc/Boot下启用`PollAppleHotkeys`
+- 重启并进入安全模式(在启动选择器中按住Shift键并按回车)
+- 运行需要访问麦克风/摄像头的应用
+- 系统会请求授予访问麦克风/摄像头的权限
+- 授权后，应用将出现在摄像头/麦克风的隐私设置中
+- 正常重启
+- 摄像头和麦克风将正常工作
+
+**问题**： 
+
+- 这种方法对Zoom有效，但Microsoft Teams在安全模式下无法运行。由于没有GUI，因此无法触发授予应用访问麦克风/摄像头的权限。
+- 仅适用于可以在禁用SIP的情况下进入安全模式的情况。如果你使用OpenCore Legacy Patcher应用了任何Root补丁(例如重新安装iGPU/GPU驱动)，则在安全模式下启动时会卡住，因为图形驱动无法加载。在这种情况下，你也必须使用方法3。
+
+### 解决方案4：手动添加权限(需要命令行技能)
+
+如果无法启用SIP启动，你必须使用[tccplus](https://github.com/jslegendre/tccplus/releases)手动将权限添加到SQL3数据库，具体方法请参见：[无法授予应用程序特殊权限](https://dortania.github.io/OpenCore-Legacy-Patcher/ACCEL.html#unable-to-grant-special-permissions-to-apps-ie-camera-access-to-zoom)
+
+> [!WARNING]
+> 
+> 本指南适用于*任何*需要访问麦克风和/或摄像头的第三方应用程序——包括数字音频工作站和视频编辑软件！
+
+## 进一步的资源
+
+- **更多关于TCC**：[TCC的作用与限制](https://eclecticlight.co/2023/02/10/privacy-what-tcc-does-and-doesnt)
+- **更多关于AMFI**：[AMFI：检查你Mac上的文件完整性](https://eclecticlight.co/2018/12/29/amfi-checking-file-integrity-on-your-mac/)
+- **macOS 13中的AMFI**：[Ventura如何检查应用程序的安全性](https://eclecticlight.co/2023/03/09/how-does-ventura-check-an-apps-security/)

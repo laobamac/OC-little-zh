@@ -7,7 +7,7 @@
 
 <div align=center>
 
-[![OpenCore Version](https://img.shields.io/badge/支持的OpenCore版本:-≤1.0.4-success.svg)](https://github.com/acidanthera/OpenCorePkg) ![macOS](https://img.shields.io/badge/支持的macOS:-≤15.3-white.svg) ![Last Update](https://img.shields.io/badge/最后更新:-25.01.23-blueviolet.svg)</br>
+[![OpenCore Version](https://img.shields.io/badge/支持的OpenCore版本:-≤1.0.4-success.svg)](https://github.com/acidanthera/OpenCorePkg) ![macOS](https://img.shields.io/badge/支持的macOS:-≤15.3-white.svg) ![Last Update](https://img.shields.io/badge/最后更新:-2025.01.24-blueviolet.svg)</br>
 
 </div>
 
@@ -30,7 +30,7 @@
 * [**修复外设问题**](/13_Peripherals/README.md)
 * [**笔记本特殊补丁**](/05_Laptop-specific_Patches/README.md)
 * [**修复CMOS相关**](/06_CMOS-related_Fixes/README.md)
-* [**启动文件夹**](/07_BOOT_Folder/README.md)
+* [**EFI文件夹**](/07_BOOT_Folder/README.md)
 * [**内核扩展加载顺序**](/10_Kexts_Loading_Sequence_Examples/README.md)
 * [**MMIO白名单**](/12_MMIO_Whitelist/README.md)
 * [**修复不正确的内存速度**](/15_RAM/README.md)
@@ -82,7 +82,7 @@ ___
 2. 此仓库中撰写的文档目的是让用户可以通过修复ACPI等操作使 macOS 的 **正常工作** ，并且不会违反 ACPI 规范。因此，**OC-Little-zh** 不提倡使用破坏ACPI规范的方法——比如直接修补“DSDT”，因为它不是获得“真正原生的macOS”体验的**正确**措施。事实上，情况恰恰相反，[**正如 insanelymac的一篇帖子**](https://www.insanelymac.com/forum/topic/352881-when-is-rebaseregions-necessary/#comment-2790870)，某些情况下仍需对DSDT进行重定位，以使macOS正常启动。
 	
 ## 关于
-用于 OpenCore Boot Manager 的指南、ACPI 热补丁和重命名集合，基于 [**OC-Little by Daliansky**](https://github.com/daliansky/OC-little)和[**OC-Little-Translated by 5T33Z0**](https://github.com/5T33Z0/OC-Little-Translated)，并加以汉化、补充、修正。
+用于 OpenCore Boot Manager 的指南、ACPI 热补丁和重命名集合，基于 [**OC-Little by Daliansky**](https://github.com/daliansky/OC-little)和[**OC-Little-Translated by 5T33Z0**](https://github.com/laobamac/OC-little-zh)，并加以汉化、补充、修正。
 
 除了ACPI指南外，此存储库还包含与 OpenCore Package 和 Dortania 的 OpenCore Guides 提供的指南相辅相成的其他指南。它涵盖了大量的黑苹果相关内容，包括：
 
@@ -99,8 +99,8 @@ ___
 
 ### 关于修改
 - 为了保证文档教学的准确性，所有文字均为我人工翻译，并尽量让文档适合中文的语言习惯。这是一个工作量巨大的进程，如果有不正确的地方，请联系我。
-- 根据问题、组件、方法等的类型，将存储库重构为更合理的（子）部分和类别。
-- 重写了令人困惑/误导的整个部分（例如“ACPI”和“定制USB端口”）
+- 根据问题、组件、方法等的类型，将存储库重构为更合理的(子)部分和类别。
+- 重写了令人困惑/误导的整个部分(例如“ACPI”和“定制USB端口”)
 - 增加了缺失的描述
 - 我并没有非常充裕的时间，高中的生活繁忙且杂乱。我会在必要时对文档进行更新来确保其适用于最新版本的OpenCore、macOS。如果我没有立刻回复你的请求，请耐心等待。
 
@@ -119,12 +119,12 @@ ___
 </a>
 
 ## 鸣谢
-- [**OC-Little by Daliansky**](https://github.com/daliansky/OC-little) 和 [**OC-Little-Translated by 5T33Z0**](https://github.com/5T33Z0/OC-Little-Translated)
+- [**OC-Little by Daliansky**](https://github.com/daliansky/OC-little) 和 [**OC-Little-Translated by 5T33Z0**](https://github.com/laobamac/OC-little-zh)
 
 <details>
 <summary><strong>5T33Z0's 5H0UT 0UT5</strong></summary>
 
-> - Thanks to al the [**contributors**](https://github.com/5T33Z0/OC-Little-Translated/graphs/contributors) for improving and expanding the repo! Additional credits for contributors outside of the github realm are listed in the respective chapters/sections.
+> - Thanks to al the [**contributors**](https://github.com/laobamac/OC-little-zh/graphs/contributors) for improving and expanding the repo! Additional credits for contributors outside of the github realm are listed in the respective chapters/sections.
 > - sascha_77 for Kext Updater, ANYmacOS and helping me to unbrick my Lenovo T530 BIOS!
 > - Apfelnico for introducing me to ASL/AML Basics
 > - Bluebyte for having good conversations

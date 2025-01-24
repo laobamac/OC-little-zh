@@ -1,73 +1,74 @@
-# Installing newer versions of macOS on legacy Wintel systems
+# 在遗留Wintel系统上安装较新版本的macOS
 
-## About
-As you may know, Dortania developed the [**OpenCore Legacy Patcher**](https://github.com/dortania/OpenCore-Legacy-Patcher) (OCLP) to install and run macOS 12 and newer on end-of-life Macs with Intel Core CPUs from the 1st to 6th generation (Kaby Lake to Comet Lake CPUs are still supported by macOS 15). It achieves this by installing the OpenCore boot loader on the target system to inject settings and [additional kexts](https://github.com/dortania/OpenCore-Legacy-Patcher/tree/main/payloads/Kexts) required for:
+## 关于
+正如你所知道的，Dortania开发了[**OpenCore Legacy Patcher**](https://github.com/dortania/OpenCore-Legacy-Patcher)（OCLP），用于在老旧的Intel Core CPU（从第1代到第6代）Mac上安装并运行macOS 12及更新版本（Kaby Lake到Comet Lake的CPU仍被macOS 15支持）。它通过在目标系统上安装OpenCore引导加载器来实现，注入所需的设置和[附加kexts](https://github.com/dortania/OpenCore-Legacy-Patcher/tree/main/payloads/Kexts)，使其能够：
 
-- Booting newer versions of macOS on unsupported board-ids, utilizing the native SMBIOS best suited for the used CPU ([more details](/09_Board-ID_VMM-Spoof/README.md)).
-- Re-enabling legacy SMC CPU Power Management in macOS 13+ (1st to 3rd Gen Intel Core CPUs)
-- Fixing issues with System Updates caused by disabling `SecureBootModel`, System Integrity Protection (`SIP`) and Apple Mobile File Integrity (`AMFI`)
+- 在不受支持的Board-ID上引导更新的macOS版本，利用最适合所用CPU的原生SMBIOS（[更多详情](/09_Board-ID_VMM-Spoof/README.md)）。
+- 重新启用macOS 13+（第1代到第3代Intel Core CPU）中的传统SMC CPU电源管理
+- 修复由于禁用`SecureBootModel`、系统完整性保护（`SIP`）和Apple移动文件完整性（`AMFI`）而导致的系统更新问题
 
-Additionally, OCLP applies [on-disk patches](https://dortania.github.io/OpenCore-Legacy-Patcher/PATCHEXPLAIN.html#on-disk-patches) ("root-patches") in Post-Install to re-enable crucial features like hardware graphics acceleration (iGPU/GPU) as well as WiFi/BT to extend the lifecycle of these expansive machines.
+此外，OCLP在安装后应用[磁盘补丁](https://dortania.github.io/OpenCore-Legacy-Patcher/PATCHEXPLAIN.html#on-disk-patches)（“root-patches”），重新启用关键功能，如硬件图形加速（iGPU/GPU）以及WiFi/BT，以延长这些过时机器的生命周期。
 
-What you may not know is: some of the settings, kexts and root-patches can  be utilized on Wintel systems as well. But the necessary adjustments of the `config.plist` and which of the kexts to inject (some of them are only required on Apple systems) is not officially documented nor supported by Dortania, nor will you receive any help for this on Discord. That's why I created in-depth configuration guides so your old Hackintosh can run macOS 12 and newer.
+你可能不知道的是：一些设置、kext和root-patches也可以在Wintel系统上使用。但是，`config.plist`的必要调整以及哪些kext需要注入（其中一些仅在Apple系统上需要）没有得到Dortania的官方文档支持，也不会在Discord上提供帮助。因此，我创建了详细的配置指南，以便你的老Hackintosh能够运行macOS 12及更新版本。
 
-**Patches relevant to us are**:
+**对我们相关的补丁是**：
 
-- iGPU drivers (to [reinstate graphics acceleration and Metal Graphics API support](https://khronokernel.github.io/macos/2022/11/01/LEGACY-METAL-PART-1.html)) 
-- GPU drivers for legacy (non-metal) AMD and NVIDIA Kepler Cards 
-- Frameworks for re-enabling previously supported Wi-Fi/Bluetooth cards
- 
-## Latest OCLP status updates
-- [**macOS Sequoia OCLP Notes**](/14_OCLP_Wintel/Sequoia_Notes.md)
-- [**macOS Sonoma OCLP Notes**](/14_OCLP_Wintel/Sonoma_Notes.md)
+- iGPU驱动（[恢复图形加速和Metal图形API支持](https://khronokernel.github.io/macos/2022/11/01/LEGACY-METAL-PART-1.html)）
+- 适用于传统（非metal）AMD和NVIDIA Kepler卡的GPU驱动
+- 用于重新启用以前支持的Wi-Fi/Bluetooth卡的框架
 
-## Configuration Guides
-Listed below are configuration guides to update your OpenCore EFI and `config.plist` with the required settings and kext to run macOS 13 and newer:
+## 最新OCLP状态更新
+- [**macOS Sequoia OCLP更新说明**](/14_OCLP_Wintel/Sequoia_Notes.md)
+- [**macOS Sonoma OCLP更新说明**](/14_OCLP_Wintel/Sonoma_Notes.md)
 
-- [**Installing macOS 13+ on 1st Gen Intel Core systems**](/14_OCLP_Wintel/Guides/Nehalem-Westmere-Lynnfield.md)
-- [**Installing macOS 13+ on Sandy Bridge systems**](/14_OCLP_Wintel/Guides/Sandy_Bridge.md)
-- [**Installing macOS 13+ on Ivy Bridge systems**](/14_OCLP_Wintel/Guides/Ivy_Bridge.md)
-- [**Installing macOS 13+ on Haswell/Broadwell systems**](/14_OCLP_Wintel/Guides/Haswell-Broadwell.md)
-- [**Installing macOS 13+ on Skylake systems**](/14_OCLP_Wintel/Guides/Skylake.md)
-- [**General CPU and SMBIOS Guide**](/14_OCLP_Wintel/Guides/CPU_to_SMBIOS.md)
+## 配置指南
+以下是配置指南，用于更新你的OpenCore EFI和`config.plist`，使其能够运行macOS 13及更新版本：
 
-> [!IMPORTANT]
+- [**在第1代Intel Core系统上安装macOS 13+**](/14_OCLP_Wintel/Guides/Nehalem-Westmere-Lynnfield.md)
+- [**在Sandy Bridge系统上安装macOS 13+**](/14_OCLP_Wintel/Guides/Sandy_Bridge.md)
+- [**在Ivy Bridge系统上安装macOS 13+**](/14_OCLP_Wintel/Guides/Ivy_Bridge.md)
+- [**在Haswell/Broadwell系统上安装macOS 13+**](/14_OCLP_Wintel/Guides/Haswell-Broadwell.md)
+- [**在Skylake系统上安装macOS 13+**](/14_OCLP_Wintel/Guides/Skylake.md)
+- [**通用CPU和SMBIOS指南**](/14_OCLP_Wintel/Guides/CPU_to_SMBIOS.md)
+
+> [!重要]
 >
-> Updating from from macOS 14.3.x to 14.4.x and newer might crash the installer early. This is related to `SecureBootModel`, so it should be set to `Disabled` during installation (&rarr; see [**Workarounds**](/W_Workarounds/macOS14.4.md) section for details).
+> 从macOS 14.3.x更新到14.4.x及更高版本时，安装程序可能会早期崩溃。这与`SecureBootModel`有关，因此在安装期间应将其设置为`Disabled`（→详见[**解决方法**](/W_Workarounds/macOS14.4.md)部分）。
 
-## (Re-)Enabling Features
-- [**Fixing WiFi and Bluetooth in macOS Sonoma+**](/14_OCLP_Wintel/Enable_Features/WiFi_Sonoma.md)
-- [**Enabling `AirportItlwm.kext` in macOS Sequoia**](/14_OCLP_Wintel/Enable_Features/AirportItllwm_Sequoia.md)
-- [**How to disable Gatekeeper in macOS Sequoia**](/14_OCLP_Wintel/Guides/Disable_Gatekeeper.md)
-- [**How to enable auto-root-patching during macOS installation**](/14_OCLP_Wintel/Guides/Auto-Patching.md)
-- [**Force-enabling root-patches Patches in OCLP**](/14_OCLP_Wintel/Enable_Features/Force-enable_Root-Patches.md)
+## （重新）启用功能
+- [**修复macOS Sonoma+中的WiFi和蓝牙问题**](/14_OCLP_Wintel/Enable_Features/WiFi_Sonoma.md)
+- [**在macOS Sequoia中启用`AirportItlwm.kext`**](/14_OCLP_Wintel/Enable_Features/AirportItllwm_Sequoia.md)
+- [**如何在macOS Sequoia中禁用Gatekeeper**](/14_OCLP_Wintel/Guides/Disable_Gatekeeper.md)
+- [**如何在macOS安装期间启用自动根补丁**](/14_OCLP_Wintel/Guides/Auto-Patching.md)
+- [**强制启用OCLP中的根补丁**](/14_OCLP_Wintel/Enable_Features/Force-enable_Root-Patches.md)
 
-## Troubleshooting
-- [**Dos and Don'ts of running macOS beta versions**](/14_OCLP_Wintel/Beta_dos_donts.md)
-- [**Recovering from failed root patching attempts**](/14_OCLP_Wintel/Guides/Reverting_Root_Patches.md)
-- [**OCLP and the macOS compatibility gap**](/14_OCLP_Wintel/Bridging_the_gap.md)
-- [**Triggering macOS Updates via Terminal**](/14_OCLP_Wintel/macOS_Update_Terminal.md)
-- [**Addressing sleep issues in macOS Sequoia**](https://www.insanelymac.com/forum/topic/360040-macos-15-sequoia-does-not-enter-sleep-mode-properly/#comment-2826474) (Thread on insanelymac)
+## 故障排除
+- [**运行macOS beta版本的注意事项**](/14_OCLP_Wintel/Beta_dos_donts.md)
+- [**从失败的根补丁尝试中恢复**](/14_OCLP_Wintel/Guides/Reverting_Root_Patches.md)
+- [**OCLP和macOS兼容性差距**](/14_OCLP_Wintel/Bridging_the_gap.md)
+- [**通过终端触发macOS更新**](/14_OCLP_Wintel/macOS_Update_Terminal.md)
+- [**解决macOS Sequoia中的睡眠问题**](https://www.insanelymac.com/forum/topic/360040-macos-15-sequoia-does-not-enter-sleep-mode-properly/#comment-2826474)（InsanelyMac上的讨论）
 
-## Fetching macOS Installers
+## 获取macOS安装器
 
-There are several options to fetch and download macOS installers directly from Apple. Here are some of them:
+有几种方法可以直接从Apple获取和下载macOS安装器。以下是其中一些：
 
-1. **OpenCore Legacy Patcher**. It can download macOS 11+ and create a USB Installer as well.
-2. [**MIST**](https://github.com/ninxsoft/Mist): GUI-based app to download macOS Installers and Apple Silicon Firmwares
-3. **Terminal**. Open Terminal and enter the following commands:<br>
-	`softwareupdate  --fetch-full-installer --list-full-installers` (to fetch the list of Installers)<br>
-	`softwareupdate  --fetch-full-installer --list-full-installer-version xx.xx` (replace xx.xx by the version you want to download)
+1. **OpenCore Legacy Patcher**。它可以下载macOS 11+并创建USB安装器。
+2. [**MIST**](https://github.com/ninxsoft/Mist)：GUI应用，用于下载macOS安装器和Apple Silicon固件。
+3. **终端**。打开终端并输入以下命令：<br>
+	`softwareupdate  --fetch-full-installer --list-full-installers`（获取安装器列表）<br>
+	`softwareupdate  --fetch-full-installer --list-full-installer-version xx.xx`（替换xx.xx为你想下载的版本）
 
-For more options, check the [**Utilities**](https://github.com/5T33Z0/OC-Little-Translated/tree/main/C_Utilities_and_Resources#getting-macos) section
- 
-## Miscellaneous
-- [**OCLP FAQ**](https://dortania.github.io/OpenCore-Legacy-Patcher/FAQ.html#application-requirements)
-- [**OCLP Changelog**](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/main/CHANGELOG.md)
-- [**OCLP Troubleshooting**](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/main/docs/TROUBLESHOOTING.md)
-- [**Installing Windows from within macOS without Bootcamp**](https://github.com/5T33Z0/OC-Little-Translated/blob/main/I_Windows/Install_Windows_NoBootcamp.md)
-- [**Collection of Non-Metal Apple apps**](https://archive.org/details/apple-apps-for-non-metal-macs) (Archive.org)
-- [**macOS Release Notes**](https://developer.apple.com/documentation/macos-release-notes)
+更多选项，请查看[**实用工具**](/C_Utilities_and_Resources#getting-macos)部分。
 
-## Contribute
-Although I've created these guides with a lot of attention to detail, there's always room for improvement. As far as verifying the guides are concerned, I only have an iMac11,3 (Lynnfield), an iMac12,2 (Sandy Bridge), and and Ivy Bridge notebook for testing. So if you have any suggestions or updated instructions to improve the guides or workflows, feel free to create an issue and let me know!
+## 其他
+- [**OCLP常见问题解答**](https://dortania.github.io/OpenCore-Legacy-Patcher/FAQ.html#application-requirements)
+- [**OCLP变更日志**](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/main/CHANGELOG.md)
+- [**OCLP故障排除**](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/main/docs/TROUBLESHOOTING.md)
+- [**在macOS中安装Windows，无需Bootcamp**](/I_Windows/Install_Windows_NoBootcamp.md)
+- [**非Metal版Apple应用程序合集**](https://archive.org/details/apple-apps-for-non-metal-macs)（Archive.org）
+- [**macOS发布说明**](https://developer.apple.com/documentation/macos-release-notes)
+
+## 贡献
+##### 这段内容来自5T33Z0原话翻译
+虽然我创建了这些指南，并在细节上非常用心，但总有改进的空间。在验证这些指南时，我只有iMac11,3（Lynnfield）、iMac12,2（Sandy Bridge）和一台Ivy Bridge笔记本进行测试。所以，如果你有任何建议或更新的指令来改进这些指南或工作流程，欢迎创建问题并告知我！

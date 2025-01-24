@@ -1,11 +1,11 @@
-# Disabling PCI Devices
+# 禁用PCI设备
 
-## About
-In some cases you may want to disable a PCI device. For example, the HDMI Audio Device of a discrete GPU or an incompatible SD Card Reader attached via PCIe. There are 2 methods for disabling PCI devices: either by using an SSDT or by blocking the kext which enables the device.
+## 关于
+在某些情况下，你可能希望禁用 PCI 设备。比如，独显、声卡或通过 PCIe 连接的不兼容的 SD 读卡器。禁用 PCI 设备有两种方法：使用 SSDT 或阻止启用设备的 kext。
 
-When to use which method depends on the situation. Using an SSDT is preferred but only works if the device in question is a children device on the PCI bus.
+何时使用哪种方法取决于具体情况。使用 SSDT 是首选，但仅当相关设备是 PCI 总线上的子设备时才有效。
 
-## Methods
+## 方法
 
-- **Method 1**: [**via SSDT**](https://github.com/5T33Z0/OC-Little-Translated/tree/main/02_Disabling_Devices/Disabling_PCI_Devices/ACPI) (recommended)
-- **Method 2**: [**by blocking Kexts**](https://github.com/5T33Z0/OC-Little-Translated/tree/main/02_Disabling_Devices/Disabling_PCI_Devices/Block_Kexts)
+- **方法 1**: [**通过SSDT**](/02_Disabling_Devices/Disabling_PCI_Devices/ACPI/README.md) (推荐)
+- **方法 2**: [**通过Kexts**](/02_Disabling_Devices/Disabling_PCI_Devices/Block_Kexts/README.md)

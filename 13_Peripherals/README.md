@@ -1,5 +1,5 @@
-# Fixing issues with peripheral devices
+# 修复外设问题
 
-Listed below you will find guides for fixing issues with peripherals not working under macOS.
+这些肯狐疑帮助你解决macOS下外设的工作问题。
 
-- [External Webcam and other peripherals not working in 3rd party apps](/13_Peripherals/Fixing_Peripherals.md)
+- [网络摄像头和其他外围设备不能在第三方应用程序中工作](/13_Peripherals/Fixing_Peripherals.md)

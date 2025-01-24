@@ -4,7 +4,7 @@ Listed below, you find available/known Framebuffer and Connector flags and their
 
 These flags can be combined to calculate a bitmask for the device properties `framebuffer-flags` and `framebuffer-conx-flags` (`x` = number of controller **con0**, **con1**, **con2**, etc.) to modify/adjust an existing Framebuffer patch.
 
-If you select any of these flags in Hackintool and click on "Generate Patch, Hackintool does the calculation and Endianness conversion automatically. When doing this manually, the values have to be summed-up and converted to Little Endian before adding the bitmask to the config.plist (see &rarr; [**OC Calculators**](https://github.com/5T33Z0/OC-Little-Translated/tree/main/B_OC_Calculators)). 
+If you select any of these flags in Hackintool and click on "Generate Patch, Hackintool does the calculation and Endianness conversion automatically. When doing this manually, the values have to be summed-up and converted to Little Endian before adding the bitmask to the config.plist (see &rarr; [**OC Calculators**](/B_OC_Calculators)). 
 
 ## Framebuffer Flags
 > Flags for device property `framebuffer-flags`
@@ -42,7 +42,7 @@ Listed below, you find the available/known framebuffer flags for Intel framebuff
 
 For reference: in Hackintool, these flags are located here:
 
-![fb_flags](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/b5dfa501-4751-4de8-8781-e2ea9ff31d63)
+![fb_flags](https://github.com/laobamac/OC-little-zh/assets/76865553/b5dfa501-4751-4de8-8781-e2ea9ff31d63)
 
 ## Connector Flags
 > Flags for device property `framebuffer-conx-flags` (`x` = number of controller **con0**, **con1**, **con2**, etc.).
@@ -78,6 +78,6 @@ Listed below, you find the available/known connector flags for Intel framebuffer
 
 For reference: in Hackintool, these flags are located here:
 
-![connectors](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/a71fc439-8518-45e0-90bd-8b7cab55bde4)
+![connectors](https://github.com/laobamac/OC-little-zh/assets/76865553/a71fc439-8518-45e0-90bd-8b7cab55bde4)
 
 **SOURCE**: [**IntelFramebuffer.bt**](https://github.com/acidanthera/WhateverGreen/blob/master/Manual/IntelFramebuffer.bt)

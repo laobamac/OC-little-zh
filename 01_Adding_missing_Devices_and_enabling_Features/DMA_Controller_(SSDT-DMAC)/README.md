@@ -27,8 +27,8 @@ For `AppleVTD` to be present, additional conditions must be met:
  
 1. `Vt-D` must be enabled in BIOS
 2. `DisableIOMapper` Quirk must be unselected
-3. Original `DMAR` Table must be [dropped](https://github.com/5T33Z0/OC-Little-Translated/tree/main/00_ACPI/ACPI_Dropping_Tables#example-1-dropping-the-dmar-table)
-4. A [modified `DMAR` Table](https://github.com/5T33Z0/OC-Little-Translated/tree/main/00_ACPI/ACPI_Dropping_Tables#example-2-replacing-the-dmar-table-by-a-modified-one) without memory regions must be injected instead.
+3. Original `DMAR` Table must be [dropped](/00_ACPI/ACPI_Dropping_Tables#example-1-dropping-the-dmar-table)
+4. A [modified `DMAR` Table](/00_ACPI/ACPI_Dropping_Tables#example-2-replacing-the-dmar-table-by-a-modified-one) without memory regions must be injected instead.
 
 Once Vt-D is enabled, it should be present in the IO Registry as `AppleVTD`:
 

@@ -4,7 +4,7 @@ This section covers the current status of OpenCore Legacy Patcher development fo
 
 ## (Officially) Supported SMBIOS (Intel Models)
 
-![Somona_SMBIOS](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/9ebc9596-5f1a-4a63-9758-a89018501372)
+![Somona_SMBIOS](https://github.com/laobamac/OC-little-zh/assets/76865553/9ebc9596-5f1a-4a63-9758-a89018501372)
 
 - **iMac**: iMac19,x, iMac20,x, iMacPro1,1
 - **MacPro**: MacPro7,1
@@ -25,7 +25,7 @@ This section covers the current status of OpenCore Legacy Patcher development fo
 	- Introduces kexts and root patching options to re-enable previously working Wifi Cards
 - [**OCLP 068**](https://github.com/dortania/OpenCore-Legacy-Patcher/releases/tag/0.6.8): 
 	- Fixes graphics acceleration patches in Sonoma
-	- Introduces AMFIPass.kext which allows AMFI to work with lowered/disabled SIP settings, resolving issues with [granting 3rd party app access to peripherals](https://github.com/5T33Z0/OC-Little-Translated/blob/main/13_Peripherals/Fixing_Peripherals.md) like webcams and micreophones
+	- Introduces AMFIPass.kext which allows AMFI to work with lowered/disabled SIP settings, resolving issues with [granting 3rd party app access to peripherals](/13_Peripherals/Fixing_Peripherals.md) like webcams and micreophones
 - **OCLP 067**: currently not working (which was expected)
 
 ## Create USB Installer

@@ -1,9 +1,9 @@
-# Disabling devices
-This section contains guides to disable the following devices and features via SSDT Hotpatches:
+# 禁用设备
+本节包含如何使用补丁禁用以下设备和功能的指南：
 
-- [Disabling PCI Devices](https://github.com/5T33Z0/OC-Little-Translated/tree/main/02_Disabling_Devices/Disabling_PCI_Devices)
-- [Disabling EHCx USB Controllers](https://github.com/5T33Z0/OC-Little-Translated/tree/main/02_Disabling_Devices/Disabling_EHCx)
+- [禁用PCI设备](/02_Disabling_Devices/Disabling_PCI_Devices/README.md)
+- [禁用EHCx USB控制器](/02_Disabling_Devices/Disabling_EHCx/README.md)
 
 > [!NOTE]
 >
-> See &rarr; [Graphics](https://github.com/5T33Z0/OC-Little-Translated/tree/main/11_Graphics) Section for disabling unsupported GPUs.
+> 看 &rarr; [显卡](/11_Graphics) 章节来学习禁用GPU。

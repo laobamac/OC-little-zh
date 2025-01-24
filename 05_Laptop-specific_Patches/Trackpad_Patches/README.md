@@ -97,7 +97,7 @@ In macOS, Acidanthera's VoodooPS2Trackpad kext will put a property in IORegistry
 	|Synaptics|[**VoodooRMI**](https://github.com/VoodooSMBus/VoodooRMI)|macOS port of Synaptics' RMI Touchpad driver from Linux. Supports I2C HID and SMBus Touchpads by Synaptics. Also contains a copy of VoodooSMBus, which is needed for VoodooRMI to work.|
 	|ELAN|[**VoodooSMBus**](https://github.com/VoodooSMBus/VoodooSMBus)|Port of the Linux i801 SMBus driver, as well as the Linux Elans SMBus driver.|
 
-More [info](https://github.com/5T33Z0/OC-Little-Translated/issues/57#issuecomment-1270539069) about SMBus Touchpads.
+More [info](https://github.com/laobamac/OC-little-zh/issues/57#issuecomment-1270539069) about SMBus Touchpads.
 
 <details>
 <summary>Known Synaptics SMBus Touchpads</summary>
@@ -237,7 +237,7 @@ graph LR
 **NOTES**: 
 
 - The dotted line represents a topic seldom touched in regards to enabling APIC interrupt mode for I2C Touchpads.
-- [**Larger version**](https://raw.githubusercontent.com/5T33Z0/OC-Little-Translated/main/05_Laptop-specific_Patches/Trackpad_Patches/I2C_Workflow.jpg) (top down view)
+- [**Larger version**](https://raw.githubusercontent.com/laobamac/OC-little-zh/main/05_Laptop-specific_Patches/Trackpad_Patches/I2C_Workflow.jpg) (top down view)
 
 ## Instructions
 
@@ -284,7 +284,7 @@ graph LR
 	- If the value is >`2F` (>47), we need to redirect the APIC Interrupt to a GPIO Interrupt to use GPIO Mode Instead. This technique is called GPIO Pinning.
 
 ### 4. Enabling a Touchpad's GPIO Pin
-In order to use Touchpads with incompatible APIC Pins on macOS, we need to use SSDT Hotfixes to enable GPIO mode. The patching principle can be found in the chapter &rarr; [**I2C-TPXX Patch Method**](https://github.com/5T33Z0/OC-Little-Translated/tree/main/05_Laptop-specific_Patches/Trackpad_Patches/I2C_TrackPad_Patches). 
+In order to use Touchpads with incompatible APIC Pins on macOS, we need to use SSDT Hotfixes to enable GPIO mode. The patching principle can be found in the chapter &rarr; [**I2C-TPXX Patch Method**](/05_Laptop-specific_Patches/Trackpad_Patches/I2C_TrackPad_Patches). 
 
 This section also contains additional patches for Notebooks from various vendors (Acer, ASUS, Dell, HP, Huawei, Lenovo).
 
@@ -307,5 +307,5 @@ This section also contains additional patches for Notebooks from various vendors
 * [**Official VoodooI2C Install Instructions**](https://github.com/VoodooI2C/VoodooI2C/blob/master/Documentation/Installation.md) – Outdated, requires patching the DSDT
 * [**Trackpad on Hackintosh with I2C protocol**](https://hackintosh-vn.translate.goog/trackpad-on-hackintosh-voi-giao-thu-i2c?_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=de&_x_tr_pto=wapp) - Informative but outdated as well, since the DSDT is patched
 * [**VoodoI2C Touchpad Driver Tutorial**](https://www-penghubingzhou-cn.translate.goog/2019/01/06/VoodooI2C%20DSDT%20Edit/?_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=de&_x_tr_pto=wapp) and [Supplement](https://www-penghubingzhou-cn.translate.goog/2019/07/24/VoodooI2C%20DSDT%20Edit%20FAQ/?_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=de&_x_tr_pto=wapp) by Penghu Bingzhou
-* [**Assorted Touchpad Patches for various Notebook models**](https://github.com/5T33Z0/OC-Little-Translated/tree/main/05_Laptop-specific_Patches/Trackpad_Patches/I2C_TrackPad_Patches/I2C_Touchpad_Hotfixes_Collection)
+* [**Assorted Touchpad Patches for various Notebook models**](/05_Laptop-specific_Patches/Trackpad_Patches/I2C_TrackPad_Patches/I2C_Touchpad_Hotfixes_Collection)
 * [**I2C Patching Principle and Example**](https://github-com.translate.goog/ettingshausen/VoodooI2C-PreRelease?_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=de&_x_tr_pto=wapp#dsdt-%E8%A7%A6%E6%91%B8%E6%9D%BF%E9%83%A8%E5%88%86%E8%AF%A6%E8%A7%A3)

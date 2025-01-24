@@ -4,7 +4,7 @@ This guide is for users who want to be able to switch between OpenCore and Clove
 
 This is possible by using [**Bootloader Chooser**](https://github.com/jief666/BootloaderChooser). It's a clover-based pre-bootloader which allows to select the actual Boot Manager you want to use present in your EFI folder structure, namely the "CLOVER" and "OC" folder. It's a pretty handy utility to have stored on a backup USB boot stick to select the Bootloades present on your USB flash drive and internal EFI folder on your SSD/NVMe, as shown in this example:
 
-![20230721_092840_HDR](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/a5972f35-afa1-4dd7-991f-d1eb8904092a)
+![20230721_092840_HDR](https://github.com/laobamac/OC-little-zh/assets/76865553/a5972f35-afa1-4dd7-991f-d1eb8904092a)
 
 ## Installing
 - Download the [**latest release**](https://github.com/jief666/BootloaderChooser/releases) of `BootX64.efi`
@@ -23,7 +23,7 @@ The BLC configuration file which is generated once Bootloader Chooser is execute
 - Open the `BLC.plist` with the TextEdit app
 - Add `</plist>` to the last line
 - Save the file
-- Now it can be opened in by plist editors and you can change settings like the Timeout, etc.: <br> ![bLC](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/1bc35fc0-3390-453d-8d12-73ebcda9fc24)
+- Now it can be opened in by plist editors and you can change settings like the Timeout, etc.: <br> ![bLC](https://github.com/laobamac/OC-little-zh/assets/76865553/1bc35fc0-3390-453d-8d12-73ebcda9fc24)
 
 > [!NOTE]
 > 

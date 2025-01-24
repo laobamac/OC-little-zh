@@ -174,7 +174,7 @@ sudo spctl --master-disable
 
 > [!IMPORTANT]
 >
-> In macOS Sequoia, Gatekeeper can no longer be disabled via Terminal ([new method](https://github.com/5T33Z0/OC-Little-Translated/blob/main/14_OCLP_Wintel/Guides/Disable_Gatekeeper.md))
+> In macOS Sequoia, Gatekeeper can no longer be disabled via Terminal ([new method](/14_OCLP_Wintel/Guides/Disable_Gatekeeper.md))
 
 ### Disable DMG verification
 

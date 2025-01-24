@@ -199,7 +199,7 @@ External (STAS, IntObj)
 	}
 ```
 ### Example 3: `GPIO` Patch
-This patch is required for enabling the GPIO pin for using I2C Touchpads. See Chapter [Trackpad Patches](https://github.com/5T33Z0/OC-Little-Translated/tree/main/05_Laptop-specific_Patches/Trackpad_Patches) for further details.
+This patch is required for enabling the GPIO pin for using I2C Touchpads. See Chapter [Trackpad Patches](/05_Laptop-specific_Patches/Trackpad_Patches) for further details.
 
 An original text:
 

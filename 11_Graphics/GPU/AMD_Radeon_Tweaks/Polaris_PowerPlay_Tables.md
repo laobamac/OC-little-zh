@@ -25,7 +25,7 @@
 Guide for creating a `PP_PhmSoftPowerPlayTable` Device Property for Radeon Polaris cards to inject into macOS. This way you can modify things like Clock Speeds, Fan Curves and Power Limits to optimize performance while reducing power consumption at the same time which wouldn't be possible otherwise. On top of that you don't have to flash a modified BIOS on your GPU.
 
 ### How it works
-Basically, you dump the vBIOS ROM from your GPU, modify it, save it. Then you extract the PowerPlayInfo table from the modded ROM with a Hex Editor and inject into macOS via `DeviceProperties`. Combined with [`@0,name`](https://github.com/5T33Z0/OC-Little-Translated/tree/main/11_Graphics/GPU/AMD_Radeon_Tweaks#method-2-selecting-specific-amd-framebuffers-via-deviceproperties) property to select a specific Framebuffer this is probably the best method to optimize performance and power consumption of AMD cards under macOS
+Basically, you dump the vBIOS ROM from your GPU, modify it, save it. Then you extract the PowerPlayInfo table from the modded ROM with a Hex Editor and inject into macOS via `DeviceProperties`. Combined with [`@0,name`](/11_Graphics/GPU/AMD_Radeon_Tweaks#method-2-selecting-specific-amd-framebuffers-via-deviceproperties) property to select a specific Framebuffer this is probably the best method to optimize performance and power consumption of AMD cards under macOS
 
 ## Requirements
 
@@ -142,7 +142,7 @@ Power consumption in idle (in Watts):
 - **Modded**: ≈ 70 W
 
 ## Example Files
-Here are some example files by Jasonhacks with explanations about the sections of the PowerPlayInfo Table code. The tables are for a Sapphire Nitro+ Radeon RX 580 (8 GB). So unless you have the same model I wouldn't recommend just copying over the data 1:1. Instead, study the principle behind it. [**Download**](https://github.com/5T33Z0/OC-Little-Translated/tree/main/11_Graphics/GPU/AMD_Radeon_Tweaks/PowerPlayInfo) 
+Here are some example files by Jasonhacks with explanations about the sections of the PowerPlayInfo Table code. The tables are for a Sapphire Nitro+ Radeon RX 580 (8 GB). So unless you have the same model I wouldn't recommend just copying over the data 1:1. Instead, study the principle behind it. [**Download**](/11_Graphics/GPU/AMD_Radeon_Tweaks/PowerPlayInfo) 
 
 ## Credits and Thank Yous
 - Original [Guide](https://www.reddit.com/r/hackintosh/comments/hg56pv/guide_polaris_rx_560_580_etc_custom_powerplay/) by Z4mp4n0

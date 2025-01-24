@@ -32,7 +32,7 @@ In some cases, GPUs and Wi-Fi cards might not be detected by OpenCore Legacy Pat
 
 > [!CAUTION]
 > 
-> If your system does not have any of the GPUs supported by OCLP installed on your system but you apply any of the GPU patches in this section anyways, *you will brick your macOS installation* and have to [revert root patches](https://github.com/5T33Z0/OC-Little-Translated/blob/main/14_OCLP_Wintel/Guides/Reverting_Root_Patches.md) in order to recover macOS!
+> If your system does not have any of the GPUs supported by OCLP installed on your system but you apply any of the GPU patches in this section anyways, *you will brick your macOS installation* and have to [revert root patches](/14_OCLP_Wintel/Guides/Reverting_Root_Patches.md) in order to recover macOS!
 
 ### NVIDIA Kepler Patching
 
@@ -68,7 +68,7 @@ To force enable patching of **NVIDIA Kepler Cards** (GT(X) 7xx Series) in OCLP, 
 	- Leave the other option in this section at **`False`**
 	- Save and close the .py file 
 - Back in Finder, double-click on `OpenCore-Patcher-GUI.command` to run the Patcher App.
-- Click on "Post-Install Root Patch". The option "Graphics: Nvidia Kepler" should now appear in the list of applicable patches:<br>![PatchKepler](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/ed1f07a7-30d7-4c5e-8720-6ae7bb89c25a)
+- Click on "Post-Install Root Patch". The option "Graphics: Nvidia Kepler" should now appear in the list of applicable patches:<br>![PatchKepler](https://github.com/laobamac/OC-little-zh/assets/76865553/ed1f07a7-30d7-4c5e-8720-6ae7bb89c25a)
 - Start Patching. 
 - Once it's done, reboot
 
@@ -96,7 +96,7 @@ Enjoy working GPU Acceleration again!
 
 > [!NOTE]
 >
-> Other security features and config requirements might prohibit applying root patches – OCLP will notify you about issues that need to be resolved first. In this case, refer to the corresponding [configuration guide](https://github.com/5T33Z0/OC-Little-Translated/tree/main/14_OCLP_Wintel#configuration-guides) for your CPU family to find the correct settings to prepare your config.plist for applying root patches with OCLP.
+> Other security features and config requirements might prohibit applying root patches – OCLP will notify you about issues that need to be resolved first. In this case, refer to the corresponding [configuration guide](/14_OCLP_Wintel#configuration-guides) for your CPU family to find the correct settings to prepare your config.plist for applying root patches with OCLP.
 
 #### OCLP Preparations
 To force enable patching of **NVIDIA Tesler Cards** in OCLP, do the following:
@@ -118,7 +118,7 @@ To force enable patching of **NVIDIA Tesler Cards** in OCLP, do the following:
  	- Leave the other option in this section at **`False`** 
  	- Save and close the .py file 
 - Back in Finder, double-click on `OpenCore-Patcher-GUI.command` to run the Patcher App.
-- Click on "Post-Install Root Patch". The option "Graphics: Nvidia Kepler" should now appear in the list of applicable patches:<br>![Patch_Tesler](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/32c41807-3189-492f-886e-54e8ed486b73)
+- Click on "Post-Install Root Patch". The option "Graphics: Nvidia Kepler" should now appear in the list of applicable patches:<br>![Patch_Tesler](https://github.com/laobamac/OC-little-zh/assets/76865553/32c41807-3189-492f-886e-54e8ed486b73)
 - Start Patching. 
 - Once it's done, reboot
 
