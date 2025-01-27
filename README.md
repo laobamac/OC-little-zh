@@ -119,7 +119,7 @@ ___
 </a>
 
 ## 鸣谢
-- [**OC-Little by Daliansky**](https://github.com/daliansky/OC-little) 和 [**OC-Little-Translated by 5T33Z0**](https://github.com/laobamac/OC-little-zh)
+- [**OC-Little by Daliansky**](https://github.com/daliansky/OC-little) 和 [**OC-Little-Translated by 5T33Z0**](https://github.com/5T33Z0/OC-Little-Translated)
 
 <details>
 <summary><strong>5T33Z0's 5H0UT 0UT5</strong></summary>
