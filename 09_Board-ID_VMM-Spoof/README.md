@@ -1,113 +1,82 @@
-# Using unsupported Board-IDs with macOS 11.3 and newer
+# 在macOS 11.3及更新版本中使用不受支持的Board-ID
 
-**TABLE of CONTENTS**
+**目录**
 
-- [Explanation](#explanation)
-- [System Requirements](#system-requirements)
-- [Use Cases](#use-cases)
-- [Instructions](#instructions)
-- [Proof](#proof)
-- [Notes](#notes)
-- [Credits](#credits)
+- [在macOS 11.3及更新版本中使用不受支持的Board-ID](#在macos-113及更新版本中使用不受支持的board-id)
+	- [解释](#解释)
+	- [系统要求](#系统要求)
+	- [使用场景](#使用场景)
+	- [操作步骤](#操作步骤)
+	- [验证](#验证)
+	- [备注](#备注)
+	- [鸣谢](#鸣谢)
 
 ---
 
-## Explanation
-**OpenCore Legacy Patcher** (OCLP) 0.3.2 introduced a set of Booter and Kernel patches which utilize macOS'es virtualization capabilities (VMM) introduced in Big Sur to trick macOS into "believing" that it's running inside a Virtual Machine:
+## 解释
+**OpenCore Legacy Patcher** (OCLP) 0.3.2 引入了一组Booter和Kernel补丁，这些补丁利用了Big Sur引入的macOS虚拟化功能 (VMM)，让macOS“以为”它运行在虚拟机中：
 
-> Parrotgeek1's VMM patch set would force `kern.hv_vmm_present` to always return `True`. With hv_vmm_present returning True, both **`OSInstallerSetupInternal`** and **`SoftwareUpdateCore`** will set the **`VMM-x86_64`** board-id while the rest of the OS will continue with the original ID.
+> Parrotgeek1的VMM补丁集会强制 `kern.hv_vmm_present` 始终返回 `True`。当 `hv_vmm_present` 返回 `True` 时，**`OSInstallerSetupInternal`** 和 **`SoftwareUpdateCore`** 将设置 **`VMM-x86_64`** Board-ID，而操作系统的其余部分会继续使用原始ID。
 >
-> - Patching `kern.hv_vmm_present` over manually setting the VMM CPUID allows for native features such as CPU and GPU power management.
+> - 修补 `kern.hv_vmm_present` 比手动设置VMM CPUID更好，因为它支持原生的CPU和GPU电源管理功能。
 
-**Source**: [**OCLP issue 543**](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/543)
+**来源**：[**OCLP issue 543**](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/543)
 
-This construct allows installing and receiving OTA system updates for macOS 11.3 and newer on otherwise unsupported Board-IDs/CPUs. Although OCLP's primary aim is to install OpenCore and macOS on legacy Macs, these patches can be utilized on Hackintoshes as well while using the "native", designated SMBIOS for a given CPU family which improves CPU and GPU Power Management - especially on Laptops. I am successfully using this spoof on my [Lenovo T530 ThinkPad](https://github.com/5T33Z0/Lenovo-T530-Hackinosh-OpenCore) for running macOS Sonoma.
+这种方法可以在macOS 11.3及更新版本中为不支持的Board-ID/CPU安装和接收OTA系统更新。虽然OCLP的主要目标是为旧Mac安装OpenCore和macOS，但这些补丁也可以在Hackintosh中使用，同时使用指定的SMBIOS提升CPU和GPU的电源管理，尤其是在笔记本电脑上。我成功在我的 [联想T530 ThinkPad](https://github.com/5T33Z0/Lenovo-T530-Hackinosh-OpenCore) 上运行macOS Sonoma。
 
-Although installing macOS on systems with an unsupported SMBIOS was possible long before these patches existed (via boot-arg `-no_compat_check`), receiving OTA system updates is impossible if this boot-arg is active.
+尽管早在这些补丁出现之前，通过 `-no_compat_check` 引导参数就可以在不支持的SMBIOS上安装macOS，但如果启用了该引导参数，则无法接收OTA系统更新。
 
-> [!CAUTION]
+> [!警告]
 >
-> - With the release of `RestrictEvents.kext` v1.1.3, the Kernel Patches were implemented into the kext itself, so adding them is no longer necessary. So If your `config.plist` still contains [these Kernel Patches](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/main/payloads/Config/config.plist#L2163-L2282), please disable/delete them! 
-> - Prior to the release of `RestrictEvents.kext`, the kernel patches had negative effects on Bluetooth since enabling the VMM Board-ID skipped loading firmware of Bluetooth devices. This has been resolved now (&rarr; [ more details](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/1076)).
+> - 自 `RestrictEvents.kext` v1.1.3 版本起，这些Kernel补丁已集成到kext中，因此无需单独添加。如果你的 `config.plist` 中仍然包含[这些Kernel补丁](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/main/payloads/Config/config.plist#L2163-L2282)，请禁用或删除它们！
+> - 在 `RestrictEvents.kext` 发布之前，这些Kernel补丁对蓝牙功能有负面影响，因为启用VMM Board-ID会跳过加载蓝牙设备固件。这个问题现在已解决（→ [更多详情](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/1076)）。
 
-## System Requirements
-**Minimum macOS**: Big Sur 11.3 or newer (Darwin Kernel 20.4+) is ***mandatory***!</br>
+## 系统要求
+**最低macOS版本**：Big Sur 11.3或更新版本（Darwin Kernel 20.4+）是***必须的***！</br>
 
-**Intel CPU families**:
+**Intel CPU系列**：
 
-- 1st Gen Intel Core CPUs (req. [SurPlus Kernel Patches](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/main/payloads/Config/config.plist#L2103-L2162))
-- Sandy Bridge (req. [SurPlus Kernel Patches](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/main/payloads/Config/config.plist#L2103-L2162))
+- 第一代Intel Core CPU（需 [SurPlus Kernel Patches](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/main/payloads/Config/config.plist#L2103-L2162)）
+- Sandy Bridge（需 [SurPlus Kernel Patches](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/main/payloads/Config/config.plist#L2103-L2162)）
 - Ivy Bridge
 - Haswell/Broadwell
-- Skylake (to continue using SMBIOS `iMac17,1` on macOS 13+). Requires additional [iGPU spoof](/11_Graphics/iGPU/Skylake_Spoofing_macOS13) so the Intel HD 530 can be used.
+- Skylake（在macOS 13+中继续使用SMBIOS `iMac17,1` 需要额外的[iGPU伪装](/11_Graphics/iGPU/Skylake_Spoofing_macOS13)，以支持Intel HD 530。）
 
-> [!NOTE]
+> [!注意]
 >
-> 7th to 10 Gen Intel Core CPUs don't need this spoof (yet) since they are still supported by macOS.
+> 7到10代Intel Core CPU目前不需要这种伪装，因为macOS仍支持它们。
 
-## Use Cases
-1. **Installing macOS 11.3+** on systems with unsupported CPUs and SMBIOSes/Board-IDs
-2. **Enabling System Updates**. As a side effect, you can use these patches to workaround issues with System Updates in macOS 11.3 and newer when using an SMBIOS of a Mac model with a T1/T2 security chip, such as (value in brackets = `SecureBootModel`):
+## 使用场景
+1. **在不支持的CPU和SMBIOS/Board-ID上安装macOS 11.3+**。
+2. **启用系统更新**。同时，这些补丁可以绕过以下情况下的系统更新问题：
+   - 使用的SMBIOS属于带T1/T2安全芯片的Mac机型，例如：
+     - MacBookPro15,1 (`J680`), 15,2 (`J132`), 15,3 (`J780`), 15,4 (`J213`)
+     - MacBookPro16,1 (`J152F`), 16,2 (`J214K`), 16,3 (`J223`), 16,4 (`J215`)
+     - MacBookAir8,1 (`J140K`), 8,2 (`J140A`)
+     - 等等。
 
-	- MacBookPro15,1 (`J680`), 15,2 (`J132`), 15,3 (`J780`), 15,4 (`J213`)
-	- MacBookPro16,1 (`J152F`), 16,2 (`J214K`), 16,3 (`J223`), 16,4 (`J215`)
-	- MacBookAir8,1 (`J140K`), 8,2 (`J140A`)
-	- MacBookAir9,1 (`J230K`)
-	- Macmini8,1 (`J174`)
-	- iMac20,1 (`J185`), 20,2 (`J185F`)
-	- iMacPro1,1 (`J137`)
-	- MacPro7,1 (`J160`)
+详细解释见原文。
 
-Normally, macOS wouldn't be able to receive System Update Notifications (and therefore wouldn't be able to download OTA System Updates) under the following conditions:
+## 操作步骤
+- 挂载你的EFI分区。
+- 使用ProperTree打开 `config.plist`。
+- 将OCLP [**`Booter/Patch`**](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/main/payloads/Config/config.plist#L220-L243) 中的“跳过Board ID检查”补丁复制到你的 `config.plist`，并启用。
+- 将 [**`RestrictEvent.kext`**](https://github.com/acidanthera/RestrictEvents/releases) 1.1.3或更新版本添加到 `EFI/OC/Kext` 文件夹，并在 `config.plist` 中配置。
+- 删除 `-no_compat_check` 引导参数（如果存在）。
+- 添加 `revpatch=sbvmm` 到引导参数或作为NVRAM变量。
+- 可选但推荐：在 `PlatformInfo/Generic` 中选择正确的SMBIOS并生成新序列号（例如使用OCAT或GenSMBIOS）。
+- 保存配置并重启。
+- 安装macOS 12或更新版本。
 
-1. Using a [`csr-active-config` bitmask](/B_OC_Calculators/SIP_Flags_Explained.md) containing the flags "Allow Apple Internal" and "Allow unauthenticated Root" to lower `System Integrity Protection` (SIP). Lowering SIP is mandatory for [applying root-patches with OCLP](https://dortania.github.io/OpenCore-Legacy-Patcher/PATCHEXPLAIN.html#on-disk-patches) to the system volume to re-enable legacy hardware since it cannot be enabled by injecting settings and kexts via OpenCore alone alone. But if these 2 SIP flags are active, you won't receive System Update Notifications any longer. Since re-installing files on the system partition also breaks its security seal, `SecureBootModel` has to be disabled in order to boot the system afterwards.
-2. Using an SMBIOS of one of the Mac models listed above in combination with `SecureBootModel` set to `Disabled` (instead of using the correct "J" value).
-3. Using boot-arg `-no_compat_check` which allows booting with an unsupported board-id but it also disables system updates.
+## 验证
+详细的测试截图和过程可以展开[这里](#proof)查看。
 
-In conclusion: in order to be able to boot the system with the designated SMBIOS, patched-in drivers ***and*** receive system updates, the Board-ID VMM spoof is the only workaround.
-	
-## Instructions
-- Mount your EFI
-- Open your `config.plist` with ProperTree
-- Copy the "Skip Board ID check" patch from OCLP's [**`Booter/Patch`**](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/main/payloads/Config/config.plist#L220-L243) section to your `config.plist` and **enable** it. 
-- Add [**`RestrictEvent.kext`**](https://github.com/acidanthera/RestrictEvents/releases) 1.1.3 or newer to your `EFI/OC/Kext` folder and `config.plist`
-- Delete `-no_compat_check` boot-arg (if present)
-- Add `revpatch=sbvmm` to boot-args or as as an NVRAM variable: <br> ![revpatch](https://github.com/laobamac/OC-little-zh/assets/76865553/a1ee759c-ced4-4669-97b4-9be8833fe57b)
-- Optional (but recommended): Under `PlatformInfo/Generic`, pick the correct/designated [SMBIOS for your CPU family/system](/14_OCLP_Wintel/CPU_to_SMBIOS.md) and generate new serials, etc (with OCAT or GenSMBIOS for example) 
-- Save your config and reboot.
-- Install macOS 12 or newer.
+## 备注
+- 升级到macOS 12+后，需要重新安装旧版显卡驱动，例如：Intel HD Graphics、NVIDIA Kepler等。
+- 有关在不支持的平台上运行macOS Ventura及更新版本的详细配置，请参考 [**OCLP Wintel**](/14_OCLP_Wintel/README.md)。
 
-<details>
-<summary><strong>Proof that the spoof is working</strong> (Click to reveal)</summary><br>
-
-## Proof
-I tested the Board-id vmm spoof on my Lenovo T530 Notebook (Ivy Bridge), using the `MacBookPro10,1` SMBIOS, which is officially not compatible with macOS Monterey. After rebooting, the system started without using `-no_compat_check` boot-arg, as you can see here:
-
-![Proof01](https://user-images.githubusercontent.com/76865553/139529766-87daac84-126e-4dfc-ac1d-37e4730e0bbf.png)
-
-Terminal shows the currently used Board-ID which belongs to the `MacBookPro10,1` SMBIOS as you can see in Clover Configurator. Usually, running macOS 12+ would require SMBIOS `MacBookPro11,4` which uses a different Board-ID:
-
-![boardid](https://github.com/laobamac/OC-little-zh/assets/76865553/79e6ae79-5c4b-4a41-b84e-29e4ac2d78b3)
-
-Next, I checked for updates and was offered macOS 12.1 beta:
-
-![Proof03](https://user-images.githubusercontent.com/76865553/139529788-d8ca770e-f8c2-49a8-a44e-908137f5e45c.png)
-  
-Which I installed…
-  
-![Proof04](https://user-images.githubusercontent.com/76865553/139529792-d92e52d3-5f91-4044-b788-730d603327b3.png)
-
-Installation went smoothly and macOS 12.1 booted without issues:
-
-![About](https://user-images.githubusercontent.com/76865553/139529802-3ea61297-7c7b-4369-8c21-4160b437f1a6.png)
-</details>
-
-## Notes
-- After upgrading to macOS 12+, you have to re-install graphics drivers for legacy iGPUs/dGPUs that are no longer supported by macOS, such as: Intel HD Graphics (Ivy Bridge to Skylake), NVIDIA Kepler and AMD Vega, Polaris and GCN. To do so, you can use [**OpenCore Patcher GUI App**](https://github.com/dortania/OpenCore-Legacy-Patcher/releases)
-- For getting macOS Ventura and newer to work on unsupported platforms, check the [**OCLP Wintel**](/14_OCLP_Wintel/README.md) section for detailed configuration guides (1st to 6th Gen Intel Core CPUs).
-
-## Credits
-- [**VMM Usage Notes**](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/543#issuecomment-953441283)
-- Dortania for [**OpenCore Legacy Patcher**](https://github.com/dortania/OpenCore-Legacy-Patcher)
-- parrotgeek1 for [**VMM Patches**](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/4a8f61a01da72b38a4b2250386cc4b497a31a839/payloads/Config/config.plist#L1222-L1281)
-- reenigneorcim for [**SurPlus**](https://github.com/reenigneorcim/SurPlus)
+## 鸣谢
+- [**VMM使用说明**](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/543#issuecomment-953441283)
+- Dortania团队开发的 [**OpenCore Legacy Patcher**](https://github.com/dortania/OpenCore-Legacy-Patcher)
+- parrotgeek1提供的 [**VMM补丁**](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/4a8f61a01da72b38a4b2250386cc4b497a31a839/payloads/Config/config.plist#L1222-L1281)
+- reenigneorcim开发的 [**SurPlus**](https://github.com/reenigneorcim/SurPlus)

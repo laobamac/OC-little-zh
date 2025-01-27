@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>OC-Little-zh&colon; &#x9002;&#x7528;&#x4e8e;OpenCore&#x7684;ACPI&#x70ed;&#x8865;&#x4e01;&#x6307;&#x5357;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="oc-little-zh-适用于opencore的acpi热补丁指南">OC-Little-zh: 适用于OpenCore的ACPI热补丁指南</h1>
+<div align="center">
+             <img src="file:////Users/laobamac/Desktop/OC-little-zh/logo.png" alt="OCLP-Mod Logo" width="256" />
+             <h1>OC-little-zh</h1>
+</div>
+<div align=center>
+<p><a href="https://github.com/acidanthera/OpenCorePkg"><img src="https://img.shields.io/badge/%E6%94%AF%E6%8C%81%E7%9A%84OpenCore%E7%89%88%E6%9C%AC:-%E2%89%A41.0.4-success.svg" alt="OpenCore Version"></a> <img src="https://img.shields.io/badge/%E6%94%AF%E6%8C%81%E7%9A%84macOS:-%E2%89%A415.3-white.svg" alt="macOS"> <img src="https://img.shields.io/badge/%E6%9C%80%E5%90%8E%E6%9B%B4%E6%96%B0:-2025.01.24-blueviolet.svg" alt="Last Update"></br></p>
+</div>
+<p><strong>目录</strong></p>
+<h2 id="前言">前言</h2>
+<ul>
+<li><a href="#%E5%85%8D%E8%B4%A3%E5%A3%B0%E6%98%8E"><strong>免责声明</strong></a></li>
+<li><a href="#%E5%85%B3%E4%BA%8E"><strong>关于OC-little-zh</strong></a></li>
+<li><a href="#%E5%85%B3%E4%BA%8E%E4%BF%AE%E6%94%B9"><strong>关于修改信息</strong></a></li>
+</ul>
+<h2 id="主要">主要</h2>
+<ul>
+<li><a href="/00_ACPI/README.html"><strong>ACPI基础知识和指南</strong></a></li>
+<li><a href="/01_Adding_missing_Devices_and_enabling_Features/README.html"><strong>通过SSDT启用、添加设备/功能</strong></a></li>
+<li><a href="/02_Disabling_Devices/README.html"><strong>禁用设备</strong></a></li>
+<li><a href="/11_Graphics/README.html"><strong>修复显卡</strong></a> (核显/独显)</li>
+<li><a href="/03_USB_Fixes/README.html"><strong>修复USB</strong></a></li>
+<li><a href="04_Fixing_Sleep_and_Wake_Issues/README.html"><strong>修复重启、睡眠、唤醒</strong></a></li>
+<li><a href="/13_Peripherals/README.html"><strong>修复外设问题</strong></a></li>
+<li><a href="/05_Laptop-specific_Patches/README.html"><strong>笔记本特殊补丁</strong></a></li>
+<li><a href="/06_CMOS-related_Fixes/README.html"><strong>修复CMOS相关</strong></a></li>
+<li><a href="/07_BOOT_Folder/README.html"><strong>EFI文件夹</strong></a></li>
+<li><a href="/10_Kexts_Loading_Sequence_Examples/README.html"><strong>内核扩展加载顺序</strong></a></li>
+<li><a href="/12_MMIO_Whitelist/README.html"><strong>MMIO白名单</strong></a></li>
+<li><a href="/15_RAM/README.html"><strong>修复不正确的内存速度</strong></a></li>
+</ul>
+<h2 id="特殊">特殊</h2>
+<ul>
+<li><a href="/14_OCLP_Wintel/README.html"><strong>在黑苹果使用OCLP补丁</strong></a></li>
+<li><a href="/09_Board-ID_VMM-Spoof/README.html"><strong>跳过Board-ID验证、使用VMM覆写</strong></a></li>
+<li><a href="/C_Utilities_and_Resources/README.html"><strong>工具&amp;资源</strong></a></li>
+</ul>
+<h2 id="额外">额外</h2>
+<h3 id="配置相关">配置相关</h3>
+<ul>
+<li><a href="/A_Config_Tips_and_Tricks/README.html"><strong>配置提示和技巧</strong></a></li>
+<li><a href="/H_Boot-args/README.html"><strong>启动参数解读</strong></a></li>
+<li><a href="/08_Quirks/README.html"><strong>OC怪癖</strong></a></li>
+<li><a href="/M_EFI_Upload_Chklst/README.html"><strong>分享你的EFI</strong></a></li>
+<li><a href="/P_Else/README.html"><strong>一些奇怪的内容</strong></a></li>
+</ul>
+<h3 id="opencore-auxiliary-tools-ocat-使用指南">OpenCore Auxiliary Tools (OCAT) 使用指南</h3>
+<ul>
+<li><a href="/D_Updating_OpenCore/README.html"><strong>同步OpenCore</strong></a></li>
+<li><a href="/B_OC_Calculators/README.html"><strong>OpenCore部分值的计算</strong></a></li>
+<li><a href="/O_OC_NO_ACPI/README.html"><strong>切换到不向其他系统注入ACPI的OpenCore Mod</strong></a></li>
+<li><a href="/F_Desktop_EFIs/README.html"><strong>通过OCAT创建EFI</strong></a></li>
+</ul>
+<h3 id="macos相关">macOS相关</h3>
+<ul>
+<li><a href="/Terminal_Commands.html#readme"><strong>终端命令</strong></a></li>
+<li><a href="/E_Compatibility_Charts/README.html"><strong>兼容性图表</strong></a></li>
+<li><a href="/S_System_Updates/README.html"><strong>修复系统更新通知</strong></a></li>
+<li><a href="/W_Workarounds/README.html"><strong>macOS 14.4 +安装解决方案</strong></a></li>
+<li><a href="/U_USB_Multi_installer/README.html"><strong>创建macOS多版本安装器</strong></a></li>
+</ul>
+<h3 id="其他系统">其他系统</h3>
+<ul>
+<li><a href="/I_Windows/README.html"><strong>Windows相关</strong></a></li>
+<li><a href="/G_Linux/README.html"><strong>启用Linux引导项</strong></a></li>
+<li><a href="/V_Virtualization/README.html"><strong>macOS 虚拟化</strong></a></li>
+</ul>
+<h3 id="杂项">杂项</h3>
+<ul>
+<li><a href="/T_Themes/README.html"><strong>OpenCanopy主题</strong></a></li>
+<li><a href="/L_ALC_Layout-ID/README.html"><strong>为AppleALC创建、修改layout-id</strong></a></li>
+<li><a href="/J_Compiling_Kexts/README.html"><strong>编译精简后的Kext</strong></a></li>
+<li><a href="/K_Debugging/README.html"><strong>通过系统报告调试</strong></a></li>
+<li><a href="/N_SSDT-ALL/README.html"><strong>创建多合一补丁 (<code>SSDT-ALL</code>)</strong></a></li>
+<li><a href="/R_BootloaderChooser/README.html"><strong>同时使用Clover与OpenCore</strong></a></li>
+</ul>
+<hr>
+<h2 id="免责声明">免责声明</h2>
+<ol>
+<li>OC-Little-zh 并非教你如何配置OpenCore来安装macOS，需要黑苹果相关教程请移步 Dortania 的 <a href="https://dortania.github.io/OpenCore-Install-Guide/"><strong>OpenCore Install Guide</strong></a> 或其他教程文档！相反，它是一个补充资源，为与黑苹果提供ACPI修复指南，以及有关的技巧、方法。</li>
+<li>此仓库中撰写的文档目的是让用户可以通过修复ACPI等操作使 macOS 的 <strong>正常工作</strong> ，并且不会违反 ACPI 规范。因此，<strong>OC-Little-zh</strong> 不提倡使用破坏ACPI规范的方法——比如直接修补“DSDT”，因为它不是获得“真正原生的macOS”体验的<strong>正确</strong>措施。事实上，情况恰恰相反，<a href="https://www.insanelymac.com/forum/topic/352881-when-is-rebaseregions-necessary/#comment-2790870"><strong>正如 insanelymac的一篇帖子</strong></a>，某些情况下仍需对DSDT进行重定位，以使macOS正常启动。</li>
+</ol>
+<h2 id="关于">关于</h2>
+<p>用于 OpenCore Boot Manager 的指南、ACPI 热补丁和重命名集合，基于 <a href="https://github.com/daliansky/OC-little"><strong>OC-Little by Daliansky</strong></a>和<a href="https://github.com/laobamac/OC-little-zh"><strong>OC-Little-Translated by 5T33Z0</strong></a>，并加以汉化、补充、修正。</p>
+<p>除了ACPI指南外，此存储库还包含与 OpenCore Package 和 Dortania 的 OpenCore Guides 提供的指南相辅相成的其他指南。它涵盖了大量的黑苹果相关内容，包括：</p>
+<ul>
+<li>ACPI 基础知识</li>
+<li>启用设备、功能</li>
+<li>修复睡眠/唤醒和其他电源相关问题</li>
+<li>定制USB端口</li>
+<li>修复笔记本电脑的特殊问题</li>
+<li>修复显卡相关问题</li>
+<li>配置相关提示</li>
+<li>在黑苹果上使用OCLP补丁</li>
+</ul>
+<p>以上内容在目录均提到。本文主要对象是OpenCore，但大部分内容页适用于Clover，可以加以参考。</p>
+<h3 id="关于修改">关于修改</h3>
+<ul>
+<li>为了保证文档教学的准确性，所有文字均为我人工翻译，并尽量让文档适合中文的语言习惯。这是一个工作量巨大的进程，如果有不正确的地方，请联系我。</li>
+<li>根据问题、组件、方法等的类型，将存储库重构为更合理的(子)部分和类别。</li>
+<li>重写了令人困惑/误导的整个部分(例如“ACPI”和“定制USB端口”)</li>
+<li>增加了缺失的描述</li>
+<li>我并没有非常充裕的时间，高中的生活繁忙且杂乱。我会在必要时对文档进行更新来确保其适用于最新版本的OpenCore、macOS。如果我没有立刻回复你的请求，请耐心等待。</li>
+</ul>
+<h2 id="贡献">贡献</h2>
+<p>如果您想为本文档提供的信息做出贡献，以改进/扩展它，请创建issue或加入QQ群来联系我，注明到章节/部分并描述您想要添加，更改，更正或扩展的内容。</p>
+<h2 id="star-历史">STAR 历史</h2>
+<a href="https://star-history.com/#laoamac/OC-little-zh&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=laobamac/OC-little-zh&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=laobamac/OC-little-zh&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=laobamac/OC-little-zh&type=Date" />
+ </picture>
+</a>
+<h2 id="鸣谢">鸣谢</h2>
+<ul>
+<li><a href="https://github.com/daliansky/OC-little"><strong>OC-Little by Daliansky</strong></a> 和 <a href="https://github.com/laobamac/OC-little-zh"><strong>OC-Little-Translated by 5T33Z0</strong></a></li>
+</ul>
+<details>
+<summary><strong>5T33Z0's 5H0UT 0UT5</strong></summary>
+<blockquote>
+<ul>
+<li>Thanks to al the <a href="https://github.com/laobamac/OC-little-zh/graphs/contributors"><strong>contributors</strong></a> for improving and expanding the repo! Additional credits for contributors outside of the github realm are listed in the respective chapters/sections.</li>
+<li>sascha_77 for Kext Updater, ANYmacOS and helping me to unbrick my Lenovo T530 BIOS!</li>
+<li>Apfelnico for introducing me to ASL/AML Basics</li>
+<li>Bluebyte for having good conversations</li>
+<li>Cyberdevs from insanelymac for his Z170X Gaming 5 Guide and for being a prime example of a Moderator who treats others with respect!</li>
+</ul>
+</blockquote>
+</details>
+<details>
+<summary><strong>Daliansky's original Credits</strong></summary>
+<blockquote>
+<ul>
+<li>Special credit to:
+<ul>
+<li>@XianWu write these ACPI component patches that useable to OpenCore</li>
+<li>@Bat.bat, @DalianSky, @athlonreg, @iStar丶Forever their proofreading and finalization.</li>
+</ul>
+</li>
+<li>Credits and thanks to：
+<ul>
+<li>@冬瓜-X1C5th</li>
+<li>@OC-xlivans</li>
+<li>@Air 13 IWL-GZ-Big Orange (OC perfect)</li>
+<li>@子骏oc IWL</li>
+<li>@大勇-小新air13-OC-划水小白</li>
+<li>@xjn819</li>
+<li>Acidanthera for maintaining OpenCorePkg</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+</details>
+
+            
+            
+        </body>
+        </html>

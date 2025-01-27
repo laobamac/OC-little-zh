@@ -1,151 +1,154 @@
-# OpenCore Config Tips and Tricks
-This section contains a small collection of useful configuration tips for OpenCore's `config.plist`.
+# OpenCore 配置小技巧
+本节包含一些关于 OpenCore `config.plist` 的有用配置技巧。
 
 <details>
-<summary><b>TABLE of CONTENTS</b> (Click to reveal)</summary><br>
-	
-- [OpenCore Troubleshooting Quick Tips](#opencore-troubleshooting-quick-tips)
-	- [Troubleshooting Workflow](#troubleshooting-workflow)
-	- [`MinDate`/`MinVersion` settings for the APFS driver](#mindateminversion-settings-for-the-apfs-driver)
-- [I. Updating config.plist and fixing errors](#i-updating-configplist-and-fixing-errors)
-	- [Automated config upgrade (recommended)](#automated-config-upgrade-recommended)
-	- [Manual upgrade and error correction (old)](#manual-upgrade-and-error-correction-old)
-	- [A personal note on using Configurator Apps](#a-personal-note-on-using-configurator-apps)
-- [II. Quick fixes for Boot Problems](#ii-quick-fixes-for-boot-problems)
-- [III. Security Settings](#iii-security-settings)
-	- [How to disable Single User Mode](#how-to-disable-single-user-mode)
-	- [How to disable System Integrity Protection (SIP)](#how-to-disable-system-integrity-protection-sip)
-- [IV. Adjust Boot Picker Attributes, enable Mouse Support](#iv-adjust-boot-picker-attributes-enable-mouse-support)
-- [V. Customizing Boot Options](#v-customizing-boot-options)
-	- [Set default boot drive in BootPicker](#set-default-boot-drive-in-bootpicker)
-	- [Enable Apple Hotkey functions](#enable-apple-hotkey-functions)
-	- [Accelerate boot (results will vary)](#accelerate-boot-results-will-vary)
-	- [Boot variants (Selection)](#boot-variants-selection)
-		- [Manual selection of the OS without GUI (default)](#manual-selection-of-the-os-without-gui-default)
-		- [Manual selection of the OS with GUI (requires OpenCanopy and Resources folder)](#manual-selection-of-the-os-with-gui-requires-opencanopy-and-resources-folder)
-		- [Boot the OS automatically from the "Default" volume (no GUI)](#boot-the-os-automatically-from-the-default-volume-no-gui)
-		- [Skip the BootPicker to load macOS automatically](#skip-the-bootpicker-to-load-macos-automatically)
-- [VI. Resolving issues with NVRAM](#vi-resolving-issues-with-nvram)
-	- [Resetting NVRAM](#resetting-nvram)
-		- [OC ≤ 0.8.3](#oc--083)
-		- [OC ≥ 0.8.4](#oc--084)
-		- [Keep Boot entries after NVRAM reset](#keep-boot-entries-after-nvram-reset)
-	- [Fixing falsely reported OpenCore version](#fixing-falsely-reported-opencore-version)
-- [VII. Prohibit SMBIOS injection into other OSes](#vii-prohibit-smbios-injection-into-other-oses)
-- [VIII. Exchanging SMBIOS Data between OpenCore and Clover](#viii-exchanging-smbios-data-between-opencore-and-clover)
-	- [Manual method](#manual-method)
-		- [Troubleshooting](#troubleshooting)
-	- [SMBIOS Data Import/Export with OCAT](#smbios-data-importexport-with-ocat)
-	- [1-Click-Solution for Clover Users](#1-click-solution-for-clover-users)
-- [Further Resources](#further-resources)
+<summary><b>目录</b>（点击展开）</summary><br>
+
+- [OpenCore 配置小技巧](#opencore-配置小技巧)
+	- [OpenCore 排错小贴士](#opencore-排错小贴士)
+		- [排错流程](#排错流程)
+		- [`MinDate`/`MinVersion` 的 APFS 驱动设置](#mindateminversion-的-apfs-驱动设置)
+	- [I. 更新 config.plist 和修复错误](#i-更新-configplist-和修复错误)
+		- [自动配置升级（推荐）](#自动配置升级推荐)
+		- [手动升级和错误修复（旧方法）](#手动升级和错误修复旧方法)
+		- [关于使用配置工具的个人建议](#关于使用配置工具的个人建议)
+	- [II. 启动问题的快速修复](#ii-启动问题的快速修复)
+	- [III. 安全设置](#iii-安全设置)
+		- [如何禁用单用户模式](#如何禁用单用户模式)
+		- [如何禁用系统完整性保护（SIP）](#如何禁用系统完整性保护sip)
+	- [IV. 调整 Boot Picker 属性并启用鼠标支持](#iv-调整-boot-picker-属性并启用鼠标支持)
+	- [V. 自定义启动选项](#v-自定义启动选项)
+		- [在 BootPicker 中设置默认启动驱动器](#在-bootpicker-中设置默认启动驱动器)
+		- [启用 Apple 热键功能](#启用-apple-热键功能)
+		- [加速启动（结果可能因系统而异）](#加速启动结果可能因系统而异)
+		- [启动方式选择](#启动方式选择)
+			- [无 GUI 手动选择操作系统（默认）](#无-gui-手动选择操作系统默认)
+			- [带 GUI 的手动选择操作系统（需要 OpenCanopy 和资源文件夹）](#带-gui-的手动选择操作系统需要-opencanopy-和资源文件夹)
+			- [从“默认”卷自动启动操作系统（无 GUI）](#从默认卷自动启动操作系统无-gui)
+			- [跳过 BootPicker 自动加载 macOS](#跳过-bootpicker-自动加载-macos)
+	- [VI. 解决 NVRAM 问题](#vi-解决-nvram-问题)
+		- [重置 NVRAM](#重置-nvram)
+			- [OC ≤ 0.8.3](#oc--083)
+			- [OC ≥ 0.8.4](#oc--084)
+			- [重置 NVRAM 后保留启动条目](#重置-nvram-后保留启动条目)
+		- [修复错误报告的 OpenCore 版本](#修复错误报告的-opencore-版本)
+	- [VII. 禁止将 SMBIOS 注入到其他操作系统](#vii-禁止将-smbios-注入到其他操作系统)
+	- [VIII. 在 OpenCore 和 Clover 之间交换 SMBIOS 数据](#viii-在-opencore-和-clover-之间交换-smbios-数据)
+		- [手动方法](#手动方法)
+			- [排错](#排错)
+		- [使用 OCAT 导入/导出 SMBIOS 数据](#使用-ocat-导入导出-smbios-数据)
+		- [Clover 用户的一键解决方案](#clover-用户的一键解决方案)
+	- [更多资源](#更多资源)
 
 </details>
 
-## OpenCore Troubleshooting Quick Tips
+## OpenCore 排错小贴士
 
-### Troubleshooting Workflow
+### 排错流程
 
-![OpenCore Troubleshooting](https://user-images.githubusercontent.com/76865553/135234918-2d0ce665-9037-4dd6-b0f4-e2b54c081160.png)
+![OpenCore 排错流程](https://user-images.githubusercontent.com/76865553/135234918-2d0ce665-9037-4dd6-b0f4-e2b54c081160.png)
 
-Besides checking the obvious (like Booter, Kernel and UEFI Quirks), check the following settings:
+除了检查明显的设置（如 Booter、Kernel 和 UEFI Quirks），还需检查以下配置：
 
 - `UEFI/ConnectDrivers` = true
 - `Misc/Security/SecureBootModel` = Disabled
 - `Misc/security/Vault` = Optional
 - `UEFI/APFS/MinDate` = -1
-- `UEF/APFS/MinVersion` = -1
-- Compare the structure of `UEFI/Drivers` with `sample.plist` from the OpenCore Package (format changed in OC 0.7.3).
+- `UEFI/APFS/MinVersion` = -1
+- 将 `UEFI/Drivers` 的结构与 OpenCore 包中的 `sample.plist` 比较（OC 0.7.3 格式有变）。
 
-For extensive troubleshooting please refer to Dortania's [Troubleshooting Guide](https://dortania.github.io/OpenCore-Install-Guide/troubleshooting/troubleshooting.html#table-of-contents).
+详细排错请参考 Dortania 的 [排错指南](https://dortania.github.io/OpenCore-Install-Guide/troubleshooting/troubleshooting.html#table-of-contents)。
 
-### `MinDate`/`MinVersion` settings for the APFS driver
-OpenCore introduced a new security feature in version 0.7.2 which prohibits the APFS driver from loading if it doesn't comply to a specific Date (`MinDate`) and Version and (`MinVersion`) in the  `UEFI/APFS` section.
+### `MinDate`/`MinVersion` 的 APFS 驱动设置
+OpenCore 在 0.7.2 版本中引入了一个新的安全功能。如果 APFS 驱动程序的日期（`MinDate`）和版本（`MinVersion`）不符合特定标准，将会被禁止加载。
 
-The new default values `0`and `0` is for macOS Big Sur. So if you're running an older version of macOS, you won't see your drives. To disable this feature, enter `-1` and the APFS driver will load for any macOS version.
+新默认值 `0` 和 `0` 支持 macOS Big Sur。如果运行旧版本 macOS，将看不到驱动器。禁用此功能，输入 `-1`，APFS 驱动将加载任何 macOS 版本。
 
-**Here's a list of supported Values:**
+**支持值列表：**
 
-| `MinDate`| `MinVersion`     | Description                                  |
-|:--------:|:----------------:|:---------------------------------------------|
-| 0        | 0                | Default. Loads APFS driver for Big Sur+ only |
-| -1       | -1               | Disabled. Allows any APFS driver             |
-| 20210508 | 1677120009000000 | req. macOS ≥ Big Sur (11.4+)                 |
-| 20200306 | 1412101001000000 | req. macOS ≥ Catalina (10.15.4+)             |
-| 20190820 | 9452750070000000 | req. macOS ≥ Mojave (10.14.6)                |
-| 20180621 | 7480770080000000 | req. macOS ≥ High Sierra (10.13.6)           |
+| `MinDate` | `MinVersion`     | 描述                                  |
+|:---------:|:----------------:|:-------------------------------------|
+| 0         | 0                | 默认，仅加载 Big Sur+ 的 APFS 驱动    |
+| -1        | -1               | 禁用，允许加载任何 APFS 驱动         |
+| 20210508  | 1677120009000000 | 需要 macOS ≥ Big Sur (11.4+)         |
+| 20200306  | 1412101001000000 | 需要 macOS ≥ Catalina (10.15.4+)     |
+| 20190820  | 9452750070000000 | 需要 macOS ≥ Mojave (10.14.6)        |
+| 20180621  | 7480770080000000 | 需要 macOS ≥ High Sierra (10.13.6)   |
 
-**Source**: [Acidanthera](https://github.com/acidanthera/OpenCorePkg/blob/master/Include/Acidanthera/Library/OcApfsLib.h)
+**来源**：[Acidanthera](https://github.com/acidanthera/OpenCorePkg/blob/master/Include/Acidanthera/Library/OcApfsLib.h)
 
 > [!IMPORTANT]
 >
-> For security concerns, you should change these values according to the version of macOS you are using.
+> 出于安全考虑，您应该根据使用的 macOS 版本更改这些值。
 
-## I. Updating config.plist and fixing errors
 
-### Automated config upgrade (recommended)
-Since OpenCore Auxiliary Tools [**OCAT**](https://github.com/ic005k/QtOpenCoreConfig) were released, the process of maintaining and updating your OpenCore config and files has become so much easier. It can automatically update/migrate any outdated config.plist to the latest structure and feature-set as well as update OpenCore, Drivers and Kexts and check the config for errors. Check my [OpenCore Update Guide](/D_Updating_OpenCore) fore more details.
+## I. 更新 config.plist 和修复错误
 
-### Manual upgrade and error correction (old)
-Prior to the advent of OCAT, I used to maintain and update my config with 4 additional tools to compare it with the latest sample.plist and update files. These included: 
+### 自动配置升级（推荐）
+自从发布 OpenCore Auxiliary Tools（[**OCAT**](https://github.com/ic005k/QtOpenCoreConfig)）以来，维护和更新 OpenCore 配置及文件的过程变得更加轻松。它可以自动更新/迁移任何过时的 `config.plist`，并提供最新的结构和功能集，还能更新 OpenCore、驱动程序和 Kext，并检查配置中的错误。更多细节请参阅我的 [OpenCore 更新指南](/D_Updating_OpenCore)。
 
-- **OCConfigCompare** – To compare config differences between OpenCore's `sample.plist` and your `config.plist` 
-- **KextUpdater** – For updating Kexts, Drivers, etc. 
-- **ProperTree** – For editing the config and creating OC Snapshots 
-- **OCValidate** – For checking the config for formal errors
+### 手动升级和错误修复（旧方法）
+在 OCAT 出现之前，我通常使用以下 4 个工具手动维护和更新配置，与最新的 `sample.plist` 进行比较并更新文件：
 
-Manually upgrading the config and files can be a really time consuming process. Since OCAT can do all of this with a few clicks now, I am glad I don't to do it any more – and you shouldn't either. 
+- **OCConfigCompare** – 比较 OpenCore 的 `sample.plist` 和你的 `config.plist` 之间的差异。
+- **KextUpdater** – 更新 Kext、驱动程序等。
+- **ProperTree** – 编辑配置并创建 OpenCore 快照。
+- **OCValidate** – 检查配置是否存在格式错误。
 
-### A personal note on using Configurator Apps
-The recommendation "Don't use Configurators" has turned into a prejudice against all Configurator Apps which is wrong, imo. It stems from an era when the config.plist's structure underwent constant changes and developers of Configurator Apps had a hard time keeping up to implement the new features. This resulted in a lot of messed up configs and unbootable systems. So it was recommended to not use them.
+手动升级配置和文件可能会非常耗时。既然 OCAT 现在可以通过几个简单的点击完成所有这些工作，我很高兴不再需要手动处理了，你也应该这样做。
 
-Over time, this recommendation turned into a mindlessly repeated and blindly followed slogan without knowing what's going on in terms of development of these Apps. People quickly adopted the "*Don't*" part of the recommendation but forgot about the *Why* part even quicker. Since then, this recommendation has become a tabu – it's propagated by the most outspoken opinion leaders of the scene on places like forums, reddit and discord. On some discord servers you will even be discredited for even using screenshots of settings that show a Configurator App… this scene is great, isn't it?
+### 关于使用配置工具的个人建议
+“不使用配置工具”的建议已经逐渐演变为对所有配置工具的偏见，我认为这种看法是错误的。这一建议源于 config.plist 的结构经常发生变化的时期，那时配置工具开发者很难跟上新增功能的步伐，导致许多配置被破坏、系统无法启动。因此，大家建议不要使用它们。
 
-While this recommendation remains true for Apps like OpenCore Configurator for example, OCAT is much more flexible when it comes to dealing with config changes. It can integrate new keys added to an existing section/array of the config automatically. No other Configurator App can do this as of yet! And since OCAT downloads the latest version of the sample.plist and OCValidate when updating, there's always a verification process in place that checks and ensures that the formal structure of the config is consistent. It also creates an automatic backup of your current config that you can always revert back to. 
+随着时间的推移，这一建议变成了一个被机械重复的口号，而忽略了背后的原因。某些论坛、Reddit 和 Discord 中的一些意见领袖还会对使用这些工具的人进行排斥，这种现象并不健康。
 
-So putting OCAT in the same category as other Configurator Apps doesn't do it justice and these so-called opinion leaders need to finally acknowledge it!
+然而，对于像 OpenCore Configurator 这样的应用来说，这一建议仍然成立。但 OCAT 在处理配置变化时更加灵活，它可以自动整合新增的配置键值，并与最新的 `sample.plist` 和 `OCValidate` 保持同步。此外，OCAT 还会自动备份你的配置，方便随时恢复。
 
-## II. Quick fixes for Boot Problems
-If the system doesn't boot despite correct boot and kernel settings and hangs directly at the boot logo without a progress bar, you should change the following settings:
+因此，将 OCAT 与其他配置工具混为一谈是不公平的，那些所谓的意见领袖需要正视这一点。
 
-- **Misc/Security/SecureBootModel** = `Disabled`. If you have problems with booting using the`Default` value. For security concerns you should check if the chosen mac Model in `SystemProductName`supports Apple's Secure Boot feature, once your system is working. Refer to the Documentation.pdf for more details.
-- **Misc/Security/Vault** = `Optional` Disables File Vault. Can prevent system boot if it is set to "Secure" but File Vault encryption is not configured at all. Because it needs the generation of a key and a hash.
+## II. 启动问题的快速修复
 
-If your macOS Partition (APFS) is not displayed in Bootpicker, do the following (OpenCore 0.7.2 and newer):
+如果系统在启动时没有进度条并停留在启动 Logo 上，即使引导和内核设置正确，也可以尝试更改以下设置：
 
-- **UEFI/APFS**: Change `MinDate` and `MinVersion` to `-1`. This disables APFS driver verification, so it loads no matter which version of macOS you are using (from macOS High Sierra onwards, because that's when APFS was introduced).
+- **Misc/Security/SecureBootModel** = `Disabled`。如果使用 `Default` 值无法启动，请暂时禁用 Secure Boot。一旦系统正常工作，建议检查 `SystemProductName` 的 Mac 模型是否支持 Apple 的 Secure Boot 功能。
+- **Misc/Security/Vault** = `Optional`。禁用文件保险箱。如果设置为“Secure”但没有配置文件保险箱加密，可能会导致无法启动系统。
 
-**BACKGROUND**: If you use an OS older than Big Sur and both values are set to default (`0`) you won't see your macOS Partition, because the APFS driver won't load. This is a security feature which should ensure that your macOS boots using a verified APFS driver. To maximize compatibility with older macOS versions, I would disable it during Install.
+如果 BootPicker 中没有显示 macOS 分区（APFS 格式），请更改以下设置（适用于 OpenCore 0.7.2 及更新版本）：
 
-## III. Security Settings
+- **UEFI/APFS**：将 `MinDate` 和 `MinVersion` 设置为 `-1`。这会禁用 APFS 驱动验证，无论 macOS 版本如何，驱动都会加载（从 macOS High Sierra 开始支持 APFS）。
 
-### How to disable Single User Mode
-You should deactivate the single user mode for security reasons, because it can be mis-used as a backdoor to bypass the password protection of the Admin account. To do this, enable the following option:
+> [!背景]
+> 如果使用的操作系统版本早于 Big Sur，而 `MinDate` 和 `MinVersion` 的默认值为 `0`，APFS 驱动不会加载，导致无法显示 macOS 分区。这是一项安全功能，旨在确保 macOS 使用经过验证的 APFS 驱动。建议在安装过程中禁用以提高兼容性。
+
+## III. 安全设置
+
+### 如何禁用单用户模式
+为了安全起见，建议禁用单用户模式，因为它可能被利用为绕过管理员账户密码保护的后门。启用以下选项即可：
 
 **Misc/Security/DisableSingleUser** = `Yes`
 
-### How to disable System Integrity Protection (SIP)
-1. To disable System Integrity Protection, add one of the following values to the config:
+### 如何禁用系统完整性保护（SIP）
+1. 添加以下配置项来禁用 SIP：
 
-   **NVRAM/Add/7C436110-AB2A-4BBB-A880-FE41995C9F82** &rarr; change `csr-active-config` from `00000000`(SIP enabled) to:
+   **NVRAM/Add/7C436110-AB2A-4BBB-A880-FE41995C9F82** &rarr; 将 `csr-active-config` 从 `00000000`（SIP 启用）更改为以下值：
 
-   - `FF030000` (for High Sierra)
-   - `EF070000` (for Mojave/Catalina)
-   - `03080000` (for Big Sur and newer)
-   - `EF0F0000` (for Big Sur and newer. Disables even more security features.)
+   - `FF030000`（适用于 High Sierra）
+   - `EF070000`（适用于 Mojave/Catalina）
+   - `03080000`（适用于 Big Sur 及更新版本）
+   - `EF0F0000`（适用于 Big Sur 及更新版本，禁用更多安全功能）
 
-   **NOTES**
-   
-   - Using `FF0F0000` for Big Sur (as suggested by Dortania's OpenCore Install Guide) is not recommended because it breaks System Update Notifications and incremental updates. For Big Sur and newer, use `67080000` instead.
-   - Using `EF0F0000` does notify you about System Updates. But if the seal of the volume is broken however, it will download the complete installer (about 12 GB), instead of performing an incremental update which is not really desireable.
-   - If you want to know how `csr-active-config` is calculated or if you want to calculate your own, check the [OpenCore Calcs](/B_OC_Calculators) section for details.
+   **注意事项：**
+   - 对于 Big Sur 和更新版本，建议使用 `67080000` 而不是 `FF0F0000`，以避免系统更新通知失效。
+   - 如果系统分区的安全签名被破坏，`EF0F0000` 会通知系统更新，但会下载完整安装程序（大约 12 GB），而非增量更新。
 
-2. To avoid the need of resetting NVRAM every time after you've changed  the csr value, add the following parameter to the config:
 
-   **NVRAM/Delete/7C436110-AB2A-4BBB-A880-FE41995C9F82** &rarr; `csr-active-config`.
+2. 为避免每次更改 `csr-active-config` 后都需要重置 NVRAM，请在配置中添加以下参数：
 
-   This deletes the currently set `csr-active-config` value from NVRAM on reboot and replaces it with the value stored under "NVRAM > Add…". This is necessary to apply the new value if you have changed it. Otherwise you would have to use "Reset NVRAM". 
+   **NVRAM/Delete/7C436110-AB2A-4BBB-A880-FE41995C9F82** &rarr; `csr-active-config`
 
-   To test if the correct settings were applied after reboot, type `csrutil status` into the terminal after reboot. The result should look something like this (for `03080000`):
+   这样在重启时，NVRAM 中现有的 `csr-active-config` 值会被删除，并替换为存储在 `NVRAM > Add` 下的新值。这种方法避免了每次都使用“Reset NVRAM”选项。
+
+   要测试设置是否正确应用，请在重启后打开终端并输入 `csrutil status`。对于 `03080000` 值，输出结果应如下所示：
 
 	```
 	Configuration:
@@ -157,224 +160,226 @@ You should deactivate the single user mode for security reasons, because it can 
 	NVRAM Protections: enabled
 	BaseSystem Verification: enabled
 	```
-	**NOTE**: Check ["`csr-active-config` flags explained"](/B_OC_Calculators/SIP_Flags_Explained.md) to figure out how this bitmask works.
+	**[!NOTE]** 请参考 ["`csr-active-config` 标志解释"](/B_OC_Calculators/SIP_Flags_Explained.md) 理解该位掩码的工作方式。
 
-## IV. Adjust Boot Picker Attributes, enable Mouse Support
+## IV. 调整 Boot Picker 属性并启用鼠标支持
 
-With **PickerAttributes**, you can customize the look and feel of the BootPicker. There are currently 8 parameters which can be combined by simple adding their values:
+通过 **PickerAttributes**，可以自定义 BootPicker 的外观和操作方式。当前支持的参数如下：
 
-`1` = Enables custom icon support for Boot entries </br>
-`2` = Enables custom titles for Boot Entries </br>
-`4` = Predefined Label Images for Boot entries without custom entries </br>
-`8` = Prefers Builtin icons for certain icon categories to match the theme style </br> `16` = Enables mouse cursor</br>
-`32` = Enables additional timing and debug information in Builtin picker (DEBUG and NOOPT builds only)</br>
-`64` = Minimal GUI (no Shutdown and Restart buttons)</br>
-`128` = Enables "Flavor Icons" which provide flexible boot entry content description (refer to `Documentation.pdf` for details)
+- `1` = 启用启动项的自定义图标
+- `2` = 启用启动项的自定义标题
+- `4` = 为未配置自定义项的启动项预定义标签图像
+- `8` = 更倾向于使用内置图标以匹配主题样式
+- `16` = 启用鼠标光标
+- `32` = 在内置选择器中启用额外的时间和调试信息（仅适用于 DEBUG 和 NOOPT 构建）
+- `64` = 最小化 GUI（无关机和重启按钮）
+- `128` = 启用“风味图标”，提供灵活的启动项内容描述（详细信息见 `Documentation.pdf`）
 
-**Examples:**
+**示例：**
 
-`17` &rarr; Enables custom icons and the mouse cursor (bew default since OpenCore 0.6.7)</br>
-`19` &rarr; Enables custom icons, custom titles and the mouse cursor</br>
-`147` &rarr; Enables custom icons, custom titles, the mouse cursor and Flavour Icons. Recommended setting when using custom themes.
+- `17` &rarr; 启用自定义图标和鼠标光标（从 OpenCore 0.6.7 起为默认设置）
+- `19` &rarr; 启用自定义图标、自定义标题和鼠标光标
+- `147` &rarr; 启用自定义图标、自定义标题、鼠标光标以及风味图标。推荐用于自定义主题。
 
-## V. Customizing Boot Options
+## V. 自定义启动选项
 
-### Set default boot drive in BootPicker
+### 在 BootPicker 中设置默认启动驱动器
 
-To be able to set the boot drive in the BootPicker, enable the following options in the config:
+要在 BootPicker 中设置默认启动驱动器，请启用以下配置选项：
 
-- **ShowPicker** = `Yes`</br>
+- **ShowPicker** = `Yes`
 - **AllowSetDefault** = `Yes`
 
-In **BootPicker**: 
+在 **BootPicker** 中：
 
-- Select drive/partition
-- Hold <kbd>Ctrl</kbd> and press <kbd>Enter</kbd> 
+1. 选择驱动器/分区。
+2. 按住 <kbd>Ctrl</kbd> 键，然后按 <kbd>Enter</kbd>。
 
-After that this volume is always preselected (until NVRAM is reset).
+之后，该分区将始终被预选为默认选项（除非重置 NVRAM）。
 
-### Enable Apple Hotkey functions
+### 启用 Apple 热键功能
 
-**PollAppleHotKeys** = `Yes` &rarr; Enables keyboard shortcuts known from Macs to use different boot modes like Verbose, Safe or Single User Mode, etc. without having to set extra boot-args. 
+启用 **PollAppleHotKeys** = `Yes` 可以使用 Mac 上的键盘快捷键，在无需额外设置启动参数的情况下进入不同的启动模式（例如：Verbose、Safe 或单用户模式）。
 
-**Examples**:
+**示例：**
 
-- Enter <kbd>CMD</kbd><kbd>V</kbd> before starting macOS boots macOS in Verbose mode. So no need to add `-v` to the boot-args.
-- Holding Shift (<kbd>⇧</kbd>) will boot macOS in Safe Mode
+- 开机时按住 <kbd>CMD</kbd><kbd>V</kbd> 将以 Verbose 模式启动 macOS，避免手动添加 `-v`。
+- 按住 <kbd>⇧</kbd> 键（Shift）将以安全模式启动 macOS。
 
-For more details check the `Configuration.pdf` included in the OpenCore package.
+有关更多详细信息，请参考 OpenCore 包中的 `Configuration.pdf`。
 
-### Accelerate boot (results will vary)
+### 加速启动（结果可能因系统而异）
 
-**ConnectDrivers** = `No`
+将 **ConnectDrivers** 设置为 `No`。
 
-If it takes a long time (8 seconds or longer) until the BootPicker appears after switching on the computer, this option can be used to shorten the waiting time - especially for notebooks. But then you have to live without the boot chime, because the audio driver `AudioDxe.efi` is not started in this case. 
+如果开机后 BootPicker 出现较慢（例如超过 8 秒），可以尝试此选项缩短等待时间，特别是在笔记本电脑上。但是这样会禁用启动音，因为音频驱动 `AudioDxe.efi` 不会被加载。
+
+> [!CAUTION]
+>
+> 在从 USB 闪存驱动器安装 macOS 前需要启用 `ConnectDrivers`，否则无法在 BootPicker 中看到驱动器。
+
+### 启动方式选择
+
+修改配置中的以下设置可以影响启动过程。以下是最常用的几种方式：
+
+#### 无 GUI 手动选择操作系统（默认）
+- **PickerMode** = `Builtin`
+- **ShowPicker** = `Yes`
+
+#### 带 GUI 的手动选择操作系统（需要 OpenCanopy 和资源文件夹）
+- **PickerMode** = `External`
+- **ShowPicker** = `Yes`
+
+#### 从“默认”卷自动启动操作系统（无 GUI）
+- **PickerMode** = `Default`
+- **ShowPicker** = `No`
 
 > [!CAUTION]
 > 
-> Before installing macOS from USB flash drive, `ConnectDrivers` needs to be enabled, otherwise you won't see the drive in the bootpicker.
+> 如果系统安装了 Windows，启用此选项可能会有问题。因为如果重置 NVRAM，且未启用 `LauncherPath`，Windows 可能会占据引导菜单的首位，导致无法进入 OpenCore 的 BootPicker。
 
-### Boot variants (Selection)
+#### 跳过 BootPicker 自动加载 macOS
+以下设置将从第一个 APFS 卷自动启动 macOS。与 `LauncherOption` 的 `Full` 或 `Short` 结合使用可以防止 Windows Boot Manager 占据引导菜单的首位。
 
-Change the following settings in the config to influence the boot process. There are certainly more options, but these seem to me to be the most common/useful.
+**前提条件**：启用 `PollAppleHotkeys`
 
-#### Manual selection of the OS without GUI (default)
-
-**PickerMode** = `Builtin`</br>
-**ShowPicker** = `Yes`
-
-#### Manual selection of the OS with GUI (requires OpenCanopy and [Resources folder](https://github.com/acidanthera/OcBinaryData))
-
-Great for dual boot setups. Combine with `LauncherOption` `Full` or `Short`to protect you against Windows Boot Manager taking over the first slot of the bootmenu.
-
-**PickerMode** = `External`</br>
-**ShowPicker** = `Yes`
-
-**NOTE**: If `PollAppleHotkeys` is enabled, holding `X` after turning on the system skips the bootpicker and automatically boots into the default volume.
-
-#### Boot the OS automatically from the "Default" volume (no GUI)
-
-**PickerMode** = `Default`</br> 
-**ShowPicker** = `No`
-
-> [!CAUTION]
-> 
-> This option can be problematic if have Windows installed. Beecaus if you perform an NVRAM reset and `LauncherPath` is not enabled, Windows might take over the first slot of boot order and then you cannot enter OC's BootPicker any more.
-
-#### Skip the BootPicker to load macOS automatically
-
-The following settings will boot macOS from first APFS volume it finds. Combine it with `LauncherOption` `Full` or `Short`to prohobit Windows Boot Manager from taking over the first slot of the bootmenu.
-
-**Prerequisites**: enabled `PollAppleHotkeys` 
-
-**PickerMode** = `Builtin`</br>
-**ShowPicker** = `Yes`
+- **PickerMode** = `Builtin`
+- **ShowPicker** = `Yes`
 
 > [!NOTE]
 > 
-> Hold `X` after turning on the system to directly boot into macOS – even if you get a black screen instead of the BootPicker.
+> 开机后按住 <kbd>X</kbd> 可以直接启动 macOS，即使屏幕显示黑屏而不是 BootPicker。
 
-This is a reliably workaround for this issue:
+这是一种可靠的解决方法，适用于以下问题：
 
-- Instead of the BootPicker, there's only a black screen (seems to be related to GOP Rendering)
-- 5 secends later (default delay) the system boots into Windows becasue it inhibits the first Slot in the BootPicker
+- BootPicker 不显示，而是一个黑屏（可能与 GOP 渲染有关）。
+- 5 秒后（默认延迟时间），系统会启动到 Windows，因为 Windows 占据了 BootPicker 的首位。
 
-:bulb: If you want to bypass all the SSDTs injections into Windows, you either need to boot it via the BIOS Boot Menu or use [OpenCore_NO_ACPI](/O_OC_NO_ACPI). Because unlike Clover, OpenCore injects everything present and enabled in the ACPI Folder into any OS.
+💡 如果你希望避免将所有 SSDT 注入到 Windows，可以通过 BIOS 启动菜单引导 Windows，或者使用 [OpenCore_NO_ACPI](/O_OC_NO_ACPI)。与 Clover 不同，OpenCore 会将 ACPI 文件夹中所有启用的内容注入到任何操作系统中。
 
-## VI. Resolving issues with NVRAM
+## VI. 解决 NVRAM 问题
 
-### Resetting NVRAM
+### 重置 NVRAM
 
-Certain BIOS variants can be badly affected by the integrated NVRAM reset tool of OpenCore. Symptoms: you can't get into the BIOS anymore or certain parameters in the NVRAM (like boot-args) are not applied or can't be deleted, etc. Older Lenovo Notebooks are affected by this a lot. 
+某些 BIOS 版本可能会受到 OpenCore 集成的 NVRAM 重置工具的影响。常见症状包括无法进入 BIOS 或某些 NVRAM 参数（如启动参数）未应用或无法删除等。老款 Lenovo 笔记本尤其容易受到影响。
 
-Therefore, the OpenCore package also contains an additional driver `ResetNvramEntry.efi` (since OC 0.8.4; was a tool called `CleanNvram.efi` previously) which works better with such problematic BIOSes. So if you have problems with NVRAM reset, do the following:
+因此，从 OpenCore 0.8.4 开始，OpenCore 包中新增了一个驱动程序 **ResetNvramEntry.efi**（此前为工具 `CleanNvram.efi`），与此类问题的 BIOS 更加兼容。如果你在重置 NVRAM 时遇到问题，可以尝试以下操作：
 
 #### OC ≤ 0.8.3
-
-* Set **Misc/Security/AllowNvramReset** to `No` &rarr; Disables OpenCore's built-in NVRAM reset tool to avoid a duplicate entry for "CleanNVRAM" in Boot Picker
-* Copy **CleanNvram.efi** to `EFI/OC/Tools`
-* Add it to the `Misc/Tools`section of the `config.plist` and enable it.
-* Set **HideAuxiliary** = `Yes` (under `Misc/Boot`)
-* Under **Misc/Tools**, find `CleanNvram` and change `Auxiliary` to `Yes`.
-* Save and reboot.
-* Press Space Bar in Boot Picker to show the "CleanNvram" entry.
-* Highlight the icon and press enter to reset NVRAM.
+1. 设置 **Misc/Security/AllowNvramReset** 为 `No`，以禁用 OpenCore 内置的 NVRAM 重置工具，避免在 BootPicker 中出现重复的 "CleanNVRAM" 条目。
+2. 将 **CleanNvram.efi** 复制到 `EFI/OC/Tools`。
+3. 将其添加到 `config.plist` 的 **Misc/Tools** 部分并启用。
+4. 设置 **HideAuxiliary** = `Yes`（位于 **Misc/Boot** 下）。
+5. 在 **Misc/Tools** 中找到 `CleanNvram`，并将 `Auxiliary` 设置为 `Yes`。
+6. 保存配置并重启。
+7. 在 BootPicker 中按下空格键以显示 "CleanNVRAM" 条目。
+8. 选中图标并按回车键以重置 NVRAM。
 
 > [!NOTE]
 > 
-> Since OC 0.8.4, the previous options for resetting NVRAM are deprecated. So delete: 
+> 自 OC 0.8.4 起，重置 NVRAM 的上述选项已被弃用。请删除：
 > 
-> - `AllowNvranReset` key from `config.plist`
-> - `CleanNvramReset.efi` from `config.plist` (Misc/Tools)
-> - `CleanNvramReset.efi` from `EFI/OC/Tools` 
+> - `AllowNvramReset` 键（从 `config.plist` 中删除）。
+> - `CleanNvram.efi`（从 `config.plist` 和 `EFI/OC/Tools` 中删除）。
 
 #### OC ≥ 0.8.4
-To enable NVRAM Reset on OC 0.8.4 and newer, do the following:
+在 OC 0.8.4 及更高版本中启用 NVRAM 重置的方法如下：
 
-* Add **ResetNvramEntry.efi** to `EFI/OC/Drivers`
-* Add **ResetNvramEntry.efi** to `config.plist` (under `UEFI/Drivers`) and enable it.
-* Save and reboot.
-* Press Space Bar in Boot Picker to show the "ResetNvram" entry.
-* Highlight the icon and press enter to reset NVRAM.
+1. 将 **ResetNvramEntry.efi** 添加到 `EFI/OC/Drivers`。
+2. 在 `config.plist` 中的 **UEFI/Drivers** 下添加 **ResetNvramEntry.efi** 并启用。
+3. 保存配置并重启。
+4. 在 BootPicker 中按下空格键以显示 "ResetNVRAM" 条目。
+5. 选中图标并按回车键以重置 NVRAM。
 
-#### Keep Boot entries after NVRAM reset
-If you reset NVRAM, usually the order of the BIOS boot menu entries resets and Windows Boot Manager takes over the first slot or the boot section. To prevent this, do the following:
+#### 重置 NVRAM 后保留启动条目
+通常情况下，重置 NVRAM 会重置 BIOS 引导菜单的顺序，导致 Windows Boot Manager 占据首位或引导分区丢失。为避免这种情况，请执行以下操作：
 
-- Go to `UEFI/Drivers/ResetNvramEntry.efi`
-- Add `--preserve-boot` to the `Arguments` field
+- 转到 **UEFI/Drivers/ResetNvramEntry.efi**。
+- 在 **Arguments** 字段中添加 `--preserve-boot` 参数。
 
-### Fixing falsely reported OpenCore version
+### 修复错误报告的 OpenCore 版本
 
-It can happen that the OpenCore version info stored in the NVRAM is not updated automatically and is therefore displayed incorrectly in Kext Updater or Hackintool. The problem was fixed in OC 0.6.7 by simply not writing the version info into NVRAM at all, but the wrong version will reside in NVRAM until deletion. To fix it, do the following:
+有时候，NVRAM 中存储的 OpenCore 版本信息不会自动更新，因此在 Kext Updater 或 Hackintool 中显示的版本可能会不正确。从 OC 0.6.7 起，这一问题已经通过不再将版本信息写入 NVRAM 的方式得以修复，但错误的版本信息仍会驻留在 NVRAM 中，直到被删除。要修复此问题，可以按照以下步骤操作：
 
-- Create a new child element under **NVRAM/Delete/4D1FDA02-38C7-4A6A-9CC6-4BCCA8B30102**
-- call it `opencore-version` 
-- Save the config and reboot
-After restarting, the correct OC version should be displayed and you can delete the entry again.
+1. 在 **NVRAM/Delete/4D1FDA02-38C7-4A6A-9CC6-4BCCA8B30102** 下创建一个新子元素。
+2. 将其命名为 `opencore-version`。
+3. 保存配置并重启。
+4. 重启后，正确的 OpenCore 版本信息应该会显示，此时你可以删除该条目。
 
-Alternatively, you can use Terminal to delete the key (no restart required):
+或者，你也可以使用终端命令删除该键值，无需重启：
+
+
+- 在 **NVRAM/Delete/4D1FDA02-38C7-4A6A-9CC6-4BCCA8B30102** 下创建一个子元素。
+- 将其命名为 `opencore-version`。
+- 保存配置并重启。
+  重启后，正确的 OpenCore 版本应会显示，此时可以删除该条目。
+
+或者，也可以使用终端命令删除键值（无需重启）：
 
 ```terminal
 sudo nvram -d 4D1FDA02-38C7-4A6A-9CC6-4BCCA8B30102:opencore-version
 ```
 
-## VII. Prohibit SMBIOS injection into other OSes
+## VII. 禁止将 SMBIOS 注入到其他操作系统
 
-To avoid OpenCore from injecting SMBIOS Infos into Windows or other OSes causing issues with the registration, change the following settings:
+为了避免 OpenCore 将 SMBIOS 信息注入到 Windows 或其他操作系统中，可能会引发注册问题，请更改以下设置：
 
-**Kernel/Quirks/CustomSMBIOSGuid**: `True` (standard: `False`)</br>
-**Platforminfo/UpdateSMBIOSMode**: `Custom` (standard: `Create`)
+- **Kernel/Quirks/CustomSMBIOSGuid**: `True`（默认值：`False`）
+- **Platforminfo/UpdateSMBIOSMode**: `Custom`（默认值：`Create`）
 
-**SOURCE**: [Avoiding SMBIOS injection into other OSes](https://github.com/dortania/OpenCore-Install-Guide/tree/master/clover-conversion#optional-avoiding-smbios-injection-into-other-oses)
+**来源**：[避免将 SMBIOS 注入到其他操作系统](https://github.com/dortania/OpenCore-Install-Guide/tree/master/clover-conversion#optional-avoiding-smbios-injection-into-other-oses)
 
-## VIII. Exchanging SMBIOS Data between OpenCore and Clover
-### Manual method
-Exchanging existing SMBIOS data back and forth between an OpenCore and a Clover config can be a bit confusing since both use different names and locations for data fields. 
+## VIII. 在 OpenCore 和 Clover 之间交换 SMBIOS 数据
 
-Transferring the data correctly is important because otherwise you have to enter your AppleID and Password again which in return will register your computer as a new device in the Apple Account. As long as there is a mismatch betwenne the two SMBIOS datasets, you have to go through the 2-way-authenticatin process every single time you switch between OpenCore and Clover, which is incredibly annoying. So in order to prevent this, you have to do the following:
+### 手动方法
+在 OpenCore 和 Clover 配置之间来回交换 SMBIOS 数据可能会有些混乱，因为两者对数据字段的命名和位置不同。
 
-1. Copy the Data from the following fields to Clover Configurator's "SMBIOS" and "RtVariables" sections:
-	PlatformInfo/Generic (OpenCore)| SMBIOS (Clover)      |
-	|------------------------------|----------------------|
-	| SystemProductName            | ProductName          |
-	| SystemUUID                   | SmUUID               |
-	| ROM                          | ROM (under `RtVariables`). Select "from SMBIOS" and paste the ROM address|
-	| N/A in "Generic"             | Board-ID             |
-	| SystemSerialNumber           | Serial Number        |
-	| MLB                          | 1. Board Serial Number (under `SMBIOS`)</br>2. MLB (under `RtVariables`)|
-	![OC](https://github.com/user-attachments/assets/8525a2a6-fc09-4447-9655-8d8f23f6736b) | ![Clover](https://github.com/user-attachments/assets/2fd0f0a2-72ac-42b6-b33a-bc14ca8352c8)
-3. Next, tick the "Update Firmware Only" box.
-4. From the Dropdown Menu next to it to, select the Mac model you used for "ProductName". This updates other fields like BIOS and Firmware.
-5. Save config and reboot with Clover.
+正确传输数据非常重要，否则每次切换 OpenCore 和 Clover 时，你都需要重新输入 Apple ID 和密码，这会导致设备在 Apple 账户中被识别为新的设备。为了避免这种情况，请按照以下步骤操作：
 
-You know that the SMBIOS data has bee transferred correctly, if you don't have to re-enter your Apple-ID and password.
+1. 将以下字段的数据从 OpenCore 的 `PlatformInfo/Generic` 复制到 Clover Configurator 的“SMBIOS”和“RtVariables”部分：
 
-#### Troubleshooting
-If you have to re-enter your Apple ID Password after changing from OpenCore to Clover or vice versa, the used SMBIOS Data is not identical, so you have to figure out where the mismatch is. You can use Hackintool to do so:
+| OpenCore PlatformInfo/Generic | Clover SMBIOS/RtVariables    |
+|------------------------------|------------------------------|
+| SystemProductName            | ProductName                 |
+| SystemUUID                   | SmUUID                      |
+| ROM                          | ROM（在 `RtVariables` 下选择“from SMBIOS”，并粘贴 ROM 地址）|
+| N/A in "Generic"             | Board-ID                    |
+| SystemSerialNumber           | Serial Number               |
+| MLB                          | 1. Board Serial Number（在 `SMBIOS` 下）</br>2. MLB（在 `RtVariables` 下）|
 
-- Mount the EFI
-- Open the config for the currently used Boot Manager
-- Run Hackintool. The "System" section shows the currently used SMBIOS Data: </br> ![SYSINFO](https://user-images.githubusercontent.com/76865553/166119425-8970d155-b546-4c91-8daf-ec308d16916f.png)
-- Check if the framed parameters match the ones in your config.
-- If they don't, correct them and use the ones from Hackintool.
-- If they do mach the values used in your config, open the config from your other Boot Manager and compare the data from Hackintool again and adjust the data accordingly.
-- Save the config and reboot.
-- Change to the other Boot Manager and start macOS.
-- If the data is correct you won't have to enter your Apple ID Password again (double-check in Hackintool to verify).
+2. 勾选“Update Firmware Only”框。
+3. 在下拉菜单中选择与你的 `ProductName` 一致的 Mac 型号，这会自动更新 BIOS 和 Firmware 等字段。
+4. 保存配置并用 Clover 重启。
 
-### SMBIOS Data Import/Export with OCAT
-Besides manually copying over SMBIOS data from your OpenCore to your Clover config and vice versa, you could use [**OpenCore Auxiliary Tools**](https://github.com/ic005k/OCAuxiliaryTools/releases) instead, which has a built-in import/export function to import SMBIOS Data from Clover as well as exporting function SMBIOS data into a Clover config:
+如果 SMBIOS 数据传输正确，你将不需要再次输入 Apple ID 和密码。
 
-![ocat](https://user-images.githubusercontent.com/76865553/162971063-cbab15fa-4c83-4013-a732-5486d4f00e31.png)
+#### 排错
+如果从 OpenCore 切换到 Clover（或相反）后需要重新输入 Apple ID 密码，说明使用的 SMBIOS 数据不一致，你需要找出数据不匹配的地方。可以通过 Hackintool 工具执行以下步骤来检查：
+
+1. 挂载 EFI 分区。
+2. 打开当前使用的引导管理器的配置文件。
+3. 运行 Hackintool。在“系统”部分可以查看当前使用的 SMBIOS 数据：
+   </br> ![SYSINFO](https://user-images.githubusercontent.com/76865553/166119425-8970d155-b546-4c91-8daf-ec308d16916f.png)
+4. 检查配置中的参数是否与 Hackintool 显示的框选参数一致。
+5. 如果参数不一致，修正并保存配置，确保与 Hackintool 的数据匹配。
+6. 如果参数一致，打开另一个引导管理器的配置文件，再次与 Hackintool 显示的参数对比并调整。
+7. 保存配置后重启。
+8. 切换到另一个引导管理器并启动 macOS。
+9. 如果数据正确，则不需要再次输入 Apple ID 密码（可使用 Hackintool 再次验证）。
+
+### 使用 OCAT 导入/导出 SMBIOS 数据
+除了手动复制 OpenCore 与 Clover 的 SMBIOS 数据，还可以使用 [**OpenCore Auxiliary Tools (OCAT)**](https://github.com/ic005k/OCAuxiliaryTools/releases)。OCAT 提供内置的导入/导出功能，可直接从 Clover 导入 SMBIOS 数据或将 SMBIOS 数据导出到 Clover 配置中：
+
+![OCAT 导入导出功能](https://user-images.githubusercontent.com/76865553/162971063-cbab15fa-4c83-4013-a732-5486d4f00e31.png)
 
 > [!IMPORTANT]
 > 
-> - If you did everything correct, you won't have to enter your AppleID Password after switching Boot Managers and macOS will let you know, that "This AppleID is now used with this device" or something like that.
-> - But if macOS asks for your AppleID Password and Mail passwords etc., you did something wrong. In this case you should reboot into OpenCore instead and check again. Otherwise, you are registering your computer as a new/different Mac.
+> - 如果操作正确，切换引导管理器后无需再次输入 Apple ID 密码，macOS 会显示“此 Apple ID 现在用于此设备”。
+> - 如果 macOS 提示输入 Apple ID 和邮件密码，说明配置有误。此时建议切换回 OpenCore 检查配置，否则设备可能被注册为新的 Mac。
 
-### 1-Click-Solution for Clover Users
-If you've used the real MAC Address of your Ethernet Controller ("ROM") when generating your SMBIOS Data for your OpenCore config, you can avoid possible SMBIOS conflicts altogether. In the "Rt Variables" section, click on "from System" and you should be fine!
+### Clover 用户的一键解决方案
+如果在生成 OpenCore 配置的 SMBIOS 数据时使用了以太网控制器的真实 MAC 地址（ROM），可以避免 SMBIOS 冲突。在 Clover 的“Rt Variables”部分，选择“from System”，即可解决问题。
 
-## Further Resources
-- Check Dortania's excellent OpenCore [Post-Install Guide](https://github.com/dortania/OpenCore-Post-Install) for fixing all sorts of issues.
-- The **Documentation.pdf** contained in the OpenCore Package also contains a Tips & Tricks chapter
+## 更多资源
+- 查看 Dortania 的优秀 OpenCore [安装后指南](https://github.com/dortania/OpenCore-Post-Install)，了解如何解决各种问题。
+- OpenCore 包中包含的 **Documentation.pdf** 也提供了许多实用技巧。
