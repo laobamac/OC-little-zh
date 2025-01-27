@@ -1,125 +1,138 @@
-# OpenCore Quirks for Intel and AMD CPUs 
-Quirks (ACPI, Booter, Kernel and UEFI) for Intel and AMD CPUs. Based on the information provided by Dortania's [**OpenCore Install Guide** ](https://dortania.github.io/OpenCore-Install-Guide/) and my own research (for 11 the Gen and newer). Presented in neatly structured tables. 
+# Intel/AMD 处理器的 OpenCore Quirks
 
-Also available in [**list form**](/08_Quirks/Quirks_List.md) which is easier to read and maintain and contains newer data, such as Quirks for 11th and 12th Gen Intel Core CPUs.
+OpenCore 的 ACPI、Booter、Kernel 和 UEFI Quirks 适用于 Intel 和 AMD CPUs。信息基于 Dortania 的 [**OpenCore Install Guide**](https://dortania.github.io/OpenCore-Install-Guide/) 以及我对第 11 代及更新平台的研究。这些内容以表格形式清晰呈现。
 
-:bulb: **TIP**: All of these Quirks combinations are included in [**OpenCore Auxiliary Tools**](https://github.com/ic005k/OCAuxiliaryTools) as presets in the corresponding Quirks sections!
+也可参考 [**列表形式**](/08_Quirks/Quirks_List.md)，其中包含更易阅读和维护的内容，包括第 11 代和第 12 代 Intel Core CPUs 的 Quirks。
 
-**Legend**:
+💡 **提示**：以下所有 Quirks 组合都可以在 [**OpenCore Auxiliary Tools**](https://github.com/ic005k/OCAuxiliaryTools) 中作为预设选项找到。
 
-- **x** = Quirk enabled
-- **( )** = Quirk disabled, but enabled for certain CPUs/Chipsets/Mainboards (read annotations for quirk in question)
-- **(x)** = Quirk enabled, but disabled for certain CPUs/Chipsets/Mainboards (read annotations for quirk in question)
-- **empty** = Quirk disabled. And by disabled, I mean *disabled* and not leaving it as is!
+**图例**：
 
-**Applicable Version**: OpenCore ≥ 0.7.5
+- **x** = 启用 Quirk。
+- **( )** = 默认禁用 Quirk，但在某些 CPU/芯片组/主板上启用（参考注释）。
+- **(x)** = 默认启用 Quirk，但在某些 CPU/芯片组/主板上禁用（参考注释）。
+- **空白** = 禁用 Quirk，即明确禁用，而不是保持默认值。
 
-## 8th to 10th Gen Intel CPUs (Desktop, High End, Mobile/NUC)
+**适用版本**：OpenCore ≥ 0.7.5
 
-### SMBIOS Requirements
-- 10th Gen Desktop: [**iMac20,1**](https://everymac.com/ultimate-mac-lookup/?search_keywords=iMac20,1) and [**iMac20,2**](https://everymac.com/ultimate-mac-lookup/?search_keywords=iMac20,2). (≥ macOS Catalina)
-- 10th Gen Mobile/NUC: [**various**](https://dortania.github.io/OpenCore-Install-Guide/config-laptop.plist/coffee-lake-plus.html#platforminfo)
-- 8th/9th/10th Gen High End Desktop [**iMacPro1,1**](https://dortania.github.io/OpenCore-Install-Guide/config-HEDT/skylake-x.html#platforminfo) (≥ macOS High Sierra)
-- 8/9th Gen Desktop: [**iMac19,1**](https://everymac.com/ultimate-mac-lookup/?search_keywords=iMac19,1) (macOS Mojave+), [**iMac18,3**](https://everymac.com/ultimate-mac-lookup/?search_keywords=iMac18,3) (≤ macOS High Sierra)
-- 8/9th Gen Mobile/NUC: [**various**](https://dortania.github.io/OpenCore-Install-Guide/config-laptop.plist/coffee-lake.html#platforminfo)
+---
 
-### ACPI Quirks
-| CPU Family | [Comet Lake](https://ark.intel.com/content/www/us/en/ark/products/codename/90354/products-formerly-comet-lake.html) | 10th Gen |Cascade Lake-[X](https://ark.intel.com/content/www/us/en/ark/products/codename/124664/products-formerly-cascade-lake.html#@Desktop)/[W](https://ark.intel.com/content/www/us/en/ark/products/codename/124664/products-formerly-cascade-lake.html#@Workstation), Skylake-[X](https://ark.intel.com/content/www/us/en/ark/products/126699/intel-core-i97980xe-extreme-edition-processor-24-75m-cache-up-to-4-20-ghz.html)/[W](https://ark.intel.com/content/www/us/en/ark/products/126793/intel-xeon-w2195-processor-24-75m-cache-2-30-ghz.html)| [Coffee Lake](https://ark.intel.com/content/www/us/en/ark/products/codename/97787/products-formerly-coffee-lake.html) | 8th/9th Gen | Description |
+## 8th 到 10th Gen Intel CPUs（桌面，高端，笔记本/NUC）
+
+### SMBIOS 要求
+- **第 10 代桌面**： [**iMac20,1**](https://everymac.com/ultimate-mac-lookup/?search_keywords=iMac20,1) 和 [**iMac20,2**](https://everymac.com/ultimate-mac-lookup/?search_keywords=iMac20,2) （macOS Catalina 及更新）。
+- **第 10 代笔记本/NUC**： [**多种型号**](https://dortania.github.io/OpenCore-Install-Guide/config-laptop.plist/coffee-lake-plus.html#platforminfo)。
+- **第 8/9/10 代高端桌面**：[**iMacPro1,1**](https://dortania.github.io/OpenCore-Install-Guide/config-HEDT/skylake-x.html#platforminfo)（macOS High Sierra 及更新）。
+- **第 8/9 代桌面**：[**iMac19,1**](https://everymac.com/ultimate-mac-lookup/?search_keywords=iMac19,1)（macOS Mojave+），[**iMac18,3**](https://everymac.com/ultimate-mac-lookup/?search_keywords=iMac18,3)（macOS High Sierra 或更低版本）。
+- **第 8/9 代笔记本/NUC**：[**多种型号**](https://dortania.github.io/OpenCore-Install-Guide/config-laptop.plist/coffee-lake.html#platforminfo)。
+
+
+### ACPI 小技巧
+
+| CPU 系列 | [Comet Lake](https://ark.intel.com/content/www/us/en/ark/products/codename/90354/products-formerly-comet-lake.html) | 第10代 | Cascade Lake-[X](https://ark.intel.com/content/www/us/en/ark/products/codename/124664/products-formerly-cascade-lake.html#@Desktop)/[W](https://ark.intel.com/content/www/us/en/ark/products/codename/124664/products-formerly-cascade-lake.html#@Workstation), Skylake-[X](https://ark.intel.com/content/www/us/en/ark/products/126699/intel-core-i97980xe-extreme-edition-processor-24-75m-cache-up-to-4-20-ghz.html)/[W](https://ark.intel.com/content/www/us/en/ark/products/126793/intel-xeon-w2195-processor-24-75m-cache-2-30-ghz.html) | [Coffee Lake](https://ark.intel.com/content/www/us/en/ark/products/codename/97787/products-formerly-coffee-lake.html) | 第8/9代 | 描述 |
 |:-----------|:---------:|:--------:|:------------:|:----------:|:-----------:|:-----------------|
-|**Platform**|[Desktop](https://dortania.github.io/OpenCore-Install-Guide/config.plist/comet-lake.html)|[Mobile/NUC](https://dortania.github.io/OpenCore-Install-Guide/config-laptop.plist/coffee-lake-plus.html#laptop-coffee-lake-plus-and-comet-lake)|[High End](https://dortania.github.io/OpenCore-Install-Guide/config-HEDT/skylake-x.html)|[Desktop](https://dortania.github.io/OpenCore-Install-Guide/config.plist/coffee-lake.html)|Mobile/NUC [8th Gen](https://dortania.github.io/OpenCore-Install-Guide/config-laptop.plist/coffee-lake.html) / [9thGen](https://dortania.github.io/OpenCore-Install-Guide/config-laptop.plist/coffee-lake-plus.html)|Corresponding Config Guide
-| **SMBIOS** |iMac20,x|MacBookPro16,x / Macmini8,1|iMacPro1,1|iMac19,1|MacBookPro15,x/16,x / Macmini8,1|PlatformInfo
+|**平台**|[台式机](https://dortania.github.io/OpenCore-Install-Guide/config.plist/comet-lake.html)|[笔记本/NUC](https://dortania.github.io/OpenCore-Install-Guide/config-laptop.plist/coffee-lake-plus.html#laptop-coffee-lake-plus-and-comet-lake)|[高端平台](https://dortania.github.io/OpenCore-Install-Guide/config-HEDT/skylake-x.html)|[台式机](https://dortania.github.io/OpenCore-Install-Guide/config.plist/coffee-lake.html)|笔记本/NUC [第8代](https://dortania.github.io/OpenCore-Install-Guide/config-laptop.plist/coffee-lake.html) / [第9代](https://dortania.github.io/OpenCore-Install-Guide/config-laptop.plist/coffee-lake-plus.html)|对应的配置指南 |
+| **SMBIOS** |iMac20,x|MacBookPro16,x / Macmini8,1|iMacPro1,1|iMac19,1|MacBookPro15,x/16,x / Macmini8,1|平台信息 |
 |                 |           |          ||           |             |             |
-|**FadtEnableReset**  ||||||For legacy systems and a few newer laptops. Can fix pwr-button shortcuts. Not recommended unless required.
-|**NormalizeHeaders** ||||||Cleans up ACPI headers to avoid boot crashes in macOS 10.13. 
-|**RebaseRegions**    ||||||Relocates ACPI memory regions. Not recommended!
-|**ResetHwSig**       ||||||Resets FACS table Hardware Signature to 0. Fixes firmware-based issues with waking from hibernation.|
-|**ResetLogoStatus**°|(x)|(x)|(x)|(x)|(x)|Sets `Displayed` to `0` (false) in `BRGT` table. Workaround for firmwares containing a `BGRT` table but fail to handle screen updates after displaying the logo. 
-|**SyncTableIDs**     ||||||Fixes tables for compatibility with in older Windows versions
+|**FadtEnableReset**  ||||||适用于老旧系统和部分新款笔记本。可以修复电源按钮快捷键问题。除非必要，不推荐启用。|
+|**NormalizeHeaders** ||||||清理 ACPI 头部信息，避免 macOS 10.13 启动崩溃。|
+|**RebaseRegions**    ||||||重定位 ACPI 内存区域。不推荐使用！|
+|**ResetHwSig**       ||||||将 FACS 表硬件签名重置为 0。修复固件导致的休眠唤醒问题。|
+|**ResetLogoStatus**°|(x)|(x)|(x)|(x)|(x)|将 `BRGT` 表中的 `Displayed` 设置为 `0`（false）。用于修复包含 `BGRT` 表但无法正确处理显示更新的固件问题。|
+|**SyncTableIDs**     ||||||修复表格以兼容旧版 Windows 系统。|
 
-`°`Enabled by fefault in `sample.plist`. This Quirk didn't exist at the time the OpenCore Install Guide was written, so it's unknown if it's a requirement. Most likely it's not.
+`°`默认在 `sample.plist` 中启用。由于 OpenCore 安装指南编写时此 Quirk 尚未存在，因此是否必需尚不明确。但大概率不需要。
 
-### Boooter Quirks
-| CPU Family | Comet Lake | 10th Gen |Cascade Lake X| Coffee Lake | 8th/9th Gen | Description |
+### 引导器小技巧 (Boooter Quirks)
+
+| CPU 系列 | Comet Lake | 第10代 | Cascade Lake X | Coffee Lake | 第8/9代 | 描述 |
 |:-----------|:---------:|:--------:|:------------:|:----------:|:-----------:|:-----------------|
-|**Platform**|Desktop|Mobile/NUC|High End Desktop|Desktop|Mobile/NUC
-| **SMBIOS** |iMac20,X|MacBookPro16,X / Macmini8,1|iMacPro1,1|iMac19,1|MacBookPro15,1 / Macmini8,1|System Management BIOS
-|                 |           |          ||           |             |             ||**AllowRelocationBlock**||||||Allows booting macOS through a relocation block. Req. ProvideCustomSlide and AvoidRuntimeDefrag.
-|**AvoidRuntimeDefrag**|x|x|x|x|x|Protects from boot.efi runtime memory defragmentation.
-|**DevirtualiseMmio**|x|x|x|x||Removes runtime attribute from certain MMIO regions
-|**DisableSingleUser**||||||Disables single user mode which improves Security.
-|**DisableVariableWrite**||||||Restricts NVRAM access in macOS.
-|**DiscardHibernateMap**||||||Reuses original hibernate memory map.
-|**EnableSafeModeSlide**|x|x|x|x|x|Patches bootloader to have KASLR enabled in safe mode. Req. ProvideCustomSlide
-|**EnableWriteUnprotector**||||||Permits write access to UEFI runtime services code.
-|**ForceBooterSignature**||||||Sets macOS boot-signature to OpenCore launcher
-|**ForceExitBootServices**||||||Fixed early boot crashes of the firmware. Do not use if you don't know what you're doing!
-|**ProtectMemoryRegions**||||||Protects memory regions from incorrect access.
-|**ProtectSecureBoot**||||||Protects UEFI Secure Boot variables from being written.
-|**ProtectUefiServices**°|x|x||(x)°||Protect UEFI services from being overridden by the firmware.
-|**ProvideCustomSlide**|x|x|x|x|x|Provides custom KASLR slide on low memory.
-|**ProvideMaxSlide**||||||Provide maximum KASLR slide when higher ones are unavailable.
-|**RebuildAppleMemoryMap**|x|x|x|x|x|Generates macOS compatible Memory Map
-|**ResizeAppleGpuBars**||||||Reduce GPU PCI BAR sizes for compatibility with macOS.
-|**SetupVirtualMap**|||x|x|x|Setup virtual memory at SetVirtualAddresses
-|**SignalAppleOS**||||||Report macOS being loaded through OS Info for any OS
-|**SyncRuntimePermissions**|x|x|x|x|x|Updates memory permissions for the runtime environment|
-
-`°` Required for Z390 mainboards
-
-### Kernel Quirks
-| CPU Family | Comet Lake | 10th Gen |Cascade Lake X| Coffee Lake | 8th/9th Gen | Description |
-|:-----------|:---------:|:--------:|:------------:|:----------:|:-----------:|:-----------------|
-|**Platform**|Desktop|Mobile/NUC|High End Desktop|Desktop|Mobile/NUC
-| **SMBIOS** |iMac20,X|MacBookPro16,X / Macmini8,1|iMacPro1,1|iMac19,1|MacBookPro15,1 / Macmini8,1|System Management BIOS
-|                 |           |          ||           |             |             ||**AppleCpuPmCfgLock**||||||Disables MSR modification in AppleIntelCPUPowerManagement.kext
-|**AppleXcpmCfgLock**°|(x)|(x)||(x)|(x)|Enables write access for XNU Kernel to enable XCPM power management.
-|**AppleXcpmExtraMsrs**||||||Disables multiple MSR access critical for certain CPUs, which have no native XCPM support. This Quirk is disabled on macOS 12+ due to non-existence of the feature
-|**AppleXcpmForceBoost**||||||Forces maximum performance in XCPM mode. Not recomm.
-|**CustomSMBIOSGuid**°°|( )|( )||( )|( )|Usually relevant for Dell laptops and when having issues with Windows License.
-|**DisableIoMapper**|x|x||x|x|Disables IOMapper support in XNU (VT-d).
-|**DisableLinkeditJettison**|x|x||x|x|Improves Lilu.kext performance in macOS Big Sur without `keepsyms=1` boot-arg.
-|**DisableRtcChecksum**||||||Disables primary checksum (0x58-0x59) writing in AppleRTC.
-|**ExtendBTFeatureFlags**||||||Sets FeatureFlags to `0x0F` for full functionality of Bluetooth, including Continuity.
-|**ExternalDiskIcons**||||||Forces internal disk icons for all AHCI disks. Avoid if possible!
-|**ForceSecureBootScheme**||||||Forces x86 scheme for IMG4 verification. Req. for VMs if SecureBootModel ≠ default
-|**IncreasePciBarSize**||||||Allows IOPCIFamily to boot with 2 GB PCI BARs. Avoid!
-|**LapicKernelPanic**°°°|( )|( )||( )|( )|Disables kernel panic on LAPIC interrupts.
-|**LegacyCommpage**||||||For legacy platforms without SSSE3 support.
-|**PanicNoKextDump**|x|x||x|x|Prevents kernel from printing kext dump in panic log. macOS 10.13 and above.
-|**PowerTimeoutKernelPanic**|x|x||x|x|Disables kernel panic on setPowerState timeout.
-|**ProvideCurrentCpuInfo**||||||Addresses issues with Microsoft Hyper-V.
-|**SetApfsTrimTimeout**|-1|-1||-1|-1|Sets trim timeout in ms for APFS filesystems on SSDs.
-|**ThirdPartyDrives**||||||Enables TRIM and hibernation Support for SSDs in macOS 10.15 and newer.
-|**XhciPortLimit**°°°°|(x)|(x)||(x)|(x)|Patches  various kexts to remove USB port limit of 15.|
-
-`°` `AppleXcpmCfgLock`: Not needed if you can disable CFGLock in BIOS</br>
-`°°` `CustomSMBIOSGuid`: Enable for Dell or Sony VAIO</br>
-`°°°` `LapicKernelPanic`: Enable for HP Systems</br>
-`°°°°` `XhciPortLimit`: Disable for macOS 11.3 and newer – create a USB Port Map instead!
-
-### UEFI Quirks
-| CPU Family | Comet Lake | 10th Gen |Cascade Lake X| Coffee Lake | 8th/9th Gen | Description |
-|:-----------|:---------:|:--------:|:------------:|:----------:|:-----------:|:-----------------|
-|**Platform**|Desktop|Mobile/NUC|High End Desktop|Desktop|Mobile/NUC
-| **SMBIOS** |iMac20,X|MacBookPro16,X / Macmini8,1|iMacPro1,1|iMac19,1|MacBookPro15,1 / Macmini8,1|System Management BIOS
+|**平台**|台式机|笔记本/NUC|高端台式机|台式机|笔记本/NUC|
+| **SMBIOS** |iMac20,X|MacBookPro16,X / Macmini8,1|iMacPro1,1|iMac19,1|MacBookPro15,1 / Macmini8,1|系统管理 BIOS|
 |                 |           |          ||           |             |             |
-|**ActivateHpetSupport**||||||Force enables HPET, if there's no option for it in the BIOS.
-|**DisableSecurityPolicy**||||||Disables platform security policy. Do NOT enable if you're using UEFI Secure Boot.
-|**EnableVectorAcceleration**|x|x||||Enables AVX vector acceleration of SHA-512 and SHA-384 hashing algorithms.
-|**ExitBootServicesDelay**||||||Adds delay in microseconds after `EXIT_BOOT_SERVICES` event.
-|**ForceOcWriteFlash**||||||Enables writing to flash memory for all OpenCore system variables.
-|**ForgeUefiSupport**||||||Implements partial UEFI 2.x support on EFI 1.x firmware.
-|**IgnoreInvalidFlexRatio**||||||Fixes invalid values in the MSR_FLEX_RATIO (0x194) MSR register.
-|**ReleaseUsbOwnership**||x|||x|Attempt to detach USB controller ownership from the firmware driver.
-|**ReloadOptionRoms**||||||Query PCI devices and reload their Option ROMs if available
-|**RequestBootVarRouting**|x|x||x|x|Required for Startup Disk PrefPane to work.
-|**ResizeGpuBars**||||||Configure GPU PCI BAR size
-|**TscSyncTimeout**||||||Experimental quirk for debugging TSC synchronization.
-|**UnblockFsConnect**°|( )|( )||( )|( )|Useful if drive detection fails and results in an missing boot entries.
+|**AllowRelocationBlock**||||||允许通过 relocation block 启动 macOS。需要启用 ProvideCustomSlide 和 AvoidRuntimeDefrag。|
+|**AvoidRuntimeDefrag**|x|x|x|x|x|防止 `boot.efi` 的运行时内存碎片化。|
+|**DevirtualiseMmio**|x|x|x|x||移除某些 MMIO 区域的运行时属性。|
+|**DisableSingleUser**||||||禁用单用户模式，提高安全性。|
+|**DisableVariableWrite**||||||限制 macOS 对 NVRAM 的访问。|
+|**DiscardHibernateMap**||||||复用原始的休眠内存映射。|
+|**EnableSafeModeSlide**|x|x|x|x|x|修改引导程序以在安全模式中启用 KASLR（地址空间布局随机化）。需要启用 ProvideCustomSlide。|
+|**EnableWriteUnprotector**||||||允许对 UEFI 运行时服务代码的写入访问。|
+|**ForceBooterSignature**||||||将 macOS 的启动签名设置为 OpenCore 启动器。|
+|**ForceExitBootServices**||||||修复固件的早期启动崩溃。如果不清楚用途，请勿启用！|
+|**ProtectMemoryRegions**||||||保护内存区域免受错误访问。|
+|**ProtectSecureBoot**||||||保护 UEFI 安全启动变量免于被修改。|
+|**ProtectUefiServices**°|x|x||(x)°||保护 UEFI 服务免被固件覆盖。|
+|**ProvideCustomSlide**|x|x|x|x|x|在低内存情况下提供自定义 KASLR 滑动地址。|
+|**ProvideMaxSlide**||||||在较高滑动地址不可用时提供最大 KASLR 滑动地址。|
+|**RebuildAppleMemoryMap**|x|x|x|x|x|生成兼容 macOS 的内存映射。|
+|**ResizeAppleGpuBars**||||||缩小 GPU PCI BAR 大小以兼容 macOS。|
+|**SetupVirtualMap**|||x|x|x|在 SetVirtualAddresses 阶段设置虚拟内存。|
+|**SignalAppleOS**||||||通过操作系统信息报告 macOS 正在加载。|
+|**SyncRuntimePermissions**|x|x|x|x|x|更新运行时环境的内存权限。|
 
-`°` `UnblockFsConnect`: Enable on HP Machines
+`°` Z390主板需要
+
+### 内核小技巧 (Kernel Quirks)
+
+| CPU 系列 | Comet Lake | 第10代 | Cascade Lake X | Coffee Lake | 第8/9代 | 描述 |
+|:-----------|:---------:|:--------:|:------------:|:----------:|:-----------:|:-----------------|
+|**平台**|台式机|笔记本/NUC|高端台式机|台式机|笔记本/NUC|
+| **SMBIOS** |iMac20,X|MacBookPro16,X / Macmini8,1|iMacPro1,1|iMac19,1|MacBookPro15,1 / Macmini8,1|系统管理 BIOS|
+|                 |           |          ||           |             |             |
+|**AppleCpuPmCfgLock**||||||禁用 `AppleIntelCPUPowerManagement.kext` 中的 MSR 修改。|
+|**AppleXcpmCfgLock**°|(x)|(x)||(x)|(x)|启用对 XNU 内核的写入访问，以便开启 XCPM 电源管理。|
+|**AppleXcpmExtraMsrs**||||||禁用多个关键 MSR 访问，适用于不支持原生 XCPM 的某些 CPU。在 macOS 12+ 中禁用此 Quirk，因为该功能不再存在。|
+|**AppleXcpmForceBoost**||||||在 XCPM 模式下强制最大性能。不推荐使用。|
+|**CustomSMBIOSGuid**°°|( )|( )||( )|( )|通常适用于戴尔笔记本或有 Windows 许可证问题时。|
+|**DisableIoMapper**|x|x||x|x|禁用 XNU（VT-d）中的 IOMapper 支持。|
+|**DisableLinkeditJettison**|x|x||x|x|在 macOS Big Sur 中提高 `Lilu.kext` 性能，无需 `keepsyms=1` 引导参数。|
+|**DisableRtcChecksum**||||||禁用 `AppleRTC` 的主校验和（0x58-0x59）写入。|
+|**ExtendBTFeatureFlags**||||||将 `FeatureFlags` 设置为 `0x0F`，以启用蓝牙的所有功能，包括 Continuity。|
+|**ExternalDiskIcons**||||||为所有 AHCI 磁盘强制使用内部磁盘图标。如果可能，尽量避免使用！|
+|**ForceSecureBootScheme**||||||强制使用 x86 方案进行 IMG4 验证。如果 `SecureBootModel` ≠ 默认值，虚拟机中需要启用此项。|
+|**IncreasePciBarSize**||||||允许 `IOPCIFamily` 使用 2 GB PCI BAR 启动。尽量避免！|
+|**LapicKernelPanic**°°°|( )|( )||( )|( )|禁用 LAPIC 中断引发的内核崩溃。|
+|**LegacyCommpage**||||||适用于不支持 SSSE3 的旧平台。|
+|**PanicNoKextDump**|x|x||x|x|防止内核在崩溃日志中打印 kext 转储。适用于 macOS 10.13 及以上版本。|
+|**PowerTimeoutKernelPanic**|x|x||x|x|禁用因 `setPowerState` 超时引发的内核崩溃。|
+|**ProvideCurrentCpuInfo**||||||解决与 Microsoft Hyper-V 的兼容性问题。|
+|**SetApfsTrimTimeout**|-1|-1||-1|-1|设置 APFS 文件系统在 SSD 上的 TRIM 超时时间（单位：ms）。|
+|**ThirdPartyDrives**||||||在 macOS 10.15 及更新版本中启用第三方 SSD 的 TRIM 和休眠支持。|
+|**XhciPortLimit**°°°°|(x)|(x)||(x)|(x)|修补各种 kexts 以移除 15 个 USB 端口限制。|
+
+`°` `AppleXcpmCfgLock`: 如果可以在 BIOS 中禁用 CFGLock，则不需要此选项。</br>
+`°°` `CustomSMBIOSGuid`: 针对戴尔或索尼 VAIO 笔记本启用。</br>
+`°°°` `LapicKernelPanic`: 针对 HP 系统启用。</br>
+`°°°°` `XhciPortLimit`: 对于 macOS 11.3 及更高版本禁用——建议创建 USB 端口映射代替！
+
+---
+
+### UEFI 小技巧 (UEFI Quirks)
+
+| CPU 系列 | Comet Lake | 第10代 | Cascade Lake X | Coffee Lake | 第8/9代 | 描述 |
+|:-----------|:---------:|:--------:|:------------:|:----------:|:-----------:|:-----------------|
+|**平台**|台式机|笔记本/NUC|高端台式机|台式机|笔记本/NUC|
+| **SMBIOS** |iMac20,X|MacBookPro16,X / Macmini8,1|iMacPro1,1|iMac19,1|MacBookPro15,1 / Macmini8,1|系统管理 BIOS|
+|                 |           |          ||           |             |             |
+|**ActivateHpetSupport**||||||强制启用 HPET（高精度事件计时器），如果 BIOS 中没有相关选项。|
+|**DisableSecurityPolicy**||||||禁用平台安全策略。如果使用 UEFI 安全启动，请勿启用。|
+|**EnableVectorAcceleration**|x|x||||启用 SHA-512 和 SHA-384 哈希算法的 AVX 矢量加速。|
+|**ExitBootServicesDelay**||||||在 `EXIT_BOOT_SERVICES` 事件后增加延迟（微秒级）。|
+|**ForceOcWriteFlash**||||||启用对所有 OpenCore 系统变量的闪存写入。|
+|**ForgeUefiSupport**||||||在 EFI 1.x 固件上部分实现 UEFI 2.x 支持。|
+|**IgnoreInvalidFlexRatio**||||||修复 MSR_FLEX_RATIO（0x194）MSR 寄存器中的无效值。|
+|**ReleaseUsbOwnership**||x|||x|尝试从固件驱动程序中解除 USB 控制器所有权。|
+|**ReloadOptionRoms**||||||查询 PCI 设备并重新加载它们的 Option ROM（如果可用）。|
+|**RequestBootVarRouting**|x|x||x|x|需要此项以使“启动磁盘”偏好设置窗格正常工作。|
+|**ResizeGpuBars**||||||配置 GPU PCI BAR 大小。|
+|**TscSyncTimeout**||||||用于调试 TSC 同步的实验性 Quirk。|
+|**UnblockFsConnect**°|( )|( )||( )|( )|如果驱动器检测失败导致启动条目丢失时启用此选项。|
+
+`°` `UnblockFsConnect`: 针对 HP 机器启用。
 <details>
-<summary><strong>6th and 7th Gen Intel Quirks</strong> (Click to show content!)</summary>
+<summary><strong>第六代和第七代 Intel 小技巧</strong>（点击展开内容！）</summary>
+
 
 ## 6th and 7th Gen Intel CPUs (Desktop/Mobile)
 

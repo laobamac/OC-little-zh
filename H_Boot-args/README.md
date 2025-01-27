@@ -1,26 +1,26 @@
-# Boot Arguments Explained
+# 启动参数解析
 一个关于常用（及较少用）启动参数和设备属性的非完整列表，这些参数可以通过 OpenCore 和 Clover 等引导管理器注入。这里的信息不是简单地从它们的官方仓库复制粘贴的，而是尽量补充了更多背景信息。此外，为了更清晰地展示这些参数，我采用了表格而不是列表，便于复制条目以及快速识别与某些启动参数或属性相关的附加参数（例如开关和位掩码）。
 
 <details>
 <summary><b>目录</b>（点击展开）</summary>
 
-- [Boot Arguments Explained](#boot-arguments-explained)
+- [启动参数解析](#启动参数解析)
 	- [调试](#调试)
 	- [网络相关启动参数](#网络相关启动参数)
 	- [其他有用的启动参数](#其他有用的启动参数)
 	- [启动参数和 Kext 提供的设备属性](#启动参数和-kext-提供的设备属性)
 		- [Lilu](#lilu)
 		- [VirtualSMC](#virtualsmc)
-		- [Whatevergreen](#whatevergreen)
-			- [Global](#global)
-			- [Board-id related](#board-id-related)
-			- [Switching GPUs](#switching-gpus)
+		- [WhateverGreen](#whatevergreen)
+			- [全局](#全局)
+			- [与 Board-id 相关](#与-board-id-相关)
+			- [切换 GPU](#切换-gpu)
 			- [Intel HD Graphics](#intel-hd-graphics)
 			- [AMD Radeon](#amd-radeon)
-				- [`unfairgva` Overrides](#unfairgva-overrides)
+				- [`unfairgva` 重写选项](#unfairgva-重写选项)
 			- [NVIDIA](#nvidia)
-			- [Backlight](#backlight)
-			- [2nd Boot stage](#2nd-boot-stage)
+			- [背光](#背光)
+			- [第二阶段启动](#第二阶段启动)
 		- [AirportBrcmFixup](#airportbrcmfixup)
 		- [AppleALC](#applealc)
 		- [BrcmPatchRAM](#brcmpatchram)
@@ -31,11 +31,12 @@
 		- [DebugEnhancer](#debugenhancer)
 		- [ECEnabler](#ecenabler)
 		- [HibernationFixup](#hibernationfixup)
+			- [使用 NVRAM 配置选项](#使用-nvram-配置选项)
 		- [NootedRed](#nootedred)
 		- [NVMeFix](#nvmefix)
 		- [RestrictEvents](#restrictevents)
 		- [RTCMemoryFixup](#rtcmemoryfixup)
-	- [Credits](#credits)
+	- [鸣谢](#鸣谢)
 
 </details>
 
@@ -403,110 +404,122 @@ Lilu 插件，用于在 macOS 内核中启用调试输出。
 
 ---
 ### ECEnabler
-Allows reading Embedded Controller fields over 1 byte long, vastly reducing the amount of ACPI modification needed (if any) for working battery status of Laptops. 
 
-boot-arg | Description 
----------|------------
-**`-eceoff`** | Disables ECEnabler  
-**`-ecedbg`** | Enables debug logs  
-**`-ecebeta`**| Removes upper macoOS limit (for macOS betas)  
+允许读取超过 1 字节长度的嵌入式控制器（EC）字段，大大减少了为笔记本电脑电池状态正常工作所需的 ACPI 修改（如有）。 
 
-[**Source**](https://github.com/1Revenger1/ECEnabler)
+| 启动参数 | 描述 |
+|----------|------|
+| **`-eceoff`** | 禁用 ECEnabler。 |
+| **`-ecedbg`** | 启用调试日志。 |
+| **`-ecebeta`** | 移除 macOS 的版本限制（适用于 Beta 版本）。 |
+
+**来源**：[ECEnabler](https://github.com/1Revenger1/ECEnabler)
+
+---
 
 ### HibernationFixup
-Lilu plugin kext intended to fix hibernation compatibility issues. It's pretty complex in terms of configuration, so you're best to read the info provided in the repo!
 
-boot-arg | Description 
----------|------------
-**`-hbfx-dump-nvram`** | Saves NVRAM to a file nvram.plist before hibernation and after kernel panic (with panic info)
-**`-hbfx-disable-patch-pci`**| Disables patching of IOPCIFamily (this patch helps to avoid hang & black screen after resume (restoreMachineState won't be called for all devices)
-**`hbfx-patch-pci=XHC,IMEI,IGPU`** | Allows to specify explicit device list (and restoreMachineState won't  be called only for these devices). Also supports values `none`, `false`, `off`.
-**`-hbfxdbg`**| Enables debugging output
-**`-hbfxbeta`** | Enables loading on unsupported osx
-**`-hbfxoff`** | Disables kext loading
-**`hbfx-ahbm=abhm_value`** | Controls auto-hibernation feature, where "abhm_value" represenst an *arithmetic sum* (bitmask) of the following values: </br></br> `1` = `EnableAutoHibernation`: If this flag is set, system will hibernate instead of regular sleep (flags below can be used to limit this behavior)</br>  `2` = `WhenLidIsClosed` : Auto hibernation can happen when lid is closed (if bit is not set - no matter which status lid has)</br> `4` = `WhenExternalPowerIsDisconnected`: Auto hibernation can happen when external power is disconnected (if bit is not set - no matter whether it is connected) </br> `8` = `WhenBatteryIsNotCharging`: Auto hibernation can happen when battery is not charging (if bit is not set - no matter whether it is charging) </br> `16` = `WhenBatteryIsAtWarnLevel`: Auto hibernation can happen when battery is at warning level (macOS and battery kext are responsible for this level)</br> `32` = `WhenBatteryAtCriticalLevel`: Auto hibernation can happen when battery is at critical level (macOS and battery kext are responsible for this level) </br> `64` = `DoNotOverrideWakeUpTime`:	Do not alter next wake up time, macOS is fully responsible for sleep maintenance dark wakes </br> `128` = `DisableStimulusDarkWakeActivityTickle`: Disable power event kStimulusDarkWakeActivityTickle in kernel, so this event cannot trigger a switching from dark wake to full wake </br></br> **EXAMPLE**: `hbfx-ahbm=135`  would enable options associated with values `1`, `2`, `4` and `128`.
+Lilu 插件 Kext，旨在修复休眠兼容性问题。其配置较为复杂，建议阅读官方仓库中的详细信息。
 
-The following options can be stored in NVRAM and can be used instead of respective boot-args:
+| 启动参数 | 描述 |
+|----------|------|
+| **`-hbfx-dump-nvram`** | 在休眠和内核恐慌后保存 NVRAM 到文件 `nvram.plist`（包括恐慌信息）。 |
+| **`-hbfx-disable-patch-pci`** | 禁用对 `IOPCIFamily` 的补丁（此补丁有助于避免从休眠恢复时的挂起和黑屏）。 |
+| **`hbfx-patch-pci=XHC,IMEI,IGPU`** | 指定显式设备列表（`restoreMachineState` 将仅对这些设备禁用）。支持的值还包括 `none`、`false` 和 `off`。 |
+| **`-hbfxdbg`** | 启用调试输出。 |
+| **`-hbfxbeta`** | 在不受支持的 macOS 上启用加载。 |
+| **`-hbfxoff`** | 禁用 Kext 加载。 |
+| **`hbfx-ahbm=abhm_value`** | 控制自动休眠功能，其中 `abhm_value` 是以下值的*算术和*（位掩码）：<br><br>`1` = `EnableAutoHibernation`: 系统将进入休眠而非正常睡眠。<br>`2` = `WhenLidIsClosed`: 合盖时可发生自动休眠（如果未设置，则不考虑合盖状态）。<br>`4` = `WhenExternalPowerIsDisconnected`: 断开外部电源时可发生自动休眠（如果未设置，则不考虑电源连接状态）。<br>`8` = `WhenBatteryIsNotCharging`: 电池未充电时可发生自动休眠（如果未设置，则不考虑充电状态）。<br>`16` = `WhenBatteryIsAtWarnLevel`: 电池处于警告水平时可发生自动休眠（由 macOS 和电池 Kext 负责）。<br>`32` = `WhenBatteryAtCriticalLevel`: 电池处于危急水平时可发生自动休眠（由 macOS 和电池 Kext 负责）。<br>`64` = `DoNotOverrideWakeUpTime`: 不更改下次唤醒时间，macOS 完全负责睡眠维护和黑暗唤醒。<br>`128` = `DisableStimulusDarkWakeActivityTickle`: 禁用内核中的 `kStimulusDarkWakeActivityTickle` 电源事件，防止此事件从黑暗唤醒切换到完全唤醒。<br><br>**示例**：`hbfx-ahbm=135` 启用与值 `1`、`2`、`4` 和 `128` 相关的选项。 |
 
-**GUID**: `NVRAM/Add/E09B9297-7928-4440-9AAB-D1F8536FBF0A`
+#### 使用 NVRAM 配置选项
 
-NVRAM Key |Type  
-----------|:---:
-**`hbfx-dump-nvram`** | Boolean
-**`hbfx-disable-patch-pci`** | Boolean
-**`hbfx-patch-pci=XHC,IMEI,IGPU,none,false,off`**| String
-**`hbfx-ahbm`** | Number
+以下选项可存储在 NVRAM 中，作为启动参数的替代。
 
-[**Source**](https://github.com/acidanthera/HibernationFixup)
+| **GUID** | `NVRAM/Add/E09B9297-7928-4440-9AAB-D1F8536FBF0A` |
+|----------|:---:|
+| **NVRAM Key** | **Type** |
+| **`hbfx-dump-nvram`** | Boolean |
+| **`hbfx-disable-patch-pci`** | Boolean |
+| **`hbfx-patch-pci=XHC,IMEI,IGPU,none,false,off`** | String |
+| **`hbfx-ahbm`** | Number |
+
+**来源**：[HibernationFixup](https://github.com/acidanthera/HibernationFixup)
+
+---
 
 ### NootedRed
- Lilu plugin for AMD Vega iGPUs.
 
-boot-arg | Description 
----------|------------
- `-CKFBOnly` | Enables "partial" acceleration 
- `-NRedDPDelay` | Adds delay to the boot sequence, useful if experiencing black screen on boot
- `-NRedDebug` | Enables detailed logging for `DEBUG` build
+Lilu 插件，用于支持 AMD Vega 集成 GPU。
 
-[**Source**](https://github.com/NootInc/NootedRed)
+| 启动参数 | 描述 |
+|----------|------|
+| **`-CKFBOnly`** | 启用“部分”加速。 |
+| **`-NRedDPDelay`** | 在启动过程中添加延迟，适用于启动时遇到黑屏问题。 |
+| **`-NRedDebug`** | 启用详细日志记录（仅适用于 DEBUG 版本）。 |
+
+**来源**：[NootedRed](https://github.com/NootInc/NootedRed)
+
+---
 
 ### NVMeFix
-A set of patches for the Apple NVMe storage driver, IONVMeFamily. Its goal is to improve compatibility with non-Apple SSDs.
 
-boot-arg | Description 
----------|------------
-**`-nvmefdbg`** | Enables detailed logging for `DEBUG` build
-**`-nvmefoff`** | Disables the kext
-**`-nvmefaspm`** | forces ASPM L1 on all the devices. This argument is recommended exclusively for testing purposes!  For daily usage, inject `pci-aspm-default` device property with `<02 00 00 00>` value into SSD and bridge devices they are connected to instead. &rarr; &rarr; See [**Configuration**](https://github.com/acidanthera/NVMeFix/blob/master/README.md#configuration) for more details.
+用于 Apple NVMe 存储驱动（IONVMeFamily）的一组补丁，旨在提高非 Apple SSD 的兼容性。
 
-[**Source**](https://github.com/acidanthera/NVMeFix)
+| 启动参数 | 描述 |
+|----------|------|
+| **`-nvmefdbg`** | 启用详细日志记录（仅适用于 DEBUG 版本）。 |
+| **`-nvmefoff`** | 禁用 Kext。 |
+| **`-nvmefaspm`** | 强制在所有设备上启用 ASPM L1（仅推荐用于测试目的）。对于日常使用，建议将值 `<02 00 00 00>` 注入到 SSD 和桥接设备的 `pci-aspm-default` 属性中。更多详情请参考 [配置文档](https://github.com/acidanthera/NVMeFix/blob/master/README.md#configuration)。 |
+
+**来源**：[NVMeFix](https://github.com/acidanthera/NVMeFix)
+
+---
 
 ### RestrictEvents
-boot-arg | NVRAM Key| Description 
----------|:--------:|------------
-**`-revoff`**| –| Disables the kext
-**`-revdbg`**| – | Enables verbose logging (in DEBUG builds)
-**`-revbeta`**| – | Enables the kext on macOS < 10.8 or greater than 13
-**`-revproc`**|–| Enables verbose process logging (in DEBUG builds)
-**`revpatch=value`** |–| Enables patching as comma separated options. Default value is `auto`. See available values below.
-**`revpatch=auto`** |YES| Enables `memtab,pci,cpuname`, without `memtab` and `pci` patches being applied on a real Mac.
-**`revpatch=none`** |YES| Disables all patching 
-**`revpatch=asset`** |YES| Allows Content Caching when `sysctl kern.hv_vmm_present` returns `1` on macOS 11.3 or newer
-**`revpatch=cpuname`**|YES| Allows Custom CPU name in System Information
-**`revpatch=diskread`** |YES| Disables "Uninitialized disk" warning in Finder
-**`revpatch=f16c`** |YES| Resolves CoreGraphics crashing on Ivy Bridge CPUs by disabling f16c instruction set reporting in macOS 13.3 or newer
-**`revpatch=memtab`** |YES|Enables memory tab in System Information on `MacBookAir` and `MacBookPro10,x`.
-**`revpatch=pci`**|YES|Prevents PCI configuration warnings in System Settings on `MacPro7,1`
-**`revpatch=sbvmm`** |YES| Forces VMM SB model, allowing OTA updates for unsupported models on macOS 11.3 or newer
-**`revcpu=value`** |YES| Enables or disables CPU brand string patching. `1` = non-Intel default, `0` = Intel default
-**`revcpuname=value`** |YES| Custom CPU brand string (max 48 characters, 20 or less recommended, taken from CPUID otherwise)
-**`revblock=value`** |–| To block processes as comma separated options. Default value is `auto`.
-**`revblock=auto`** |YES| Same as `pci`
-**`revblock=none`**|YES| Disables all blocking
-**`revblock=pci`**|YES| Prevents PCI and RAM configuration notifications on `MacPro7,1`
-**`revblock=gmux`** |YES| Blocks `displaypolicyd` on Big Sur+ (for genuine MacBookPro9,1/10,1)
-**`revblock=media`** |YES| Block `mediaanalysisd` on Ventura+ (for Metal 1 GPUs)
 
-**NOTE**: NVRAM variables work the same way as the boot arguments, but have lower priority. They need to be added to the config under `NVRAM/Add/4D1FDA02-38C7-4A6A-9CC6-4BCCA8B30102`:
+Lilu 插件，用于修改和限制 macOS 系统事件。
 
-![revpatchrevblock](https://github.com/laobamac/OC-little-zh/assets/76865553/dcfad4c5-f646-4463-b6dc-2248d23c49cf)
+| 启动参数 | NVRAM 键 | 描述 |
+|----------|:--------:|------|
+| **`-revoff`** | – | 禁用 Kext。 |
+| **`-revdbg`** | – | 启用详细日志记录（仅适用于 DEBUG 版本）。 |
+| **`-revbeta`** | – | 在 macOS < 10.8 或 macOS > 13 上启用 Kext。 |
+| **`-revproc`** | – | 启用进程详细日志记录（仅适用于 DEBUG 版本）。 |
+| **`revpatch=value`** | – | 启用逗号分隔的补丁选项，默认值为 `auto`。可用值如下：<br>**`revpatch=auto`**：启用 `memtab,pci,cpuname`，但在真实 Mac 上不会应用 `memtab` 和 `pci` 补丁。<br>**`revpatch=none`**：禁用所有补丁。<br>**`revpatch=asset`**：在 macOS 11.3 或更高版本上，允许当 `sysctl kern.hv_vmm_present` 返回 `1` 时启用内容缓存。<br>**`revpatch=cpuname`**：允许在系统信息中显示自定义 CPU 名称。<br>**`revpatch=diskread`**：禁用 Finder 中的“未初始化磁盘”警告。<br>**`revpatch=f16c`**：通过禁用 f16c 指令集报告，解决 macOS 13.3+ 上 Ivy Bridge CPU 的 CoreGraphics 崩溃问题。<br>**`revpatch=memtab`**：在 `MacBookAir` 和 `MacBookPro10,x` 上启用系统信息中的内存选项卡。<br>**`revpatch=pci`**：在 `MacPro7,1` 上防止系统设置中的 PCI 配置警告。<br>**`revpatch=sbvmm`**：强制 VMM SB 模型，允许在 macOS 11.3 或更高版本上进行 OTA 更新。 |
+| **`revcpu=value`** | YES | 启用或禁用 CPU 品牌字符串补丁：`1` = 非 Intel 默认值，`0` = Intel 默认值。 |
+| **`revcpuname=value`** | YES | 自定义 CPU 品牌字符串（最大 48 个字符，推荐 20 个字符以内，否则使用 CPUID）。 |
+| **`revblock=value`** | – | 以逗号分隔的选项阻止进程，默认值为 `auto`。可用值如下：<br>**`revblock=auto`**：与 `pci` 相同。<br>**`revblock=none`**：禁用所有阻止。<br>**`revblock=pci`**：在 `MacPro7,1` 上防止 PCI 和 RAM 配置通知。<br>**`revblock=gmux`**：在 Big Sur+ 上阻止 `displaypolicyd`（适用于 MacBookPro9,1/10,1）。<br>**`revblock=media`**：在 Ventura+ 上阻止 `mediaanalysisd`（适用于 Metal 1 GPU）。 |
 
-[**Source**](https://github.com/acidanthera/RestrictEvents)
+**来源**：[RestrictEvents](https://github.com/acidanthera/RestrictEvents)
+
+---
+
+**NOTE**: NVRAM 变量的功能与启动参数相同，但优先级较低。它们需要添加到 `NVRAM/Add/4D1FDA02-38C7-4A6A-9CC6-4BCCA8B30102` 配置项下：
+
+![revpatchrevblock](https://github.com/5T33Z0/OC-Little-Translated/assets/76865553/dcfad4c5-f646-4463-b6dc-2248d23c49cf)
+
+**来源**：[RestrictEvents](https://github.com/acidanthera/RestrictEvents)
+
+---
 
 ### RTCMemoryFixup
-Kext providing a way to emulate some offsets in your CMOS (RTC) memory. 
-More details about CMOS-related isses fan be found [here](/06_CMOS-related_Fixes).
 
-boot-arg | Description 
-:-------|------------
-**`rtcfx_exclude=`** | The `=` is followed by values for offsets ranging from `00` to `FF` &rarr; Check repo description for details
-**`-rtcfxdbg`** | Turns on debugging output
+用于在 CMOS（RTC）内存中模拟某些偏移量的 Kext。更多关于 CMOS 相关问题的信息可以在 [这里](/06_CMOS-related_Fixes) 找到。
 
-[**Source**](https://github.com/acidanthera/RTCMemoryFixup)
+| 启动参数 | 描述 |
+|----------|------|
+| **`rtcfx_exclude=`** | 通过等号 `=` 指定从 `00` 到 `FF` 的偏移量值。详细信息请查看官方仓库描述。 |
+| **`-rtcfxdbg`** | 启用调试输出。 |
 
-**To be continued…**
+**来源**：[RTCMemoryFixup](https://github.com/acidanthera/RTCMemoryFixup)
 
-## Credits
-- 1Revenger1 for ECEnabler
-- Acidanthera for Lilu, VirtalSMC, Whatevergreen and others
-- Miliuco and Andrey1970AppleLife for additional details about `igfxfw` and `rps-control` properties
+---
+
+**待续…**
+
+---
+
+## 鸣谢
+- **1Revenger1**：感谢其开发 ECEnabler。
+- **Acidanthera**：感谢其开发 Lilu、VirtualSMC、WhateverGreen 等工具。
+- **Miliuco 和 Andrey1970AppleLife**：感谢其提供有关 `igfxfw` 和 `rps-control` 属性的更多细节。
