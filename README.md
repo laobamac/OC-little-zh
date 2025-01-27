@@ -7,7 +7,7 @@
 
 <div align=center>
 
-[![OpenCore Version](https://img.shields.io/badge/支持的OpenCore版本:-≤1.0.4-success.svg)](https://github.com/acidanthera/OpenCorePkg) ![macOS](https://img.shields.io/badge/支持的macOS:-≤15.3-white.svg) ![Last Update](https://img.shields.io/badge/最后更新:-2025.01.24-blueviolet.svg)</br>
+[![OpenCore Version](https://img.shields.io/badge/支持的OpenCore版本:-≤1.0.4-success.svg)](https://github.com/acidanthera/OpenCorePkg) ![macOS](https://img.shields.io/badge/支持的macOS:-≤15.3-white.svg) ![Last Update](https://img.shields.io/badge/最后更新:-2025.01.27-blueviolet.svg)</br>
 
 </div>
 
